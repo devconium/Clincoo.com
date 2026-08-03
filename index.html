@@ -331,43 +331,88 @@
         </div>
 
         <div id="tab-content-halaman" class="hidden flex-col gap-6 py-6 max-w-4xl mx-auto w-full transition-opacity">
-          
-          <div class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-              <label class="text-sm font-semibold text-gray-800">Hyperlink</label>
-              <input type="url" id="deploy-hyperlink" placeholder="https://..." class="custom-input px-4 py-3 rounded-xl border text-sm font-mono">
+
+          <!-- Deploy ke Production -->
+          <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-gray-900">Deploy ke Production</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Publikasikan proyek ke Cloudflare Pages</p>
+              </div>
             </div>
-            <div class="flex flex-col gap-2">
-              <label class="text-sm font-semibold text-gray-800">Teks Tampilan</label>
-              <input type="text" id="deploy-text" placeholder="Teks untuk tautan" class="custom-input px-4 py-3 rounded-xl border text-sm">
-            </div>
-            <div class="flex justify-end w-full">
-              <button onclick="saveDeployLink()" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">
-                Simpan
-              </button>
+            <div class="p-5 flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Domain Custom</label>
+                <div class="relative">
+                  <input type="text" id="deploy-domain" placeholder="namadomain.com" class="custom-input w-full pl-10 pr-4 py-3 rounded-xl border text-sm font-mono">
+                  <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                </div>
+              </div>
+              <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Branch</label>
+                <select id="deploy-branch" class="custom-input w-full px-4 py-3 rounded-xl border text-sm">
+                  <option value="main" selected>main</option>
+                  <option value="preview">preview</option>
+                </select>
+              </div>
+              <div class="flex items-center gap-3 pt-1">
+                <button onclick="deployToProduction()" id="deploy-prod-btn" class="flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-all focus:outline-none shadow-sm">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                  <span>Deploy Sekarang</span>
+                </button>
+                <span id="deploy-prod-status" class="text-xs text-gray-400"></span>
+              </div>
             </div>
           </div>
 
-          <div class="mt-4 flex flex-col gap-4">
-            <h3 class="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-3">Deploy</h3>
-            <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-gray-600">Domain Custom</label>
-              <input type="text" id="deploy-domain" placeholder="namadomain.com" class="custom-input px-4 py-3 rounded-xl border text-sm font-mono">
+          <!-- Tautan Terpasang -->
+          <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                </div>
+                <div class="min-w-0">
+                  <h3 class="text-sm font-semibold text-gray-900">Tautan Terpasang</h3>
+                  <p class="text-xs text-gray-500 mt-0.5">Kelola hyperlink proyek Anda</p>
+                </div>
+              </div>
+              <span id="deploy-link-count" class="text-xs text-gray-400 font-medium px-2.5 py-1 bg-gray-100 rounded-full flex-shrink-0">0</span>
             </div>
-            <div class="flex flex-col gap-2">
-              <label class="text-sm font-medium text-gray-600">Branch</label>
-              <select id="deploy-branch" class="custom-input px-4 py-3 rounded-xl border text-sm">
-                <option value="main" selected>main</option>
-              </select>
-            </div>
-            <div class="flex justify-end w-full">
-              <button onclick="deployProject()" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">
-                Deploy
-              </button>
+            <div class="p-5">
+              <!-- Add link form -->
+              <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                <input type="url" id="deploy-hyperlink" placeholder="https://..." class="custom-input flex-1 min-w-0 px-4 py-2.5 rounded-xl border text-sm font-mono">
+                <input type="text" id="deploy-text" placeholder="Teks tampilan" class="custom-input flex-1 min-w-0 px-4 py-2.5 rounded-xl border text-sm">
+                <button onclick="saveDeployLink()" class="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-all flex-shrink-0">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Tambah</span>
+                </button>
+              </div>
+              <!-- Link list -->
+              <div id="deploy-list" class="flex flex-col gap-2"></div>
             </div>
           </div>
 
-          <div id="deploy-list" class="flex flex-col gap-3 mt-2"></div>
+          <!-- Riwayat Deploy -->
+          <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-gray-900">Riwayat Deploy</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Status deploy terbaru</p>
+              </div>
+            </div>
+            <div class="p-5">
+              <div id="deploy-history-list" class="flex flex-col gap-2"></div>
+            </div>
+          </div>
+
         </div>
 
         <div id="tab-content-env" class="hidden flex-col gap-6 py-6 max-w-4xl mx-auto w-full transition-opacity">
@@ -1527,10 +1572,10 @@
     }
 
     let envVariables = [];
-    const STORAGE_KEY_ENV = 'clincoo_env_variables';
+    function getEnvKey() { return 'clincoo_' + (currentProjectId || 'default') + '_env_variables'; }
 
     function loadEnvVariables() {
-        const saved = localStorage.getItem(STORAGE_KEY_ENV);
+        const saved = localStorage.getItem(getEnvKey());
         if (saved) {
             try { envVariables = JSON.parse(saved); } catch (e) { envVariables = []; }
         }
@@ -1553,83 +1598,276 @@
 
     function deleteEnv(index) {
         envVariables.splice(index, 1);
-        localStorage.setItem(STORAGE_KEY_ENV, JSON.stringify(envVariables));
+        localStorage.setItem(getEnvKey(), JSON.stringify(envVariables));
+        if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         renderEnvList();
+        showToast('Variabel dihapus', 'success');
     }
 
     function saveEnv() {
         const keyInput = document.getElementById('env-key');
         const valInput = document.getElementById('env-value');
-        if(!keyInput.value || !valInput.value) return;
-        envVariables.push({ key: keyInput.value, value: valInput.value });
-        localStorage.setItem(STORAGE_KEY_ENV, JSON.stringify(envVariables));
+        if(!keyInput.value.trim() || !valInput.value) { showToast('Isi kunci dan nilai', 'error'); return; }
+        envVariables.push({ key: keyInput.value.trim(), value: valInput.value });
+        localStorage.setItem(getEnvKey(), JSON.stringify(envVariables));
+        if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         keyInput.value = '';
         valInput.value = '';
         renderEnvList();
+        showToast('Variabel tersimpan', 'success');
     }
 
     function safeNavigate(url) {
       window.location.href = url;
     }
 
-    const STORAGE_KEY_DEPLOY = 'clincoo_deploy_links';
+    // ===== HALAMAN TAB: Deploy & Links (project-scoped, real-time) =====
     let deployLinks = [];
+    let deployHistory = [];
+
+    function getDeployKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_links'; }
+    function getDeployDomainKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_domain'; }
+    function getDeployBranchKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_branch'; }
+    function getDeployHistoryKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_history'; }
 
     function loadDeployData() {
-      const saved = localStorage.getItem(STORAGE_KEY_DEPLOY);
-      if (saved) {
-        try { deployLinks = JSON.parse(saved); } catch (e) { deployLinks = []; }
-      }
+      // Load links
+      try { deployLinks = JSON.parse(localStorage.getItem(getDeployKey()) || '[]'); } catch(e) { deployLinks = []; }
+      // Load history
+      try { deployHistory = JSON.parse(localStorage.getItem(getDeployHistoryKey()) || '[]'); } catch(e) { deployHistory = []; }
+      // Load domain
+      const savedDomain = localStorage.getItem(getDeployDomainKey());
+      if (savedDomain) { const el = document.getElementById('deploy-domain'); if (el) el.value = savedDomain; }
+      // Load branch
+      const savedBranch = localStorage.getItem(getDeployBranchKey());
+      if (savedBranch) { const el = document.getElementById('deploy-branch'); if (el) el.value = savedBranch; }
       renderDeployLinks();
-      const savedDomain = localStorage.getItem('clincoo_deploy_domain');
-      if (savedDomain) {
-        const domainEl = document.getElementById('deploy-domain');
-        if (domainEl) domainEl.value = savedDomain;
-      }
+      renderDeployHistory();
     }
 
     function saveDeployLink() {
       const linkInput = document.getElementById('deploy-hyperlink');
       const textInput = document.getElementById('deploy-text');
-      if (!linkInput.value) return;
-      deployLinks.push({ url: linkInput.value, text: textInput.value || linkInput.value });
-      localStorage.setItem(STORAGE_KEY_DEPLOY, JSON.stringify(deployLinks));
+      if (!linkInput || !linkInput.value.trim()) {
+        showToast('Masukkan URL terlebih dahulu', 'error');
+        linkInput.focus();
+        return;
+      }
+      // Validate URL
+      try { new URL(linkInput.value); } catch(e) {
+        showToast('URL tidak valid', 'error');
+        return;
+      }
+      deployLinks.unshift({ url: linkInput.value.trim(), text: (textInput.value || linkInput.value).trim(), id: Date.now() });
+      localStorage.setItem(getDeployKey(), JSON.stringify(deployLinks));
+      if (typeof FB !== 'undefined') FB.set(getDeployKey(), deployLinks);
       linkInput.value = '';
       textInput.value = '';
       renderDeployLinks();
+      showToast('Tautan ditambahkan', 'success');
     }
 
     function renderDeployLinks() {
       const list = document.getElementById('deploy-list');
+      const countEl = document.getElementById('deploy-link-count');
       if (!list) return;
+      if (countEl) countEl.textContent = deployLinks.length;
       if (deployLinks.length === 0) {
-        list.innerHTML = '';
+        list.innerHTML = '<div class="flex flex-col items-center justify-center py-8 text-center">' +
+          '<div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3 border border-gray-100">' +
+            '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>' +
+          '</div>' +
+          '<p class="text-xs text-gray-400">Belum ada tautan terpasang</p>' +
+        '</div>';
         return;
       }
-      list.innerHTML = deployLinks.map((item, i) => 
-        '<div class="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3 shadow-sm">' +
-          '<a href="' + item.url + '" target="_blank" class="flex-1 min-w-0 text-sm font-medium text-gray-800 hover:text-[#273849] truncate">' + (item.text || item.url) + '</a>' +
-          '<span class="text-xs text-gray-400 font-mono truncate hidden sm:block">' + item.url + '</span>' +
-          '<button onclick="deleteDeployLink(' + i + ')" class="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0">' +
+      list.innerHTML = deployLinks.map((item, i) =>
+        '<div class="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-xl px-3 py-2.5 group hover:bg-gray-50 transition-colors">' +
+          '<div class="w-8 h-8 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center flex-shrink-0">' +
+            '<svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>' +
+          '</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-sm font-medium text-gray-800 hover:text-gray-900 truncate block">' + escapeHtmlLink(item.text || item.url) + '</a>' +
+            '<span class="text-xs text-gray-400 font-mono truncate block">' + escapeHtmlLink(item.url) + '</span>' +
+          '</div>' +
+          '<button onclick="deleteDeployLink(' + i + ')" class="p-1.5 text-gray-300 hover:text-red-500 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100">' +
             '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
           '</button>' +
         '</div>'
       ).join('');
     }
 
-    function deleteDeployLink(index) {
-      deployLinks.splice(index, 1);
-      localStorage.setItem(STORAGE_KEY_DEPLOY, JSON.stringify(deployLinks));
-      renderDeployLinks();
+    function escapeHtmlLink(str) {
+      return String(str).replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
     }
 
-    function deployProject() {
-      const domainInput = document.getElementById('deploy-domain');
-      const branchSelect = document.getElementById('deploy-branch');
-      if (domainInput) {
-        localStorage.setItem('clincoo_deploy_domain', domainInput.value);
+    function deleteDeployLink(index) {
+      deployLinks.splice(index, 1);
+      localStorage.setItem(getDeployKey(), JSON.stringify(deployLinks));
+      if (typeof FB !== 'undefined') FB.set(getDeployKey(), deployLinks);
+      renderDeployLinks();
+      showToast('Tautan dihapus', 'success');
+    }
+
+    function renderDeployHistory() {
+      const list = document.getElementById('deploy-history-list');
+      if (!list) return;
+      if (deployHistory.length === 0) {
+        list.innerHTML = '<div class="flex flex-col items-center justify-center py-8 text-center">' +
+          '<div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3 border border-gray-100">' +
+            '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' +
+          '</div>' +
+          '<p class="text-xs text-gray-400">Belum ada riwayat deploy</p>' +
+        '</div>';
+        return;
       }
+      list.innerHTML = deployHistory.slice(0, 10).map((item) => {
+        var statusColor = item.status === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700';
+        var statusIcon = item.status === 'success'
+          ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'
+          : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+        return '<div class="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-xl px-3 py-2.5">' +
+          '<div class="w-8 h-8 rounded-lg ' + statusColor + ' flex items-center justify-center flex-shrink-0">' +
+            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">' + statusIcon + '</svg>' +
+          '</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<span class="text-sm font-medium text-gray-800 truncate block">' + escapeHtmlLink(item.url || 'Deploy') + '</span>' +
+            '<span class="text-xs text-gray-400">' + escapeHtmlLink(item.time || '') + (item.files ? ' \u00b7 ' + item.files + ' file' : '') + '</span>' +
+          '</div>' +
+          (item.url ? '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:text-blue-600 font-medium flex-shrink-0">Buka</a>' : '') +
+        '</div>';
+      }).join('');
+    }
+
+    async function deployToProduction() {
+      var btn = document.getElementById('deploy-prod-btn');
+      var status = document.getElementById('deploy-prod-status');
+      if (!btn) return;
+
+      // Save domain & branch
+      var domainInput = document.getElementById('deploy-domain');
+      var branchSelect = document.getElementById('deploy-branch');
+      if (domainInput) localStorage.setItem(getDeployDomainKey(), domainInput.value);
+      if (branchSelect) localStorage.setItem(getDeployBranchKey(), branchSelect.value);
+
+      // Collect files from localStorage
       if (typeof saveData === 'function') saveData();
+      var storageKey = 'clincoo_' + (currentProjectId || 'default') + '_files';
+      var localFiles = {};
+      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+      var allFiles = [];
+      for (var folderPath in localFiles) {
+        if (!Array.isArray(localFiles[folderPath])) continue;
+        for (var i = 0; i < localFiles[folderPath].length; i++) {
+          var fItem = localFiles[folderPath][i];
+          if (fItem.type === 'file' && fItem.content) {
+            var fp = folderPath === 'root' ? fItem.name : folderPath + '/' + fItem.name;
+            allFiles.push({ path: fp, content: fItem.content });
+          }
+        }
+      }
+      if (allFiles.length === 0) {
+        showToast('Tidak ada file untuk di-deploy', 'error');
+        return;
+      }
+
+      // Get CF config
+      var cfConfig = {};
+      try { cfConfig = JSON.parse(localStorage.getItem('clincoo_cf_config') || '{}'); } catch(e) {}
+      if (!cfConfig.accountId || !cfConfig.apiToken) {
+        showToast('Konfigurasi Cloudflare belum ada. Buka halaman Deployments untuk setup.', 'error');
+        return;
+      }
+
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+      var projName = proj ? proj.name : (currentProjectId || 'project');
+      var projectSlug = 'clincoo-' + projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      var branch = branchSelect ? branchSelect.value : 'main';
+
+      // UI: loading state
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Deploying...</span>';
+      if (status) status.textContent = '';
+
+      try {
+        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectName: projectSlug,
+            files: allFiles,
+            cfToken: cfConfig.apiToken,
+            cfAccountId: cfConfig.accountId,
+            branch: branch
+          })
+        });
+        var result = await res.json();
+        if (result.success) {
+          btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Berhasil</span>';
+          btn.classList.remove('bg-gray-900', 'hover:bg-gray-800');
+          btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+          if (status) status.innerHTML = '<a href="' + (result.url || result.productionUrl || '') + '" target="_blank" class="text-blue-500 hover:text-blue-600 font-medium">' + (result.url || result.productionUrl || 'Lihat') + '</a>';
+
+          // Save to history
+          var histItem = {
+            status: 'success',
+            url: result.url || result.productionUrl || '',
+            time: new Date().toLocaleString('id-ID'),
+            files: allFiles.length
+          };
+          deployHistory.unshift(histItem);
+          deployHistory = deployHistory.slice(0, 20);
+          localStorage.setItem(getDeployHistoryKey(), JSON.stringify(deployHistory));
+          if (typeof FB !== 'undefined') FB.set(getDeployHistoryKey(), deployHistory);
+          renderDeployHistory();
+
+          showToast('Deploy berhasil! ' + allFiles.length + ' file dipublikasikan', 'success');
+
+          setTimeout(function() {
+            btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg><span>Deploy Sekarang</span>';
+            btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+            btn.classList.add('bg-gray-900', 'hover:bg-gray-800');
+            btn.disabled = false;
+          }, 3000);
+        } else {
+          throw new Error(result.error || 'Deploy gagal');
+        }
+      } catch(err) {
+        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg><span>Deploy Sekarang</span>';
+        btn.disabled = false;
+        showToast('Deploy gagal: ' + err.message, 'error');
+
+        // Save failed attempt to history
+        deployHistory.unshift({ status: 'failed', url: '', time: new Date().toLocaleString('id-ID'), files: allFiles.length });
+        deployHistory = deployHistory.slice(0, 20);
+        localStorage.setItem(getDeployHistoryKey(), JSON.stringify(deployHistory));
+        if (typeof FB !== 'undefined') FB.set(getDeployHistoryKey(), deployHistory);
+        renderDeployHistory();
+      }
+    }
+
+    // ===== Toast notification =====
+    function showToast(msg, type) {
+      var existing = document.getElementById('clincoo-toast');
+      if (existing) existing.remove();
+      var toast = document.createElement('div');
+      toast.id = 'clincoo-toast';
+      var bg = type === 'error' ? 'bg-red-600' : 'bg-emerald-600';
+      toast.className = 'fixed top-4 right-4 z-[100] px-4 py-2.5 rounded-xl text-white text-sm font-medium shadow-lg flex items-center gap-2 transition-all duration-300 opacity-0 translate-y-[-8px] ' + bg;
+      var icon = type === 'error'
+        ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+        : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+      toast.innerHTML = icon + '<span>' + msg + '</span>';
+      document.body.appendChild(toast);
+      requestAnimationFrame(function() {
+        toast.classList.remove('opacity-0', 'translate-y-[-8px]');
+      });
+      setTimeout(function() {
+        toast.classList.add('opacity-0', 'translate-y-[-8px]');
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 2800);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
