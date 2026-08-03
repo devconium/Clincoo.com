@@ -1774,19 +1774,58 @@
       showToast('Publikasi situs dihapus', 'success');
     }
 
-    function saveDeployDomain() {
+    async function saveDeployDomain() {
       const domainInput = document.getElementById('deploy-domain');
       if (!domainInput) return;
-      localStorage.setItem(getDeployDomainKey(), domainInput.value.trim());
-      if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), domainInput.value.trim());
-      showToast('Domain disimpan', 'success');
+      const domain = domainInput.value.trim();
+      if (!domain) {
+        showToast('Masukkan nama domain', 'error');
+        return;
+      }
+      localStorage.setItem(getDeployDomainKey(), domain);
+      if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), domain);
+
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+      var projName = proj ? proj.name : (currentProjectId || 'project');
+      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!projectSlug) projectSlug = 'clincoo-app';
+
+      try {
+        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/domain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ projectName: projectSlug, domain: domain })
+        });
+        var result = await res.json();
+        if (result.success) {
+          showToast(result.message || 'Domain berhasil ditambahkan', 'success');
+        } else {
+          showToast('Domain gagal: ' + (result.error || 'Unknown error'), 'error');
+        }
+      } catch(err) {
+        showToast('Domain tersimpan lokal, tapi gagal kirim ke server: ' + err.message, 'error');
+      }
     }
 
-    function removeDeployDomain() {
+    async function removeDeployDomain() {
       const domainInput = document.getElementById('deploy-domain');
+      const domain = domainInput ? domainInput.value.trim() : '';
       if (domainInput) domainInput.value = '';
       localStorage.removeItem(getDeployDomainKey());
       if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), '');
+
+      if (domain) {
+        var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+        var projName = proj ? proj.name : (currentProjectId || 'project');
+        var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        if (!projectSlug) projectSlug = 'clincoo-app';
+        try {
+          await fetch('https://clincoo-deploy.clincoo.workers.dev/domain?projectName=' + encodeURIComponent(projectSlug) + '&domain=' + encodeURIComponent(domain), {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+          });
+        } catch(err) {}
+      }
       showToast('Domain dihapus', 'success');
     }
 
@@ -1827,16 +1866,10 @@
         return;
       }
 
-      var cfConfig = {};
-      try { cfConfig = JSON.parse(localStorage.getItem('clincoo_cf_config') || '{}'); } catch(e) {}
-      if (!cfConfig.accountId || !cfConfig.apiToken) {
-        showToast('Konfigurasi Cloudflare belum ada. Buka halaman Publikasi untuk setup.', 'error');
-        return;
-      }
-
       var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
       var projName = proj ? proj.name : (currentProjectId || 'project');
-      var projectSlug = 'clincoo-' + projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!projectSlug) projectSlug = 'clincoo-app';
       var branch = branchSelect ? branchSelect.value : 'main';
 
       var originalHTML = btn.innerHTML;
@@ -1851,14 +1884,12 @@
           body: JSON.stringify({
             projectName: projectSlug,
             files: allFiles,
-            cfToken: cfConfig.apiToken,
-            cfAccountId: cfConfig.accountId,
             branch: branch
           })
         });
         var result = await res.json();
         if (result.success) {
-          var siteUrl = result.url || result.productionUrl || '';
+          var siteUrl = result.productionUrl || result.url || '';
           var nowStr = new Date().toLocaleString('id-ID');
 
           var siteInfo = { url: siteUrl, time: nowStr };
