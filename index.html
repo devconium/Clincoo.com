@@ -1715,7 +1715,7 @@
         keyInput.value = '';
         valInput.value = '';
         renderEnvList();
-        }
+    }
 
     function safeNavigate(url) {
       window.location.href = url;
@@ -1791,11 +1791,13 @@ async function saveDeployDomain() {
         });
         var result = await res.json();
         if (result.success) {
-          } else {
-          , 'error');
+          console.log('[Clincoo] Domain berhasil disimpan');
+        } else {
+          console.warn('[Clincoo] Gagal menyimpan domain');
         }
       } catch(err) {
-        }
+        console.warn('[Clincoo] Gagal menyimpan domain');
+      }
     }
 
     async function removeDeployDomain() {
@@ -1817,7 +1819,7 @@ async function saveDeployDomain() {
           });
         } catch(err) {}
       }
-      }
+    }
 
     document.addEventListener('change', function(e) {
       if (e.target && e.target.id === 'deploy-https') {
@@ -1897,8 +1899,6 @@ async function saveDeployDomain() {
           localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
           if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
           renderDeployStatus();
-
-          
           btn.innerHTML = originalHTML;
           btn.disabled = false;
         } else {
@@ -1907,9 +1907,8 @@ async function saveDeployDomain() {
       } catch(err) {
         btn.innerHTML = originalHTML;
         btn.disabled = false;
-        }
+      }
     }
-
 
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
