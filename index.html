@@ -1561,6 +1561,7 @@
         localStorage.removeItem('clincoo_' + targetId + '_files');
         saveData();
         navigateTo('/');
+        if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(targetId);
       }
     }
 
@@ -1635,6 +1636,7 @@
       localStorage.removeItem('clincoo_' + projectId + '_files');
       saveData();
       applyFilters();
+      if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(projectId);
     }
 
     document.addEventListener('click', function(e) {

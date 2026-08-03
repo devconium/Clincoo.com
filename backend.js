@@ -13,6 +13,7 @@ let _lastProjectsHash = '';
 let _lastFilesHash = {};
 let _pollTimer = null;
 let _debounceTimer = null;
+var _recentlyDeletedIds = new Set();
 
 async function _api(method, path, body) {
   try {
@@ -85,6 +86,20 @@ async function _syncProjectsToD1() {
         await _api('POST', '/api/projects', { id: pid, name: name, description: desc });
       }
     }
+    // Delete D1 projects that no longer exist locally
+    var d1Result = await _api('GET', '/api/projects');
+    if (d1Result && d1Result.success && d1Result.data) {
+      for (var j = 0; j < d1Result.data.length; j++) {
+        var d1Id = String(d1Result.data[j].id);
+        var stillExists = projects.some(function(p) { return String(p.id) === d1Id; });
+        if (!stillExists && !_recentlyDeletedIds.has(d1Id)) {
+          _recentlyDeletedIds.add(d1Id);
+          await _api('DELETE', '/api/projects/' + d1Id);
+          await _api('DELETE', '/api/kv/clincoo_' + d1Id + '_files');
+          setTimeout(function(id) { _recentlyDeletedIds.delete(id); }, 5000);
+        }
+      }
+    }
   } catch (e) {
     console.warn('[Clincoo Sync] Error syncing projects to D1:', e.message);
   } finally {
@@ -110,6 +125,7 @@ async function _syncProjectsFromD1() {
 
   for (var i = 0; i < d1Projects.length; i++) {
     var d1Proj = d1Projects[i];
+    if (_recentlyDeletedIds.has(String(d1Proj.id))) continue;
     var localIdx = projects.findIndex(function(p) { return String(p.id) === String(d1Proj.id); });
     if (localIdx === -1) {
       projects.push(d1Proj);
@@ -164,7 +180,16 @@ async function _syncFilesFromD1(projectId) {
 }
 
 async function _deleteProjectFromD1(projectId) {
-  await _api('DELETE', '/api/projects/' + String(projectId));
+  var pid = String(projectId);
+  _recentlyDeletedIds.add(pid);
+  try {
+    await _api('DELETE', '/api/projects/' + pid);
+    await _api('DELETE', '/api/kv/clincoo_' + pid + '_files');
+  } catch(e) {
+    console.warn('[Clincoo Sync] Error deleting project from D1:', e.message);
+  } finally {
+    setTimeout(function() { _recentlyDeletedIds.delete(pid); }, 5000);
+  }
 }
 
 // === ENV VARS SYNC ===
