@@ -1701,13 +1701,59 @@
     }
 
     const SECURITY_PATTERNS = [
-      { regex: /(api[_-]?key|apikey)\s*[:=]\s*['"][a-zA-Z0-9_\-]{10,}['"]/gi, label: 'API key ter-hardcode ditemukan di kode', severity: 'Tinggi' },
-      { regex: /(secret|client[_-]?secret)\s*[:=]\s*['"][a-zA-Z0-9_\-]{6,}['"]/gi, label: 'Secret ter-hardcode ditemukan di kode', severity: 'Tinggi' },
-      { regex: /password\s*[:=]\s*['"][^'"]{3,}['"]/gi, label: 'Password ter-hardcode ditemukan di kode', severity: 'Tinggi' },
-      { regex: /(token|access[_-]?token|bearer)\s*[:=]\s*['"][a-zA-Z0-9_\-\.]{10,}['"]/gi, label: 'Token ter-hardcode ditemukan di kode', severity: 'Sedang' },
+      { regex: /(api[_-]?key|apikey)\s*[:=]\s*['"]([a-zA-Z0-9_\-]{10,})['"]/gi, label: 'API key ter-hardcode ditemukan di kode', severity: 'Tinggi', envKey: 'API_KEY' },
+      { regex: /(secret|client[_-]?secret)\s*[:=]\s*['"]([a-zA-Z0-9_\-]{6,})['"]/gi, label: 'Secret ter-hardcode ditemukan di kode', severity: 'Tinggi', envKey: 'SECRET' },
+      { regex: /password\s*[:=]\s*['"]([^'"]{3,})['"]/gi, label: 'Password ter-hardcode ditemukan di kode', severity: 'Tinggi', envKey: 'PASSWORD' },
+      { regex: /(token|access[_-]?token|bearer)\s*[:=]\s*['"]([a-zA-Z0-9_\-\.]{10,})['"]/gi, label: 'Token ter-hardcode ditemukan di kode', severity: 'Sedang', envKey: 'TOKEN' },
       { regex: /-----BEGIN (RSA |EC )?PRIVATE KEY-----/g, label: 'Private key ditemukan di kode', severity: 'Tinggi' },
       { regex: /<script[^>]*>[\s\S]*document\.write\([\s\S]*<\/script>/gi, label: 'Penggunaan document.write terdeteksi (risiko XSS)', severity: 'Rendah' }
     ];
+
+    function autoExtractCredentialsToEnv(files) {
+      if (!currentProjectId) return 0;
+      var envKey = getEnvKey();
+      var envVars = [];
+      try { envVars = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+      var existingKeys = envVars.map(function(e) { return e.key.toUpperCase(); });
+      var added = 0;
+      var seenValues = {};
+
+      files.forEach(function(file) {
+        SECURITY_PATTERNS.forEach(function(pattern) {
+          if (!pattern.envKey) return;
+          var regex = new RegExp(pattern.regex.source, pattern.regex.flags);
+          var match;
+          while ((match = regex.exec(file.content)) !== null) {
+            var value = match[2] || match[1] || '';
+            if (!value || value.length < 3) continue;
+            if (seenValues[value]) continue;
+            seenValues[value] = true;
+            var baseKey = pattern.envKey;
+            var envKeyName = baseKey;
+            var suffix = 1;
+            while (existingKeys.indexOf(envKeyName.toUpperCase()) !== -1) {
+              suffix++;
+              envKeyName = baseKey + '_' + suffix;
+            }
+            envVars.push({ key: envKeyName, value: value });
+            existingKeys.push(envKeyName.toUpperCase());
+            added++;
+          }
+        });
+      });
+
+      if (added > 0) {
+        localStorage.setItem(envKey, JSON.stringify(envVars));
+        if (typeof FB !== 'undefined') FB.set(envKey, envVars);
+        if (typeof renderEnvList === 'function') {
+          envVariables = envVars;
+          renderEnvList();
+        }
+        if (typeof _syncEnvToD1 === 'function') _syncEnvToD1(currentProjectId);
+        console.log('[Clincoo] Auto-extracted ' + added + ' credentials to env');
+      }
+      return added;
+    }
 
     function getAllProjectFiles() {
       if (!currentProjectId) return [];
@@ -1741,6 +1787,14 @@
           }
         });
       });
+
+      // Auto-extract detected credentials to env vars
+      if (!silent) {
+        var extracted = autoExtractCredentialsToEnv(files);
+        if (extracted > 0) {
+          findings.push({ file: 'Auto-Extract', label: extracted + ' kredensial terdeteksi & dipindahkan ke env otomatis', severity: 'Sedang', count: extracted });
+        }
+      }
 
       var envKey = getEnvKey();
       var savedEnv = [];
@@ -1812,6 +1866,10 @@
             try { envVariables = JSON.parse(saved); } catch (e) { envVariables = []; }
         }
         renderEnvList();
+        // Fetch from D1 for real-time sync
+        if (typeof _syncEnvFromD1 === 'function' && currentProjectId) {
+            _syncEnvFromD1(currentProjectId);
+        }
     }
 
     function renderEnvList() {
@@ -1838,6 +1896,7 @@
         localStorage.setItem(getEnvKey(), JSON.stringify(envVariables));
         if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         renderEnvList();
+        if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
         }
 
     function saveEnv() {
@@ -1850,6 +1909,7 @@
         keyInput.value = '';
         valInput.value = '';
         renderEnvList();
+        if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
     }
 
     function safeNavigate(url) {
@@ -1877,6 +1937,11 @@
       if (httpsEl) httpsEl.checked = httpsSaved === null ? true : httpsSaved === 'true';
 
       renderDeployStatus();
+
+      // Fetch domain from D1 if available (real-time sync)
+      if (typeof _syncDomainFromD1 === 'function' && currentProjectId) {
+        _syncDomainFromD1(currentProjectId);
+      }
     }
 
     function renderDeployStatus() {
@@ -1933,6 +1998,7 @@ async function saveDeployDomain() {
       } catch(err) {
         console.warn('[Clincoo] Gagal menyimpan domain');
       }
+      if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
     }
 
     async function removeDeployDomain() {
@@ -1954,6 +2020,7 @@ async function saveDeployDomain() {
           });
         } catch(err) {}
       }
+      if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
     }
 
     document.addEventListener('change', function(e) {
@@ -2015,6 +2082,19 @@ async function saveDeployDomain() {
       btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menyimpan...</span>';
       if (status) status.textContent = '';
 
+      // Auto-inject env vars into deployed files
+      var _envVars = [];
+      try { _envVars = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) {}
+      var _envScript = '';
+      if (_envVars.length > 0) {
+        var _envObj = {};
+        _envVars.forEach(function(ev) { _envObj[ev.key] = ev.value; });
+        _envScript = '<script>\n' +
+          'window.ENV=' + JSON.stringify(_envObj) + ';\n' +
+          'window._env=function(k){return (window.ENV&&window.ENV[k])||""};\n' +
+          '<\/script>';
+      }
+
       // Auto-inject analytics tracking script into HTML files
       var _trackerScript = '<script>\n' +
         '(function(){\n' +
@@ -2034,7 +2114,15 @@ async function saveDeployDomain() {
       for (var fi = 0; fi < allFiles.length; fi++) {
         if (allFiles[fi].path && allFiles[fi].path.match(/\.html?$/i) && allFiles[fi].content) {
           var c = allFiles[fi].content;
-          // Check if tracker already exists
+          // Inject env vars first (before any other script)
+          if (_envScript && c.indexOf('window.ENV') === -1) {
+            if (c.indexOf('</head>') !== -1) {
+              c = c.replace('</head>', _envScript + '\n</head>');
+            } else if (c.indexOf('</body>') !== -1) {
+              c = c.replace('</body>', _envScript + '\n</body>');
+            }
+          }
+          // Inject analytics tracker
           if (c.indexOf('analyticsTrack') === -1) {
             if (c.indexOf('</head>') !== -1) {
               c = c.replace('</head>', _trackerScript + '\n</head>');
@@ -2043,8 +2131,8 @@ async function saveDeployDomain() {
             } else {
               c = c + _trackerScript;
             }
-            allFiles[fi].content = c;
           }
+          allFiles[fi].content = c;
         }
       }
 

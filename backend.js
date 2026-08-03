@@ -167,6 +167,123 @@ async function _deleteProjectFromD1(projectId) {
   await _api('DELETE', '/api/projects/' + String(projectId));
 }
 
+// === ENV VARS SYNC ===
+var _lastEnvHash = {};
+var _isEnvSyncing = false;
+
+async function _syncEnvToD1(projectId) {
+  if (_isEnvSyncing) return;
+  _isEnvSyncing = true;
+  try {
+    var envKey = 'clincoo_' + projectId + '_env_variables';
+    var localEnv = [];
+    try { localEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+
+    // Fetch existing D1 env vars
+    var existing = await _api('GET', '/api/projects/' + projectId + '/env');
+    var d1Vars = (existing && existing.success && existing.data) ? existing.data : [];
+
+    // Delete vars that no longer exist locally
+    for (var i = 0; i < d1Vars.length; i++) {
+      var d1Key = d1Vars[i].key;
+      var stillExists = localEnv.some(function(e) { return e.key === d1Key; });
+      if (!stillExists) {
+        await _api('DELETE', '/api/env/' + d1Vars[i].id);
+      }
+    }
+
+    // Add/update vars that exist locally but not in D1
+    for (var j = 0; j < localEnv.length; j++) {
+      var localKey = localEnv[j].key;
+      var localVal = localEnv[j].value;
+      var d1Match = d1Vars.find(function(d) { return d.key === localKey; });
+      if (!d1Match) {
+        await _api('POST', '/api/projects/' + projectId + '/env', { key: localKey, value: localVal });
+      } else if (d1Match.value !== localVal) {
+        await _api('DELETE', '/api/env/' + d1Match.id);
+        await _api('POST', '/api/projects/' + projectId + '/env', { key: localKey, value: localVal });
+      }
+    }
+  } catch(e) {
+    console.warn('[Clincoo Sync] Error syncing env to D1:', e.message);
+  } finally {
+    _isEnvSyncing = false;
+  }
+}
+
+async function _syncEnvFromD1(projectId) {
+  if (_isEnvSyncing) return;
+  try {
+    var result = await _api('GET', '/api/projects/' + projectId + '/env');
+    if (!result || !result.success || !result.data) return;
+
+    var d1Env = result.data.map(function(item) {
+      return { key: item.key, value: item.value };
+    });
+
+    var envKey = 'clincoo_' + projectId + '_env_variables';
+    var localEnv = [];
+    try { localEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+
+    var d1Hash = _hash(d1Env);
+    if (d1Hash !== (_lastEnvHash[projectId] || '') && JSON.stringify(d1Env) !== JSON.stringify(localEnv)) {
+      localStorage.setItem(envKey, JSON.stringify(d1Env));
+      if (typeof envVariables !== 'undefined') {
+        envVariables = d1Env;
+        if (typeof renderEnvList === 'function') renderEnvList();
+      }
+      _lastEnvHash[projectId] = d1Hash;
+    }
+  } catch(e) {
+    console.warn('[Clincoo Sync] Error syncing env from D1:', e.message);
+  }
+}
+
+// === DOMAIN SYNC ===
+var _lastDomainHash = {};
+
+async function _syncDomainToD1(projectId) {
+  try {
+    var domainKey = 'clincoo_' + projectId + '_deploy_domain';
+    var localDomain = localStorage.getItem(domainKey) || '';
+
+    var existing = await _api('GET', '/api/projects/' + projectId + '/settings');
+    var settings = (existing && existing.success && existing.data) ? existing.data : {};
+    
+    if (settings.deploy_domain !== localDomain) {
+      settings.deploy_domain = localDomain;
+      await _api('PUT', '/api/projects/' + projectId + '/settings', settings);
+    }
+  } catch(e) {
+    console.warn('[Clincoo Sync] Error syncing domain to D1:', e.message);
+  }
+}
+
+async function _syncDomainFromD1(projectId) {
+  try {
+    var result = await _api('GET', '/api/projects/' + projectId + '/settings');
+    if (!result || !result.success || !result.data) return;
+
+    var settings = result.data;
+    if (settings.deploy_domain !== undefined) {
+      var domainKey = 'clincoo_' + projectId + '_deploy_domain';
+      var localDomain = localStorage.getItem(domainKey) || '';
+      if (settings.deploy_domain !== localDomain) {
+        if (settings.deploy_domain) {
+          localStorage.setItem(domainKey, settings.deploy_domain);
+        } else {
+          localStorage.removeItem(domainKey);
+        }
+        var domainEl = document.getElementById('deploy-domain');
+        if (domainEl) domainEl.value = settings.deploy_domain || '';
+        _lastDomainHash[projectId] = _hash(settings.deploy_domain || '');
+      }
+    }
+  } catch(e) {
+    console.warn('[Clincoo Sync] Error syncing domain from D1:', e.message);
+  }
+}
+
 async function _poll() {
   if (_isSyncing) return;
 
@@ -189,6 +306,12 @@ async function _poll() {
         await _syncFilesFromD1(currentProjectId);
       }
     }
+
+    // Sync env vars
+    await _syncEnvFromD1(currentProjectId);
+
+    // Sync domain
+    await _syncDomainFromD1(currentProjectId);
   }
 }
 
@@ -227,6 +350,8 @@ window.addEventListener('DOMContentLoaded', function() {
     _syncProjectsFromD1();
     if (typeof currentProjectId !== 'undefined' && currentProjectId) {
       _syncFilesFromD1(currentProjectId);
+      _syncEnvFromD1(currentProjectId);
+      _syncDomainFromD1(currentProjectId);
     }
   }, 100);
 });
@@ -234,3 +359,7 @@ window.addEventListener('DOMContentLoaded', function() {
 window._deleteProjectFromD1 = _deleteProjectFromD1;
 window._fetchSecurityStats = _fetchSecurityStats;
 window._checkBackendHealth = _checkBackendHealth;
+window._syncEnvToD1 = _syncEnvToD1;
+window._syncEnvFromD1 = _syncEnvFromD1;
+window._syncDomainToD1 = _syncDomainToD1;
+window._syncDomainFromD1 = _syncDomainFromD1;
