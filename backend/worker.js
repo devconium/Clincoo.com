@@ -117,7 +117,9 @@ async function handleRequest(request, env, ctx) {
   }
 
   if (path === '/api/health') {
-    return json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
+    const healthData = json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
+    healthData.headers.set('Cache-Control', 'no-cache');
+    return healthData;
   }
 
   const hasAuth = checkAuth(request, env);
@@ -316,6 +318,27 @@ async function handleRequest(request, env, ctx) {
     const key = path.split('/')[3];
     await env.DB.prepare('DELETE FROM settings WHERE project_id = ?').bind(key).run();
     return json({ message: 'KV deleted: ' + key });
+  }
+
+  // === SYNC STATUS ===
+  if (path === '/api/sync/status' && method === 'GET') {
+    const projectCount = await env.DB.prepare('SELECT COUNT(*) as count FROM projects').first();
+    const fileCount = await env.DB.prepare('SELECT COUNT(*) as count FROM files').first();
+    const kvCount = await env.DB.prepare('SELECT COUNT(*) as count FROM settings').first();
+    const deployCount = await env.DB.prepare('SELECT COUNT(*) as count FROM deployments').first();
+    const lastProject = await env.DB.prepare('SELECT updated_date FROM projects ORDER BY updated_date DESC LIMIT 1').first();
+    return json({
+      data: {
+        projects: projectCount.count,
+        files: fileCount.count,
+        kv_entries: kvCount.count,
+        deployments: deployCount.count,
+        last_sync: lastProject ? lastProject.updated_date : null,
+        database: 'connected',
+        worker: 'clincoo-backend',
+        version: '2.0'
+      }
+    });
   }
 
   return error('Endpoint not found: ' + method + ' ' + path, 404);
