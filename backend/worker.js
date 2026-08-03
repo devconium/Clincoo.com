@@ -1,4 +1,9 @@
-
+/**
+ * Clincoo Backend — Cloudflare Worker
+ * Database: D1 (clincoo_db)
+ * Security: Bot Protection + Rate Limiting + IP Blocking + API Key Auth
+ * API Key: Stored as Cloudflare Secret (BACKEND_API_KEY) — not in code, not changeable
+ */
 
 const RATE_LIMIT = 60;
 const BLOCKED_UAS = ['curl', 'wget', 'python-requests', 'scrapy', 'bot', 'spider', 'headless', 'semrush', 'ahrefs', 'mj12'];
@@ -60,7 +65,6 @@ async function checkBotProtection(request, env, path, hasAuth) {
         return { blocked: true, reason: 'Suspicious user agent', status: 403 };
       }
     }
-
     if (!ua && !path.includes('/health')) {
       return { blocked: true, reason: 'Empty user agent', status: 403 };
     }
@@ -117,18 +121,14 @@ async function handleRequest(request, env, ctx) {
   }
 
   if (path === '/api/health') {
-    const healthData = json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
-    healthData.headers.set('Cache-Control', 'no-cache');
-    return healthData;
+    return json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
   }
 
   const hasAuth = checkAuth(request, env);
-
   const protection = await checkBotProtection(request, env, path, hasAuth);
   if (protection.blocked) {
     return error(protection.reason, protection.status);
   }
-
   if (!hasAuth) {
     return error('Unauthorized', 401);
   }
@@ -302,43 +302,26 @@ async function handleRequest(request, env, ctx) {
     return json({ data: schemas });
   }
 
-  // === KEY-VALUE STORE (for localStorage sync) ===
-  if (path.match(/^\/api\/kv\/[\w_-]+$/) && method === 'GET') {
-    const key = path.split('/')[3];
-    const row = await env.DB.prepare('SELECT data FROM settings WHERE project_id = ?').bind(key).first();
-    return json({ data: row ? JSON.parse(row.data) : null });
+  if (path.match(/^\/api\/kv\/.+$/) && method === 'GET') {
+    const key = decodeURIComponent(path.replace('/api/kv/', ''));
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT, updated_date TEXT)').run();
+    const row = await env.DB.prepare('SELECT value FROM kv_store WHERE key = ?').bind(key).first();
+    if (!row) return json({ data: null });
+    try { return json({ data: JSON.parse(row.value) }); }
+    catch(e) { return json({ data: row.value }); }
   }
-  if (path.match(/^\/api\/kv\/[\w_-]+$/) && method === 'PUT') {
-    const key = path.split('/')[3];
+  if (path.match(/^\/api\/kv\/.+$/) && method === 'PUT') {
+    const key = decodeURIComponent(path.replace('/api/kv/', ''));
     const body = await request.json();
-    await env.DB.prepare('INSERT OR REPLACE INTO settings (project_id, data) VALUES (?, ?)').bind(key, JSON.stringify(body)).run();
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT, updated_date TEXT)').run();
+    await env.DB.prepare('INSERT OR REPLACE INTO kv_store (key, value, updated_date) VALUES (?, ?, ?)').bind(key, JSON.stringify(body), new Date().toISOString()).run();
     return json({ data: body });
   }
-  if (path.match(/^\/api\/kv\/[\w_-]+$/) && method === 'DELETE') {
-    const key = path.split('/')[3];
-    await env.DB.prepare('DELETE FROM settings WHERE project_id = ?').bind(key).run();
-    return json({ message: 'KV deleted: ' + key });
-  }
-
-  // === SYNC STATUS ===
-  if (path === '/api/sync/status' && method === 'GET') {
-    const projectCount = await env.DB.prepare('SELECT COUNT(*) as count FROM projects').first();
-    const fileCount = await env.DB.prepare('SELECT COUNT(*) as count FROM files').first();
-    const kvCount = await env.DB.prepare('SELECT COUNT(*) as count FROM settings').first();
-    const deployCount = await env.DB.prepare('SELECT COUNT(*) as count FROM deployments').first();
-    const lastProject = await env.DB.prepare('SELECT updated_date FROM projects ORDER BY updated_date DESC LIMIT 1').first();
-    return json({
-      data: {
-        projects: projectCount.count,
-        files: fileCount.count,
-        kv_entries: kvCount.count,
-        deployments: deployCount.count,
-        last_sync: lastProject ? lastProject.updated_date : null,
-        database: 'connected',
-        worker: 'clincoo-backend',
-        version: '2.0'
-      }
-    });
+  if (path.match(/^\/api\/kv\/.+$/) && method === 'DELETE') {
+    const key = decodeURIComponent(path.replace('/api/kv/', ''));
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT, updated_date TEXT)').run();
+    await env.DB.prepare('DELETE FROM kv_store WHERE key = ?').bind(key).run();
+    return json({ message: 'KV deleted' });
   }
 
   return error('Endpoint not found: ' + method + ' ' + path, 404);
