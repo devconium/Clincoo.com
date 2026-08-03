@@ -246,10 +246,10 @@
      <!-- Tab Navigasi, sekarang dengan event listener yang aman -->
      <div class="w-full border-b border-gray-200 mb-6" id="project-nav-tabs">
         <nav class="-mb-px flex space-x-6 overflow-x-auto hide-scrollbar" aria-label="Tabs">
-          <button onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none" aria-current="page">
+          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none" aria-current="page">
             Kode
           </button> 
-          <button onclick="switchTab('keamanan', this)" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none">
+          <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none">
             Keamanan
           </button>
         </nav>
@@ -303,34 +303,15 @@
           <div id="file-list-container" class="flex flex-col"></div>
         </div>
 
-        <div id="tab-content-empty" class="hidden flex-col items-center justify-center py-20 text-center transition-opacity">
-          <div class="mx-auto h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 ">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <h3 class="text-sm font-medium text-gray-900">Halaman Kosong</h3>
-          <p class="text-sm text-gray-500 mt-1">Konten untuk bagian ini belum tersedia.</p>
-        </div>
-
         <div id="tab-content-keamanan" class="hidden flex-col gap-4 py-8 max-w-4xl mx-auto w-full transition-opacity">
-          <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <div class="h-14 w-14 rounded-full bg-white text-red-600 flex items-center justify-center flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+          <div class="flex items-center justify-between mb-1 gap-3">
+            <div class="min-w-0">
+              <h3 class="text-base font-semibold text-gray-900">Pemindaian Keamanan</h3>
+              <p class="text-xs text-gray-500 mt-0.5">Memeriksa berkas proyek untuk kunci API, token, dan data sensitif yang terekspos secara publik.</p>
             </div>
-            <div class="flex-1 min-w-0">
-              <h4 class="text-base font-semibold text-gray-900 mb-1">Perangkat Baru Terdeteksi</h4>
-              <p class="text-sm text-gray-600 line-clamp-2">Akun Anda baru saja diakses dari perangkat Mac OS di Jakarta, Indonesia. Jika ini bukan Anda, segera amankan akun Anda.</p>
-              <div class="mt-2 text-xs font-medium text-gray-400">Hari ini, 14:18 WIB</div>
-            </div>
-            <div class="flex-shrink-0 mt-3 sm:mt-0 w-full sm:w-auto">
-              <button class="w-full sm:w-auto px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 focus:outline-none transition-colors">
-                Tinjau Aktivitas
-              </button>
-            </div>
+            <span id="security-last-scan" class="text-xs text-gray-400 whitespace-nowrap flex-shrink-0"></span>
           </div>
+          <div id="security-scan-results" class="flex flex-col gap-3"></div>
         </div>
 
       </div>
@@ -486,6 +467,7 @@
     </div>
   </div>
 
+  <script src="security.js"></script>
   <script>
     let projects = [];
     let filteredProjects = [];
@@ -524,6 +506,7 @@
     function saveData() {
       localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
       localStorage.setItem(STORAGE_KEY_FILES, JSON.stringify(projectFilesData));
+      if (typeof renderSecurityTab === 'function') renderSecurityTab();
     }
 
     const defaultTemplates = {
@@ -571,6 +554,9 @@
           indentUnit: 4,
           lineWrapping: true,
           scrollbarStyle: 'native'
+        });
+        codeEditor.on('change', function() {
+          if (typeof scheduleSecurityRescan === 'function') scheduleSecurityRescan();
         });
       }
     }
@@ -705,6 +691,7 @@
       modalAction = null;
       itemBeingRenamed = null;
       renderFileList();
+      if (typeof renderSecurityTab === 'function') renderSecurityTab();
       
       const tabBtns = document.querySelectorAll('.tab-btn');
       if (tabBtns.length > 0) switchTab('kode', tabBtns[0]);
@@ -1438,30 +1425,30 @@
     function switchTab(tabId, element) {
       const tabBtns = document.querySelectorAll('.tab-btn');
       tabBtns.forEach(btn => {
-        btn.classList.remove('border-black', 'text-black');
-        btn.classList.add('border-transparent', 'text-gray-500');
+        const isActive = btn.dataset.tab === tabId || btn === element;
+        if(isActive) {
+          btn.classList.remove('border-transparent', 'text-gray-500');
+          btn.classList.add('border-black', 'text-black');
+          btn.setAttribute('aria-current', 'page');
+        } else {
+          btn.classList.remove('border-black', 'text-black');
+          btn.classList.add('border-transparent', 'text-gray-500');
+          btn.removeAttribute('aria-current');
+        }
       });
-      if(element) {
-        element.classList.remove('border-transparent', 'text-gray-500');
-        element.classList.add('border-black', 'text-black');
-      }
       
       const contentKode = document.getElementById('tab-content-kode');
-      const contentEmpty = document.getElementById('tab-content-empty');
       const contentKeamanan = document.getElementById('tab-content-keamanan');
       
       if(contentKode) {
         if(tabId === 'kode') contentKode.classList.remove('hidden');
         else contentKode.classList.add('hidden');
       }
-      if(contentEmpty) {
-        if(tabId === 'kode') contentEmpty.classList.remove('hidden');
-        else contentEmpty.classList.add('hidden');
-      }
       if(contentKeamanan) {
         if(tabId === 'keamanan') {
           contentKeamanan.classList.remove('hidden');
           contentKeamanan.classList.add('flex');
+          if (typeof renderSecurityTab === 'function') renderSecurityTab();
         } else {
           contentKeamanan.classList.add('hidden');
           contentKeamanan.classList.remove('flex');
