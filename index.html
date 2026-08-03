@@ -59,8 +59,9 @@
     }
     .custom-input:focus {
       background-color: #ffffff;
-      border-color: #9ca3af;
-      box-shadow: 0 0 0 1px #9ca3af;
+      border-color: #d1d5db;
+      box-shadow: none;
+      outline: none;
     }
 
     .hide-scrollbar::-webkit-scrollbar {
@@ -358,7 +359,7 @@
 
             <div class="flex flex-col gap-2">
               <label class="text-sm font-medium text-gray-700">Sumber</label>
-              <select id="deploy-source" class="custom-input w-full px-4 py-3 rounded-xl border text-sm">
+              <select id="deploy-source" class="custom-input w-full px-4 py-3 rounded-xl border text-sm focus:outline-none">
                 <option value="project" selected>Publikasi dari berkas proyek</option>
               </select>
             </div>
@@ -367,7 +368,7 @@
               <label class="text-sm font-medium text-gray-700">Cabang</label>
               <p class="text-xs text-gray-500 -mt-1">Pilih cabang untuk publikasi proyek Anda. Setiap kali disimpan, proyek akan langsung dipublikasi ke production.</p>
               <div class="flex flex-col sm:flex-row gap-2">
-                <select id="deploy-branch" class="custom-input flex-1 px-4 py-3 rounded-xl border text-sm">
+                <select id="deploy-branch" class="custom-input flex-1 px-4 py-3 rounded-xl border text-sm focus:outline-none">
                   <option value="main" selected>main</option>
                   <option value="preview">preview</option>
                 </select>
@@ -678,7 +679,7 @@
     </div>
   </div>
 
-  <div id="input-modal-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+  <div id="input-modal-overlay" onclick="if(event.target===this) closeInputModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
     <div id="input-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
       <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
         <h3 id="input-modal-title" class="text-lg font-bold text-gray-900">Buat File Baru</h3>
@@ -933,6 +934,8 @@
         currentFolderPath = 'root';
       }
       currentProjectId = id;
+      // Ensure deploy status reflects THIS project, not a stale one
+      renderDeployStatus();
       loadProjectFiles();
       if (fileSearchInput) fileSearchInput.value = '';
       modalAction = null;
@@ -1542,11 +1545,19 @@
         const index = projects.findIndex(p => p.id == parseInt(id));
         if (index !== -1) projects[index] = { ...projects[index], name, desc, visibility };
       } else {
-        const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
+        const existingIds = projects.map(p => p.id);
+        let newId = projects.length > 0 ? Math.max(...existingIds) + 1 : 1;
+        // Ensure ID is truly unique (not recycled from deleted project)
+        while (localStorage.getItem('clincoo_' + newId + '_deploy_site')) {
+          newId++;
+        }
+        // Clear any stale deploy keys for this ID
+        localStorage.removeItem('clincoo_' + newId + '_deploy_site');
+        localStorage.removeItem('clincoo_' + newId + '_deploy_domain');
+        localStorage.removeItem('clincoo_' + newId + '_deploy_branch');
+        localStorage.removeItem('clincoo_' + newId + '_deploy_https');
         projects.push({ id: newId, name, desc, visibility });
-        // Clear currentProjectId so auto-deploy doesn't fire with old project's deploy URL
         currentProjectId = newId;
-        // Initialize empty files for new project
         projectFilesData = { 'root': [] };
         localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
       }
@@ -1561,6 +1572,11 @@
         var projName = projToDelete ? projToDelete.name : '';
         projects = projects.filter(p => p.id !== targetId);
         localStorage.removeItem('clincoo_' + targetId + '_files');
+        localStorage.removeItem('clincoo_' + targetId + '_deploy_site');
+        localStorage.removeItem('clincoo_' + targetId + '_deploy_domain');
+        localStorage.removeItem('clincoo_' + targetId + '_deploy_branch');
+        localStorage.removeItem('clincoo_' + targetId + '_deploy_https');
+        localStorage.removeItem('clincoo_' + targetId + '_security_findings');
         saveData();
         navigateTo('/');
         if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(targetId, projName);
@@ -1638,6 +1654,11 @@
       var projName = projToDelete ? projToDelete.name : '';
       projects = projects.filter(p => p.id !== projectId);
       localStorage.removeItem('clincoo_' + projectId + '_files');
+      localStorage.removeItem('clincoo_' + projectId + '_deploy_site');
+      localStorage.removeItem('clincoo_' + projectId + '_deploy_domain');
+      localStorage.removeItem('clincoo_' + projectId + '_deploy_branch');
+      localStorage.removeItem('clincoo_' + projectId + '_deploy_https');
+      localStorage.removeItem('clincoo_' + projectId + '_security_findings');
       saveData();
       applyFilters();
       if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(projectId, projName);
@@ -1807,6 +1828,16 @@
         } else {
           contentEnv.classList.add('hidden');
           contentEnv.classList.remove('flex');
+        }
+      }
+      // Security warning banner only shows in Keamanan tab
+      var secBanner = document.getElementById('security-warning-banner');
+      if (secBanner) {
+        if (tabId === 'keamanan') {
+          // visibility controlled by runSecurityScan
+        } else {
+          secBanner.classList.add('hidden');
+          secBanner.classList.remove('flex');
         }
       }
     }
@@ -2286,6 +2317,7 @@ async function saveDeployDomain() {
         }
       }
       if (allFiles.length === 0) {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Menyimpan</span>'; }
         return;
       }
 
@@ -2295,11 +2327,11 @@ async function saveDeployDomain() {
       if (!projectSlug) projectSlug = 'clincoo-app';
       var branch = branchSelect ? branchSelect.value : 'main';
 
-      var originalHTML = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menyimpan...</span>';
-      if (status) status.textContent = '';
-
+      if (btn) {
+        var originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menyimpan...</span>';
+      }
       // Auto-inject env vars into deployed files
       var _envVars = [];
       try { _envVars = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) {}
@@ -2373,14 +2405,12 @@ async function saveDeployDomain() {
           localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
           if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
           renderDeployStatus();
-          btn.innerHTML = originalHTML;
-          btn.disabled = false;
+          if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
         } else {
           throw new Error(result.error || 'Publikasi gagal');
         }
       } catch(err) {
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
+        if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
       }
     }
 
