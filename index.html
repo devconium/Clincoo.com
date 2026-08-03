@@ -514,40 +514,50 @@
             <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
               <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-5.13a4 4 0 11-8 0 4 4 0 018 0zm6 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             </div>
-            <span class="text-xs font-medium text-gray-500">Total Pengunjung</span>
+            <span class="text-xs font-medium text-gray-500">Views Hari Ini</span>
           </div>
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">12.480</p>
-          <p class="text-xs text-green-600 font-medium mt-1">+18% bulan ini</p>
+          <p id="analytics-total-today" class="text-xl sm:text-2xl font-bold text-gray-900">0</p>
+          <p class="text-xs text-gray-400 font-medium mt-1">Real-time</p>
         </div>
         <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
           <div class="flex items-center gap-2 mb-2">
             <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
-              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
             </div>
-            <span class="text-xs font-medium text-gray-500">Pendapatan</span>
+            <span class="text-xs font-medium text-gray-500">Unique Visitors</span>
           </div>
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">Rp 84,2jt</p>
-          <p class="text-xs text-green-600 font-medium mt-1">+7% bulan ini</p>
+          <p id="analytics-total-visitors" class="text-xl sm:text-2xl font-bold text-gray-900">0</p>
+          <p class="text-xs text-gray-400 font-medium mt-1">30 hari terakhir</p>
         </div>
         <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
           <div class="flex items-center gap-2 mb-2">
             <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
               <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
             </div>
-            <span class="text-xs font-medium text-gray-500">Konversi</span>
+            <span class="text-xs font-medium text-gray-500">Total Events</span>
           </div>
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">3,4%</p>
-          <p class="text-xs text-red-500 font-medium mt-1">-0,5% bulan ini</p>
+          <p id="analytics-total-events" class="text-xl sm:text-2xl font-bold text-gray-900">0</p>
+          <p class="text-xs text-gray-400 font-medium mt-1">All time</p>
         </div>
         <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
           <div class="flex items-center gap-2 mb-2">
             <div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
               <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
-            <span class="text-xs font-medium text-gray-500">Sesi Aktif</span>
+            <span class="text-xs font-medium text-gray-500">Avg. Durasi</span>
           </div>
-          <p class="text-xl sm:text-2xl font-bold text-gray-900">847</p>
-          <p class="text-xs text-green-600 font-medium mt-1">+12 hari ini</p>
+          <p id="analytics-avg-duration" class="text-xl sm:text-2xl font-bold text-gray-900">0s</p>
+          <p class="text-xs text-gray-400 font-medium mt-1">Per sesi</p>
+        </div>
+      </div>
+
+      <!-- Auto-refresh indicator -->
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2 text-xs text-gray-400">
+          <span class="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+          <span>Live data</span>
+          <span class="text-gray-300">|</span>
+          <span>Update: <span id="analytics-last-refresh">--:--</span></span>
         </div>
       </div>
 
@@ -2005,6 +2015,39 @@ async function saveDeployDomain() {
       btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menyimpan...</span>';
       if (status) status.textContent = '';
 
+      // Auto-inject analytics tracking script into HTML files
+      var _trackerScript = '<script>\n' +
+        '(function(){\n' +
+        'var T="https://elowen-d02cebb0.base44.app/functions/analyticsTrack";\n' +
+        'var v=localStorage.getItem("_cv")||("v-"+Date.now().toString(36)+Math.random().toString(36).substr(2,8));\n' +
+        'localStorage.setItem("_cv",v);\n' +
+        'var s=sessionStorage.getItem("_cs")||("s-"+Date.now().toString(36)+Math.random().toString(36).substr(2,6));\n' +
+        'sessionStorage.setItem("_cs",s);\n' +
+        'function track(e,d){try{var b=JSON.stringify({domain:location.hostname,path:location.pathname,event_type:e||"pageview",visitor_id:v,session_id:s,referrer:document.referrer||"",screen_w:screen.width,screen_h:screen.height,language:navigator.language||"",duration:d||0});if(navigator.sendBeacon){navigator.sendBeacon(T,b)}else{fetch(T,{method:"POST",headers:{"Content-Type":"application/json"},body:b,keepalive:true})}}catch(x){}}\n' +
+        'track("pageview");\n' +
+        'var st=Date.now();\n' +
+        'window.addEventListener("beforeunload",function(){track("session_end",Date.now()-st)});\n' +
+        'document.addEventListener("click",function(e){if(e.target&&e.target.tagName==="A"){track("click")}},true);\n' +
+        '})();\n' +
+        '<\/script>';
+
+      for (var fi = 0; fi < allFiles.length; fi++) {
+        if (allFiles[fi].path && allFiles[fi].path.match(/\.html?$/i) && allFiles[fi].content) {
+          var c = allFiles[fi].content;
+          // Check if tracker already exists
+          if (c.indexOf('analyticsTrack') === -1) {
+            if (c.indexOf('</head>') !== -1) {
+              c = c.replace('</head>', _trackerScript + '\n</head>');
+            } else if (c.indexOf('</body>') !== -1) {
+              c = c.replace('</body>', _trackerScript + '\n</body>');
+            } else {
+              c = c + _trackerScript;
+            }
+            allFiles[fi].content = c;
+          }
+        }
+      }
+
       try {
         var res = await fetch('https://clincoo-deploy.clincoo.workers.dev', {
           method: 'POST',
@@ -2037,7 +2080,42 @@ async function saveDeployDomain() {
 
 
     var _analyticsChartsInited = false;
+    var _analyticsCharts = {};
+    var _analyticsRefreshTimer = null;
+    var ANALYTICS_STATS_URL = 'https://elowen-d02cebb0.base44.app/functions/analyticsStats';
+    var ANALYTICS_TRACK_URL = 'https://elowen-d02cebb0.base44.app/functions/analyticsTrack';
 
+    // === TRACKING: Self-track the Clincoo dashboard itself ===
+    var _clincooVisitorId = localStorage.getItem('clincoo_vid') || '';
+    if (!_clincooVisitorId) {
+      _clincooVisitorId = 'v-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
+      localStorage.setItem('clincoo_vid', _clincooVisitorId);
+    }
+    var _clincooSessionId = sessionStorage.getItem('clincoo_sid') || '';
+    if (!_clincooSessionId) {
+      _clincooSessionId = 's-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+      sessionStorage.setItem('clincoo_sid', _clincooSessionId);
+    }
+    // Send tracking beacon for dashboard views
+    if (navigator.sendBeacon) {
+      try {
+        var trackData = JSON.stringify({
+          domain: window.location.hostname,
+          path: window.location.pathname,
+          event_type: 'pageview',
+          visitor_id: _clincooVisitorId,
+          session_id: _clincooSessionId,
+          referrer: document.referrer || '',
+          screen_w: window.screen.width,
+          screen_h: window.screen.height,
+          language: navigator.language || '',
+          duration: 0
+        });
+        navigator.sendBeacon(ANALYTICS_TRACK_URL, trackData);
+      } catch(e) {}
+    }
+
+    // === ANALYTICS DASHBOARD ===
     function initAnalyticsCharts() {
       if (typeof Chart === 'undefined') return;
       if (_analyticsChartsInited) return;
@@ -2047,197 +2125,189 @@ async function saveDeployDomain() {
       Chart.defaults.color = '#6b7280';
       Chart.defaults.borderColor = '#e5e7eb';
 
-      // 1. Bar Chart
-      new Chart(document.getElementById('barChart'), {
+      // Create chart instances with empty data, will be filled by fetch
+      _analyticsCharts.bar = new Chart(document.getElementById('barChart'), {
         type: 'bar',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-          datasets: [{
-            label: 'Jumlah Pengunjung',
-            data: [1200, 1900, 3000, 2500, 2200, 3500],
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Trafik Pengunjung (Bar Chart)', font: { size: 14, weight: 600 } } },
-          scales: { y: { beginAtZero: true } }
-        }
+        data: { labels: [], datasets: [{ label: 'Page Views', data: [], backgroundColor: 'rgba(54,162,235,0.6)', borderColor: 'rgba(54,162,235,1)', borderWidth: 1 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik Bulanan (Bar)', font: { size: 14, weight: '600' } } }, scales: { y: { beginAtZero: true } } }
       });
 
-      // 2. Line Chart
-      new Chart(document.getElementById('lineChart'), {
+      _analyticsCharts.line = new Chart(document.getElementById('lineChart'), {
         type: 'line',
-        data: {
-          labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
-          datasets: [{
-            label: 'Penjualan Mingguan',
-            data: [65, 59, 80, 81, 56, 95, 110],
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Tren Penjualan (Line Chart)', font: { size: 14, weight: 600 } } }
-        }
+        data: { labels: [], datasets: [{ label: 'Views Harian', data: [], fill: false, borderColor: 'rgb(75,192,192)', tension: 0.1 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik 7 Hari (Line)', font: { size: 14, weight: '600' } } } }
       });
 
-      // 3. Pie Chart
-      new Chart(document.getElementById('pieChart'), {
+      _analyticsCharts.pie = new Chart(document.getElementById('pieChart'), {
         type: 'pie',
-        data: {
-          labels: ['Organik', 'Sosial Media', 'Direct', 'Referral'],
-          datasets: [{
-            label: 'Sumber Trafik',
-            data: [300, 150, 100, 50],
-            backgroundColor: ['rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,205,86)', 'rgb(75,192,192)'],
-            hoverOffset: 4
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Sumber Trafik (Pie Chart)', font: { size: 14, weight: 600 } } }
-        }
+        data: { labels: [], datasets: [{ label: 'Sumber', data: [], backgroundColor: ['rgb(255,99,132)','rgb(54,162,235)','rgb(255,205,86)','rgb(75,192,192)','rgb(153,102,255)','rgb(255,159,64)','rgb(201,203,207)','rgb(54,199,99)'], hoverOffset: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Sumber Trafik (Pie)', font: { size: 14, weight: '600' } } } }
       });
 
-      // 4. Doughnut Chart
-      new Chart(document.getElementById('doughnutChart'), {
+      _analyticsCharts.doughnut = new Chart(document.getElementById('doughnutChart'), {
         type: 'doughnut',
-        data: {
-          labels: ['Mobile', 'Desktop', 'Tablet'],
-          datasets: [{
-            label: 'Perangkat',
-            data: [65, 30, 5],
-            backgroundColor: ['rgb(153,102,255)', 'rgb(255,159,64)', 'rgb(201,203,207)'],
-            hoverOffset: 4
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Perangkat Pengguna (Doughnut Chart)', font: { size: 14, weight: 600 } } }
-        }
+        data: { labels: [], datasets: [{ label: 'Perangkat', data: [], backgroundColor: ['rgb(153,102,255)','rgb(255,159,64)','rgb(201,203,207)','rgb(75,192,192)'], hoverOffset: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Perangkat (Doughnut)', font: { size: 14, weight: '600' } } } }
       });
 
-      // 5. Radar Chart
-      new Chart(document.getElementById('radarChart'), {
+      _analyticsCharts.radar = new Chart(document.getElementById('radarChart'), {
         type: 'radar',
-        data: {
-          labels: ['Komunikasi', 'Pemecahan Masalah', 'Kerja Sama', 'Inovasi', 'Ketepatan Waktu', 'Kualitas Kerja'],
-          datasets: [{
-            label: 'Tim A', data: [65, 59, 90, 81, 56, 55],
-            fill: true, backgroundColor: 'rgba(255,99,132,0.2)', borderColor: 'rgb(255,99,132)',
-            pointBackgroundColor: 'rgb(255,99,132)', pointBorderColor: '#fff'
-          }, {
-            label: 'Tim B', data: [28, 48, 40, 19, 96, 27],
-            fill: true, backgroundColor: 'rgba(54,162,235,0.2)', borderColor: 'rgb(54,162,235)',
-            pointBackgroundColor: 'rgb(54,162,235)', pointBorderColor: '#fff'
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Analisis Performa (Radar Chart)', font: { size: 14, weight: 600 } } },
-          elements: { line: { borderWidth: 3 } }
-        }
+        data: { labels: [], datasets: [{ label: 'Bahasa Pengguna', data: [], fill: true, backgroundColor: 'rgba(255,99,132,0.2)', borderColor: 'rgb(255,99,132)', pointBackgroundColor: 'rgb(255,99,132)' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Bahasa (Radar)', font: { size: 14, weight: '600' } } } }
       });
 
-      // 6. Polar Area Chart
-      new Chart(document.getElementById('polarAreaChart'), {
+      _analyticsCharts.polarArea = new Chart(document.getElementById('polarAreaChart'), {
         type: 'polarArea',
-        data: {
-          labels: ['Elektronik', 'Pakaian', 'Buku', 'Alat Rumah Tangga', 'Mainan'],
-          datasets: [{
-            label: 'Pendapatan per Kategori', data: [11, 16, 7, 3, 14],
-            backgroundColor: ['rgba(255,99,132,0.5)', 'rgba(75,192,192,0.5)', 'rgba(255,205,86,0.5)', 'rgba(201,203,207,0.5)', 'rgba(54,162,235,0.5)']
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Penjualan Kategori (Polar Area)', font: { size: 14, weight: 600 } } }
-        }
+        data: { labels: [], datasets: [{ data: [], backgroundColor: ['rgba(255,99,132,0.5)','rgba(75,192,192,0.5)','rgba(255,205,86,0.5)','rgba(201,203,207,0.5)','rgba(54,162,235,0.5)','rgba(153,102,255,0.5)','rgba(255,159,64,0.5)','rgba(99,199,54,0.5)'] }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Negara Asal (Polar Area)', font: { size: 14, weight: '600' } } } }
       });
 
-      // 7. Scatter Chart
-      new Chart(document.getElementById('scatterChart'), {
+      _analyticsCharts.scatter = new Chart(document.getElementById('scatterChart'), {
         type: 'scatter',
-        data: {
-          datasets: [{
-            label: 'Sesi Pengguna',
-            data: [{x:10,y:20},{x:15,y:10},{x:20,y:30},{x:25,y:25},{x:30,y:40},{x:35,y:35},{x:40,y:50},{x:45,y:45},{x:50,y:60},{x:55,y:55}],
-            backgroundColor: 'rgb(255,99,132)'
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Waktu vs Halaman (Scatter)', font: { size: 14, weight: 600 } } },
-          scales: {
-            x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Waktu (Menit)' } },
-            y: { title: { display: true, text: 'Jumlah Halaman' } }
-          }
-        }
+        data: { datasets: [{ label: 'Trafik per Jam', data: [], backgroundColor: 'rgb(255,99,132)' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik 24 Jam (Scatter)', font: { size: 14, weight: '600' } } }, scales: { x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jam' } }, y: { title: { display: true, text: 'Views' } } } }
       });
 
-      // 8. Bubble Chart
-      new Chart(document.getElementById('bubbleChart'), {
+      _analyticsCharts.bubble = new Chart(document.getElementById('bubbleChart'), {
         type: 'bubble',
-        data: {
-          datasets: [{
-            label: 'Campaign A', data: [{x:20,y:30,r:15},{x:40,y:10,r:10},{x:30,y:25,r:25},{x:50,y:45,r:20}],
-            backgroundColor: 'rgba(255,99,132,0.5)'
-          }, {
-            label: 'Campaign B', data: [{x:15,y:40,r:10},{x:35,y:20,r:15},{x:25,y:35,r:20},{x:45,y:50,r:25}],
-            backgroundColor: 'rgba(54,162,235,0.5)'
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Analisis Campaign (Bubble)', font: { size: 14, weight: 600 } } },
-          scales: {
-            x: { title: { display: true, text: 'Pengunjung (Ribuan)' } },
-            y: { title: { display: true, text: 'Tingkat Konversi (%)' } }
-          }
-        }
+        data: { datasets: [{ label: 'Trafik per Jam', data: [], backgroundColor: 'rgba(54,162,235,0.5)' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Visitors x Views (Bubble)', font: { size: 14, weight: '600' } } }, scales: { x: { title: { display: true, text: 'Jam' } }, y: { title: { display: true, text: 'Views' } } } }
       });
 
-      // 9. Mixed Chart (Bar & Line)
-      new Chart(document.getElementById('mixedChart'), {
+      _analyticsCharts.mixed = new Chart(document.getElementById('mixedChart'), {
         type: 'bar',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-          datasets: [{
-            type: 'line', label: 'Target Penjualan', data: [200, 220, 250, 270, 300, 320],
-            borderColor: 'rgb(255,99,132)', borderWidth: 2, fill: false
-          }, {
-            type: 'bar', label: 'Realisasi Penjualan', data: [180, 230, 240, 290, 280, 350],
-            backgroundColor: 'rgba(75,192,192,0.6)', borderColor: 'rgba(75,192,192,1)', borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Penjualan vs Target (Mixed)', font: { size: 14, weight: 600 } } }
-        }
+        data: { labels: [], datasets: [
+          { type: 'line', label: 'Unique Visitors', data: [], borderColor: 'rgb(255,99,132)', borderWidth: 2, fill: false },
+          { type: 'bar', label: 'Page Views', data: [], backgroundColor: 'rgba(75,192,192,0.6)', borderColor: 'rgba(75,192,192,1)', borderWidth: 1 }
+        ] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Views vs Visitors (Mixed)', font: { size: 14, weight: '600' } } } }
       });
 
-      // 10. Horizontal Bar Chart
-      new Chart(document.getElementById('horizontalBarChart'), {
+      _analyticsCharts.horizontalBar = new Chart(document.getElementById('horizontalBarChart'), {
         type: 'bar',
-        data: {
-          labels: ['Amerika Serikat', 'Indonesia', 'India', 'Inggris', 'Brasil'],
-          datasets: [{
-            label: 'Jumlah Pengunjung Aktif', data: [45000, 38000, 25000, 18000, 15000],
-            backgroundColor: ['rgba(255,99,132,0.6)', 'rgba(54,162,235,0.6)', 'rgba(255,205,86,0.6)', 'rgba(75,192,192,0.6)', 'rgba(153,102,255,0.6)'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          plugins: { title: { display: true, text: 'Top Negara Asal (Horizontal Bar)', font: { size: 14, weight: 600 } } }
-        }
+        data: { labels: [], datasets: [{ label: 'Views', data: [], backgroundColor: ['rgba(255,99,132,0.6)','rgba(54,162,235,0.6)','rgba(255,205,86,0.6)','rgba(75,192,192,0.6)','rgba(153,102,255,0.6)','rgba(255,159,64,0.6)','rgba(201,203,207,0.6)','rgba(99,199,54,0.6)','rgba(199,54,199,0.6)','rgba(54,199,199,0.6)'], borderWidth: 1 }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Top Halaman (Horizontal Bar)', font: { size: 14, weight: '600' } } } }
       });
+
+      // Fetch real data
+      fetchAnalyticsData();
+
+      // Auto-refresh every 30 seconds
+      if (_analyticsRefreshTimer) clearInterval(_analyticsRefreshTimer);
+      _analyticsRefreshTimer = setInterval(fetchAnalyticsData, 30000);
     }
+
+    async function fetchAnalyticsData() {
+      try {
+        var res = await fetch(ANALYTICS_STATS_URL, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+        if (!res.ok) return;
+        var result = await res.json();
+        if (!result || !result.data) return;
+        var d = result.data;
+
+        // Update summary cards
+        var elToday = document.getElementById('analytics-total-today');
+        var elVisitors = document.getElementById('analytics-total-visitors');
+        var elEvents = document.getElementById('analytics-total-events');
+        var elDuration = document.getElementById('analytics-avg-duration');
+        if (elToday) elToday.textContent = (d.summary.total_today || 0).toLocaleString('id-ID');
+        if (elVisitors) elVisitors.textContent = (d.summary.total_visitors_30d || 0).toLocaleString('id-ID');
+        if (elEvents) elEvents.textContent = (d.summary.total_events || 0).toLocaleString('id-ID');
+        if (elDuration) elDuration.textContent = ((d.summary.avg_duration || 0) / 1000).toFixed(1) + 's';
+
+        // 1. Bar: monthly
+        if (d.monthly && d.monthly.length) {
+          _analyticsCharts.bar.data.labels = d.monthly.map(function(m) { return m.month; });
+          _analyticsCharts.bar.data.datasets[0].data = d.monthly.map(function(m) { return m.views; });
+          _analyticsCharts.bar.update();
+        }
+
+        // 2. Line: daily
+        if (d.daily && d.daily.length) {
+          _analyticsCharts.line.data.labels = d.daily.map(function(m) { return m.day; });
+          _analyticsCharts.line.data.datasets[0].data = d.daily.map(function(m) { return m.views; });
+          _analyticsCharts.line.update();
+        }
+
+        // 3. Pie: sources
+        if (d.sources && d.sources.length) {
+          _analyticsCharts.pie.data.labels = d.sources.map(function(s) { return s.source; });
+          _analyticsCharts.pie.data.datasets[0].data = d.sources.map(function(s) { return s.count; });
+          _analyticsCharts.pie.update();
+        }
+
+        // 4. Doughnut: devices
+        if (d.devices && d.devices.length) {
+          _analyticsCharts.doughnut.data.labels = d.devices.map(function(s) { return s.device; });
+          _analyticsCharts.doughnut.data.datasets[0].data = d.devices.map(function(s) { return s.count; });
+          _analyticsCharts.doughnut.update();
+        }
+
+        // 5. Radar: languages
+        if (d.languages && d.languages.length) {
+          _analyticsCharts.radar.data.labels = d.languages.map(function(s) { return s.lang; });
+          _analyticsCharts.radar.data.datasets[0].data = d.languages.map(function(s) { return s.count; });
+          _analyticsCharts.radar.update();
+        }
+
+        // 6. Polar Area: countries
+        if (d.countries && d.countries.length) {
+          _analyticsCharts.polarArea.data.labels = d.countries.map(function(s) { return s.country; });
+          _analyticsCharts.polarArea.data.datasets[0].data = d.countries.map(function(s) { return s.count; });
+          _analyticsCharts.polarArea.update();
+        }
+
+        // 7. Scatter: hourly
+        if (d.hourly && d.hourly.length) {
+          _analyticsCharts.scatter.data.datasets[0].data = d.hourly.map(function(s) { return { x: s.hour, y: s.views }; });
+          _analyticsCharts.scatter.update();
+        }
+
+        // 8. Bubble: visitors x views x sessions
+        if (d.bubbleData && d.bubbleData.length) {
+          _analyticsCharts.bubble.data.datasets[0].data = d.bubbleData.map(function(s) { return { x: s.hour, y: s.views, r: Math.max(5, Math.min(40, s.visitors * 3)) }; });
+          _analyticsCharts.bubble.update();
+        }
+
+        // 9. Mixed: daily views vs visitors
+        if (d.dailyMixed && d.dailyMixed.length) {
+          _analyticsCharts.mixed.data.labels = d.dailyMixed.map(function(s) { return s.day; });
+          _analyticsCharts.mixed.data.datasets[0].data = d.dailyMixed.map(function(s) { return s.visitors; });
+          _analyticsCharts.mixed.data.datasets[1].data = d.dailyMixed.map(function(s) { return s.views; });
+          _analyticsCharts.mixed.update();
+        }
+
+        // 10. Horizontal Bar: top pages
+        if (d.topPages && d.topPages.length) {
+          _analyticsCharts.horizontalBar.data.labels = d.topPages.map(function(s) { return s.path.substring(0, 25); });
+          _analyticsCharts.horizontalBar.data.datasets[0].data = d.topPages.map(function(s) { return s.views; });
+          _analyticsCharts.horizontalBar.update();
+        }
+
+        // Update last refreshed time
+        var refreshEl = document.getElementById('analytics-last-refresh');
+        if (refreshEl) refreshEl.textContent = new Date().toLocaleTimeString('id-ID');
+      } catch(e) {
+        console.warn('[Analytics] Gagal fetch data:', e.message);
+      }
+    }
+
+    // Track session duration on unload
+    window.addEventListener('beforeunload', function() {
+      if (navigator.sendBeacon) {
+        try {
+          var dur = performance.now();
+          navigator.sendBeacon(ANALYTICS_TRACK_URL, JSON.stringify({
+            domain: window.location.hostname,
+            path: window.location.pathname,
+            event_type: 'session_end',
+            visitor_id: _clincooVisitorId,
+            session_id: _clincooSessionId,
+            duration: Math.round(dur)
+          }));
+        } catch(e) {}
+      }
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
