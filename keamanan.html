@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https: blob:;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Proyek</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+    }
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+    .page-view {
+      transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+    }
+    .page-enter {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .page-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+    
+    .dark-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+    .dark-scrollbar::-webkit-scrollbar-track { background: #1e1e1e; }
+    .dark-scrollbar::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+    .dark-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
+
+    .custom-input {
+      background-color: #f3f4f6;
+      border-color: #e5e7eb;
+      color: #111827;
+    }
+    .custom-input:focus {
+      background-color: #ffffff;
+      border-color: #9ca3af;
+      box-shadow: 0 0 0 1px #9ca3af;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="text-gray-900 antialiased min-h-screen relative bg-[#f7f7f9]">
+
+  <div id="page-project-detail" class="page-view w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20 page-active">
+    <div class="w-full max-w-5xl">
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Ruang Kerja</h2>
+            <span class="text-gray-300 font-medium text-lg flex-shrink-0">/</span>
+            <div class="min-w-0">
+              <button onclick="toggleProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray hover:text-gray focus:outline-none border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
+                <span id="current-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
+                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              <div id="project-shortcut-dropdown" class="hidden absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden transition-all z-50">
+                <div class="p-1 max-h-60 overflow-y-auto hide-scrollbar" id="project-shortcut-list">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
+            <button onclick="toggleNotifications(event)" class="relative p-2 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none flex items-center justify-center" aria-label="Notifikasi">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </button>
+            <a href="profile.html" class="flex items-center justify-center ml-1">
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+            </a>
+        </div>
+      </div>
+
+      <div class="w-full border-b border-gray-200 mb-6" id="project-nav-tabs">
+        <nav class="-mb-px flex space-x-6 overflow-x-auto hide-scrollbar" aria-label="Tabs">
+          <button onclick="safeNavigate('index.html')" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none">
+            Kode
+          </button> 
+          <button onclick="switchTab('keamanan', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none" aria-current="page">
+            Keamanan
+          </button>
+        </nav>
+      </div>
+
+      <div id="tab-content-keamanan" class="flex flex-col gap-4 py-8 max-w-4xl mx-auto w-full transition-opacity">
+        <div class="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div class="h-14 w-14 rounded-full bg-white text-red-600 flex items-center justify-center flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-base font-semibold text-gray-900 mb-1">Perangkat Baru Terdeteksi</h4>
+            <p class="text-sm text-gray-600 line-clamp-2">Akun Anda baru saja diakses dari perangkat Mac OS di Jakarta, Indonesia. Jika ini bukan Anda, segera amankan akun Anda.</p>
+            <div class="mt-2 text-xs font-medium text-gray-400">Hari ini, 14:18 WIB</div>
+          </div>
+          <div class="flex-shrink-0 mt-3 sm:mt-0 w-full sm:w-auto">
+            <button class="w-full sm:w-auto px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 focus:outline-none transition-colors">
+              Tinjau Aktivitas
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="notif-dropdown" class="hidden fixed top-16 right-4 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-[90] animate-fade-in">
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
+      <button onclick="toggleNotifications(event)" class="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+    <div class="py-8 text-center">
+      <div class="mx-auto h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mb-3 border border-gray-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+      </div>
+      <p class="text-sm text-gray-500">Tidak ada notifikasi baru</p>
+    </div>
+  </div>
+
+  <div id="item-action-menu" class="hidden fixed w-44 bg-white rounded-xl shadow-xl overflow-hidden transition-all z-[100] py-1">
+    <button onclick="triggerRename()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      Edit Nama
+    </button>
+    <button onclick="triggerDownload()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      Unduh Berkas
+    </button>
+    <button onclick="triggerZip()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      Kompres ZIP
+    </button>
+    <div class="h-px bg-gray-100 my-1"></div>
+    <button onclick="confirmItemDelete()" class="flex items-center w-full px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 transition-colors">
+      Hapus
+    </button>
+  </div>
+
+  <div id="sidebar" class="fixed inset-0 z-[70] hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="toggleSidebar()"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10">
+          <div id="sidebar-panel" class="pointer-events-auto w-64 max-w-xs transform -translate-x-full transition duration-300 ease-in-out">
+            <div class="flex h-full flex-col bg-white py-6 shadow-xl border-r border-gray-200">
+              <div class="px-4 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-gray-900" id="slide-over-title" style="font-family: 'Space Grotesk', sans-serif;">Menu Utama</h2>
+                <button onclick="toggleSidebar()" class="rounded-full p-2 bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none transition-colors">
+                  <span class="sr-only">Tutup menu</span>
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div class="mt-6 flex-1 px-3">
+                <nav class="flex flex-col gap-1">
+                  <button onclick="safeNavigate('index.html')" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-white text-gray-900 font-semibold transition-colors hover:bg-gray-50 text-sm focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Beranda
+                  </button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let projects = [];
+    let currentFolderPath = 'root';
+    let projectFilesData = { 'root': [] };
+    let currentProjectId = null;
+    let activeItemName = null;
+
+    const STORAGE_KEY_PROJECTS = 'clincoo_projects_v2';
+    let STORAGE_KEY_FILES = 'clincoo_' + (currentProjectId || 'default') + '_files';
+
+    function updateFilesKey() { STORAGE_KEY_FILES = 'clincoo_' + (currentProjectId || 'default') + '_files'; }
+
+    function loadData() {
+      const savedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS);
+      if (savedProjects) {
+        try { projects = JSON.parse(savedProjects); } catch (e) { projects = []; }
+      }
+    }
+
+    function loadProjectFiles() {
+      updateFilesKey();
+      const savedFiles = localStorage.getItem(STORAGE_KEY_FILES);
+      if (savedFiles) {
+        try { projectFilesData = JSON.parse(savedFiles); } catch (e) { projectFilesData = { 'root': [] }; }
+      } else {
+        projectFilesData = { 'root': [] };
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
+      localStorage.setItem(STORAGE_KEY_FILES, JSON.stringify(projectFilesData));
+    }
+
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const sidebarPanel = document.getElementById('sidebar-panel');
+    let isSidebarOpen = false;
+
+    function toggleSidebar() {
+      isSidebarOpen = !isSidebarOpen;
+      if (isSidebarOpen) {
+        sidebar.classList.remove('hidden');
+        setTimeout(() => {
+          sidebarOverlay.classList.remove('opacity-0');
+          sidebarPanel.classList.remove('-translate-x-full');
+        }, 10);
+      } else {
+        sidebarOverlay.classList.add('opacity-0');
+        sidebarPanel.classList.add('-translate-x-full');
+        setTimeout(() => {
+          sidebar.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    function safeNavigate(url) {
+      window.location.href = url;
+    }
+
+    function navigateTo(path) {
+      const url = new URL(window.location);
+      if (path === '/' || path === '') url.searchParams.delete('p');
+      else url.searchParams.set('p', path);
+      window.history.pushState({}, '', url);
+      handleRoute();
+    }
+
+    function handleRoute() {
+      const params = new URLSearchParams(window.location.search);
+      let path = params.get('p');
+      
+      if (!path || path === '/') {
+          if (projects.length > 0) {
+              path = '/proyek/' + projects[0].id;
+              const url = new URL(window.location);
+              url.searchParams.set('p', path);
+              window.history.replaceState({}, '', url);
+          }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (path && path.startsWith('/proyek/')) {
+        const id = parseInt(path.replace('/proyek/', ''));
+        setupDetailPage(id);
+      }
+    }
+
+    window.addEventListener('popstate', handleRoute);
+
+    function setupDetailPage(id) {
+      if (currentProjectId !== id) {
+        currentFolderPath = 'root';
+      }
+      currentProjectId = id;
+      loadProjectFiles();
+      
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      if (tabBtns.length > 1) switchTab('keamanan', tabBtns[1]);
+
+      const proj = projects.find(p => p.id === id);
+      const nameEl = document.getElementById('current-project-name');
+      if (nameEl && proj) {
+        nameEl.textContent = proj.name;
+      }
+    }
+
+    function toggleProjectDropdown(e) {
+      e.stopPropagation();
+      const dropdown = document.getElementById('project-shortcut-dropdown');
+      const list = document.getElementById('project-shortcut-list');
+      
+      if (dropdown.classList.contains('hidden')) {
+        list.innerHTML = '';
+        projects.forEach(p => {
+          const btn = document.createElement('button');
+          btn.className = `w-full text-left px-4 py-2.5 text-sm transition-colors ${p.id === currentProjectId ? 'bg-gray-200 text-gray-800 font-medium rounded-lg' : 'text-gray-700 hover:bg-gray-50 rounded-lg'}`;
+          btn.textContent = p.name;
+          btn.onclick = () => { dropdown.classList.add('hidden'); navigateTo('/proyek/' + p.id); };
+          list.appendChild(btn);
+        });
+        dropdown.classList.remove('hidden');
+      } else {
+        dropdown.classList.add('hidden');
+      }
+    }
+
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-black', 'text-black');
+        btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+        btn.removeAttribute('aria-current');
+      });
+      if (el) {
+        el.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+        el.classList.add('border-black', 'text-black');
+        el.setAttribute('aria-current', 'page');
+      }
+      
+      const tabKeamanan = document.getElementById('tab-content-keamanan');
+      if (tabKeamanan) {
+        if (tabId === 'keamanan') {
+          tabKeamanan.classList.remove('hidden');
+          tabKeamanan.classList.add('flex');
+        } else {
+          tabKeamanan.classList.add('hidden');
+          tabKeamanan.classList.remove('flex');
+        }
+      }
+    }
+
+    function toggleNotifications(e) {
+      e.stopPropagation();
+      const notif = document.getElementById('notif-dropdown');
+      notif.classList.toggle('hidden');
+    }
+
+    function openItemActionMenu(e, itemName) {
+      e.stopPropagation();
+      activeItemName = itemName;
+      const menu = document.getElementById('item-action-menu');
+      menu.classList.remove('hidden');
+      
+      const rect = e.currentTarget.getBoundingClientRect();
+      const menuWidth = 176;
+      let left = rect.left - menuWidth + rect.width;
+      let top = rect.bottom + 4;
+      
+      if (left < 10) left = 10;
+      if (top + menu.offsetHeight > window.innerHeight) top = rect.top - menu.offsetHeight - 4;
+      
+      menu.style.left = left + 'px';
+      menu.style.top = top + 'px';
+    }
+
+    document.addEventListener('click', (e) => {
+      const pDrop = document.getElementById('project-shortcut-dropdown');
+      if (pDrop && !pDrop.contains(e.target)) pDrop.classList.add('hidden');
+      
+      const nDrop = document.getElementById('notif-dropdown');
+      if (nDrop && !nDrop.contains(e.target)) nDrop.classList.add('hidden');
+      
+      const aMenu = document.getElementById('item-action-menu');
+      if (aMenu && !aMenu.contains(e.target)) aMenu.classList.add('hidden');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      
+      if (projects.length === 0) {
+          projects.push({ id: 1, name: 'Proyek Realtime', desc: 'Sistem Langsung', visibility: 'public' });
+          saveData();
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      let path = params.get('p');
+      
+      if (!path || path === '/' || path === '') {
+          path = '/proyek/' + projects[0].id;
+          const url = new URL(window.location);
+          url.searchParams.set('p', path);
+          window.history.replaceState({}, '', url);
+      }
+      
+      handleRoute();
+    });
+  </script>
+</body>
+</html>
