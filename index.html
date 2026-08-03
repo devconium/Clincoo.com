@@ -1347,11 +1347,12 @@
       const visibilityInput = document.querySelector('input[name="project-visibility"]:checked');
       const visibility = visibilityInput ? visibilityInput.value : 'public';
 
+      let newId = null;
       if (id) {
         const index = projects.findIndex(p => p.id == id);
         if (index !== -1) projects[index] = { ...projects[index], name, desc, visibility };
       } else {
-        const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
+        newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
         projects.push({ id: newId, name, desc, visibility });
       }
       saveData();
