@@ -263,6 +263,15 @@
         </nav>
       </div>
 
+      <div id="security-warning-banner" class="hidden items-start gap-3 w-full mt-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
+        <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <div class="flex-1 min-w-0">
+          <h2 class="text-sm font-semibold text-red-800">Peringatan Keamanan</h2>
+          <p id="security-warning-text" class="text-xs text-red-600 mt-0.5"></p>
+        </div>
+        <button onclick="switchTab('keamanan', document.querySelector('[data-tab=\'keamanan\']'))" class="text-xs font-semibold text-red-700 hover:text-red-800 underline flex-shrink-0 mt-0.5">Lihat</button>
+      </div>
+
       <div class="w-full mt-2 relative pb-20">
         <div id="tab-content-kode" class="block transition-opacity">
           <div class="flex gap-2 w-full mb-4">
@@ -319,12 +328,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 class="text-sm font-medium text-gray-900">Belum ada pemindaian</h3>
-            <p class="text-sm text-gray-500 mt-1 mb-6 max-w-sm mx-auto">Jalankan pemindaian untuk menemukan potensi kerentanan keamanan pada kode proyek ini.</p>
-            <button onclick="startSecurityScan()" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-xl shadow-sm hover:bg-gray-50 transition-colors focus:outline-none">
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              Pindai Sekarang
-            </button>
+            <h3 class="text-sm font-medium text-gray-900">Memindai...</h3>
+            <p class="text-sm text-gray-500 mt-1 max-w-sm mx-auto">Keamanan proyek ini dipindai otomatis untuk menemukan potensi kerentanan.</p>
           </div>
 
           <div id="security-scan-results" class="flex flex-col gap-3 hidden"></div>
@@ -332,7 +337,7 @@
 
         <div id="tab-content-halaman" class="hidden flex-col gap-6 py-6 max-w-4xl mx-auto w-full transition-opacity">
 
-          <!-- Deploy ke Production -->
+          
           <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
               <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
@@ -368,7 +373,7 @@
             </div>
           </div>
 
-          <!-- Tautan Terpasang -->
+          
           <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
               <div class="flex items-center gap-3 min-w-0">
@@ -383,7 +388,7 @@
               <span id="deploy-link-count" class="text-xs text-gray-400 font-medium px-2.5 py-1 bg-gray-100 rounded-full flex-shrink-0">0</span>
             </div>
             <div class="p-5">
-              <!-- Add link form -->
+              
               <div class="flex flex-col sm:flex-row gap-2 mb-4">
                 <input type="url" id="deploy-hyperlink" placeholder="https://..." class="custom-input flex-1 min-w-0 px-4 py-2.5 rounded-xl border text-sm font-mono">
                 <input type="text" id="deploy-text" placeholder="Teks tampilan" class="custom-input flex-1 min-w-0 px-4 py-2.5 rounded-xl border text-sm">
@@ -392,12 +397,12 @@
                   <span>Tambah</span>
                 </button>
               </div>
-              <!-- Link list -->
+              
               <div id="deploy-list" class="flex flex-col gap-2"></div>
             </div>
           </div>
 
-          <!-- Riwayat Deploy -->
+          
           <div class="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
               <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
@@ -429,6 +434,15 @@
           </div>
           <div class="mt-4 flex flex-col gap-4">
             <h3 class="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-3">Environtment variabel</h3>
+            <div id="env-empty-state" class="hidden text-center py-12 px-4">
+              <div class="mx-auto h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 class="text-sm font-medium text-gray-900">Belum ada variabel</h3>
+              <p class="text-sm text-gray-500 mt-1 max-w-sm mx-auto">Tambahkan environment variable pertama Anda menggunakan form di atas.</p>
+            </div>
             <div class="flex flex-col gap-3 w-full" id="env-list"></div>
           </div>
         </div>
@@ -807,6 +821,7 @@
       setTimeout(() => {
         const halamanBtn = document.querySelector('[data-tab="halaman"]');
         if (halamanBtn) switchTab('halaman', halamanBtn);
+        if (typeof runSecurityScan === 'function') runSecurityScan(true);
       }, 50);
 
       const proj = projects.find(p => p.id === id);
@@ -1538,6 +1553,7 @@
         if(tabId === 'keamanan') {
           contentKeamanan.classList.remove('hidden');
           contentKeamanan.classList.add('flex');
+          runSecurityScan();
         } else {
           contentKeamanan.classList.add('hidden');
           contentKeamanan.classList.remove('flex');
@@ -1568,7 +1584,110 @@
     }
     
     function startSecurityScan() {
-       console.log("Memulai pemindaian...");
+       runSecurityScan();
+    }
+
+    const SECURITY_PATTERNS = [
+      { regex: /(api[_-]?key|apikey)\s*[:=]\s*['"][a-zA-Z0-9_\-]{10,}['"]/gi, label: 'API key ter-hardcode ditemukan di kode', severity: 'Tinggi' },
+      { regex: /(secret|client[_-]?secret)\s*[:=]\s*['"][a-zA-Z0-9_\-]{6,}['"]/gi, label: 'Secret ter-hardcode ditemukan di kode', severity: 'Tinggi' },
+      { regex: /password\s*[:=]\s*['"][^'"]{3,}['"]/gi, label: 'Password ter-hardcode ditemukan di kode', severity: 'Tinggi' },
+      { regex: /(token|access[_-]?token|bearer)\s*[:=]\s*['"][a-zA-Z0-9_\-\.]{10,}['"]/gi, label: 'Token ter-hardcode ditemukan di kode', severity: 'Sedang' },
+      { regex: /-----BEGIN (RSA |EC )?PRIVATE KEY-----/g, label: 'Private key ditemukan di kode', severity: 'Tinggi' },
+      { regex: /<script[^>]*>[\s\S]*document\.write\([\s\S]*<\/script>/gi, label: 'Penggunaan document.write terdeteksi (risiko XSS)', severity: 'Rendah' }
+    ];
+
+    function getAllProjectFiles() {
+      if (!currentProjectId) return [];
+      var storageKey = 'clincoo_' + currentProjectId + '_files';
+      var localFiles = {};
+      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+      var allFiles = [];
+      for (var folderPath in localFiles) {
+        if (!Array.isArray(localFiles[folderPath])) continue;
+        for (var i = 0; i < localFiles[folderPath].length; i++) {
+          var fItem = localFiles[folderPath][i];
+          if (fItem.type === 'file' && fItem.content) {
+            var fp = folderPath === 'root' ? fItem.name : folderPath + '/' + fItem.name;
+            allFiles.push({ path: fp, content: fItem.content });
+          }
+        }
+      }
+      return allFiles;
+    }
+
+    function runSecurityScan(silent) {
+      if (!currentProjectId) return;
+      var files = getAllProjectFiles();
+      var findings = [];
+
+      files.forEach(function(file) {
+        SECURITY_PATTERNS.forEach(function(pattern) {
+          var matches = file.content.match(pattern.regex);
+          if (matches) {
+            findings.push({ file: file.path, label: pattern.label, severity: pattern.severity, count: matches.length });
+          }
+        });
+      });
+
+      var envKey = getEnvKey();
+      var savedEnv = [];
+      try { savedEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+      var weakEnvCount = 0;
+      savedEnv.forEach(function(item) {
+        if (item.value && item.value.length < 8) weakEnvCount++;
+      });
+      if (weakEnvCount > 0) {
+        findings.push({ file: 'Environment', label: weakEnvCount + ' variabel memiliki nilai yang terlalu pendek/lemah', severity: 'Rendah', count: weakEnvCount });
+      }
+
+      localStorage.setItem('clincoo_' + currentProjectId + '_security_findings', JSON.stringify(findings));
+
+      var emptyState = document.getElementById('security-empty-state');
+      var resultsEl = document.getElementById('security-scan-results');
+      var banner = document.getElementById('security-warning-banner');
+      var bannerText = document.getElementById('security-warning-text');
+
+      if (resultsEl) {
+        if (findings.length > 0) {
+          if (emptyState) emptyState.classList.add('hidden');
+          resultsEl.classList.remove('hidden');
+          resultsEl.classList.add('flex');
+          resultsEl.innerHTML = findings.map(function(f) {
+            var color = f.severity === 'Tinggi' ? 'red' : (f.severity === 'Sedang' ? 'amber' : 'gray');
+            return '<div class="bg-white rounded-xl border border-' + color + '-200 shadow-sm p-4 flex items-start gap-3">' +
+              '<div class="w-8 h-8 rounded-lg bg-' + color + '-50 flex items-center justify-center flex-shrink-0">' +
+                '<svg class="w-4 h-4 text-' + color + '-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>' +
+              '</div>' +
+              '<div class="min-w-0 flex-1">' +
+                '<p class="text-sm font-medium text-gray-900">' + f.label + '</p>' +
+                '<p class="text-xs text-gray-500 mt-0.5">' + f.file + ' · Tingkat: ' + f.severity + '</p>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        } else {
+          resultsEl.classList.add('hidden');
+          resultsEl.classList.remove('flex');
+          if (emptyState) {
+            emptyState.classList.remove('hidden');
+            var titleEl = emptyState.querySelector('h3');
+            var descEl = emptyState.querySelector('p');
+            if (titleEl) titleEl.textContent = 'Tidak ada masalah ditemukan';
+            if (descEl) descEl.textContent = 'Pemindaian otomatis tidak menemukan kerentanan keamanan pada kode proyek ini.';
+          }
+        }
+      }
+
+      if (banner && bannerText) {
+        if (findings.length > 0) {
+          banner.classList.remove('hidden');
+          banner.classList.add('flex');
+          var highCount = findings.filter(function(f){ return f.severity === 'Tinggi'; }).length;
+          bannerText.textContent = findings.length + ' masalah ditemukan' + (highCount > 0 ? ' (' + highCount + ' berisiko tinggi)' : '') + ' pada proyek ini.';
+        } else {
+          banner.classList.add('hidden');
+          banner.classList.remove('flex');
+        }
+      }
     }
 
     let envVariables = [];
@@ -1585,6 +1704,11 @@
     function renderEnvList() {
         const list = document.getElementById('env-list');
         if (!list) return;
+        const empty = document.getElementById('env-empty-state');
+        if (empty) {
+          if (envVariables.length === 0) empty.classList.remove('hidden');
+          else empty.classList.add('hidden');
+        }
         list.innerHTML = envVariables.map((item, i) =>
             '<div class="flex items-center gap-2 sm:gap-3 w-full group">' +
                '<input type="text" value="' + item.key + '" readonly class="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-500 px-3 sm:px-4 py-3 rounded-xl text-xs sm:text-sm font-mono cursor-not-allowed focus:outline-none pointer-events-none truncate">' +
@@ -1621,7 +1745,6 @@
       window.location.href = url;
     }
 
-    // ===== HALAMAN TAB: Deploy & Links (project-scoped, real-time) =====
     let deployLinks = [];
     let deployHistory = [];
 
@@ -1631,14 +1754,10 @@
     function getDeployHistoryKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_history'; }
 
     function loadDeployData() {
-      // Load links
       try { deployLinks = JSON.parse(localStorage.getItem(getDeployKey()) || '[]'); } catch(e) { deployLinks = []; }
-      // Load history
       try { deployHistory = JSON.parse(localStorage.getItem(getDeployHistoryKey()) || '[]'); } catch(e) { deployHistory = []; }
-      // Load domain
       const savedDomain = localStorage.getItem(getDeployDomainKey());
       if (savedDomain) { const el = document.getElementById('deploy-domain'); if (el) el.value = savedDomain; }
-      // Load branch
       const savedBranch = localStorage.getItem(getDeployBranchKey());
       if (savedBranch) { const el = document.getElementById('deploy-branch'); if (el) el.value = savedBranch; }
       renderDeployLinks();
@@ -1653,7 +1772,6 @@
         linkInput.focus();
         return;
       }
-      // Validate URL
       try { new URL(linkInput.value); } catch(e) {
         showToast('URL tidak valid', 'error');
         return;
@@ -1746,13 +1864,11 @@
       var status = document.getElementById('deploy-prod-status');
       if (!btn) return;
 
-      // Save domain & branch
       var domainInput = document.getElementById('deploy-domain');
       var branchSelect = document.getElementById('deploy-branch');
       if (domainInput) localStorage.setItem(getDeployDomainKey(), domainInput.value);
       if (branchSelect) localStorage.setItem(getDeployBranchKey(), branchSelect.value);
 
-      // Collect files from localStorage
       if (typeof saveData === 'function') saveData();
       var storageKey = 'clincoo_' + (currentProjectId || 'default') + '_files';
       var localFiles = {};
@@ -1773,7 +1889,6 @@
         return;
       }
 
-      // Get CF config
       var cfConfig = {};
       try { cfConfig = JSON.parse(localStorage.getItem('clincoo_cf_config') || '{}'); } catch(e) {}
       if (!cfConfig.accountId || !cfConfig.apiToken) {
@@ -1786,7 +1901,6 @@
       var projectSlug = 'clincoo-' + projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
       var branch = branchSelect ? branchSelect.value : 'main';
 
-      // UI: loading state
       btn.disabled = true;
       btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Deploying...</span>';
       if (status) status.textContent = '';
@@ -1810,7 +1924,6 @@
           btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
           if (status) status.innerHTML = '<a href="' + (result.url || result.productionUrl || '') + '" target="_blank" class="text-blue-500 hover:text-blue-600 font-medium">' + (result.url || result.productionUrl || 'Lihat') + '</a>';
 
-          // Save to history
           var histItem = {
             status: 'success',
             url: result.url || result.productionUrl || '',
@@ -1839,7 +1952,6 @@
         btn.disabled = false;
         showToast('Deploy gagal: ' + err.message, 'error');
 
-        // Save failed attempt to history
         deployHistory.unshift({ status: 'failed', url: '', time: new Date().toLocaleString('id-ID'), files: allFiles.length });
         deployHistory = deployHistory.slice(0, 20);
         localStorage.setItem(getDeployHistoryKey(), JSON.stringify(deployHistory));
@@ -1848,7 +1960,6 @@
       }
     }
 
-    // ===== Toast notification =====
     function showToast(msg, type) {
       var existing = document.getElementById('clincoo-toast');
       if (existing) existing.remove();
