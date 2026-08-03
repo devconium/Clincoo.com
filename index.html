@@ -221,7 +221,9 @@
             <div class="min-w-0">
               <button onclick="toggleProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
                 <span id="current-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
-                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                <span class="flex-shrink-0 w-5 h-5 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
               </button>
               <div id="project-shortcut-dropdown" class="hidden absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all z-50">
                 <div class="p-1 max-h-60 overflow-y-auto hide-scrollbar" id="project-shortcut-list">
@@ -246,10 +248,10 @@
      <!-- Tab Navigasi, sekarang dengan event listener yang aman -->
      <div class="w-full border-b border-gray-200 mb-6" id="project-nav-tabs">
         <nav class="-mb-px flex space-x-6 overflow-x-auto hide-scrollbar" aria-label="Tabs">
-          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none" aria-current="page">
+          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center focus:outline-none" aria-current="page">
             Kode
           </button> 
-          <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none">
+          <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center focus:outline-none">
             Keamanan
           </button>
         </nav>
@@ -467,6 +469,7 @@
     </div>
   </div>
 
+  <script src="app.js"></script>
   <script src="security.js"></script>
   <script>
     let projects = [];
@@ -479,68 +482,6 @@
     let modalAction = null;
     let itemBeingRenamed = null;
     let activeItemName = null;
-
-    const STORAGE_KEY_PROJECTS = 'clincoo_projects_v2';
-    let STORAGE_KEY_FILES = 'clincoo_files_v2';
-
-    function updateFilesKey() { STORAGE_KEY_FILES = 'clincoo_' + (currentProjectId || 'default') + '_files'; }
-
-    function loadData() {
-      const savedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS);
-      if (savedProjects) {
-        try { projects = JSON.parse(savedProjects); } catch (e) { projects = []; }
-      }
-      filteredProjects = [...projects];
-    }
-
-    function loadProjectFiles() {
-      updateFilesKey();
-      const savedFiles = localStorage.getItem(STORAGE_KEY_FILES);
-      if (savedFiles) {
-        try { projectFilesData = JSON.parse(savedFiles); } catch (e) { projectFilesData = { 'root': [] }; }
-      } else {
-        projectFilesData = { 'root': [] };
-      }
-    }
-
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
-      localStorage.setItem(STORAGE_KEY_FILES, JSON.stringify(projectFilesData));
-      if (typeof renderSecurityTab === 'function') renderSecurityTab();
-    }
-
-    const defaultTemplates = {
-      'html': '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <title>Proyek Baru</title>\n</head>\n<body>\n  <h1>Halo Dunia!</h1>\n</body>\n</html>',
-      'css': 'body {\n  margin: 0;\n  padding: 0;\n  font-family: sans-serif;\n}',
-      'js': 'console.log("Hello from Clincoo!");',
-      'py': 'def main():\n  print("Hello, World!")\n\nif __name__ == "__main__":\n  main()',
-      'json': '{\n  "name": "project",\n  "version": "1.0.0"\n}',
-      'txt': 'Ini adalah berkas teks catatan baru.'
-    };
-
-    function showNotification(message) {
-      console.log("Notifikasi:", message);
-    }
-
-    function getFileType(filename) {
-      if (!filename) return 'code';
-      let ext = getFileExtension(filename);
-      const audioExts = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'];
-      const videoExts = ['mp4', 'avi', 'mkv', 'mov', 'webm'];
-      const imageExts = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'ico'];
-      if (audioExts.includes(ext)) return 'audio';
-      if (videoExts.includes(ext)) return 'video';
-      if (imageExts.includes(ext)) return 'image';
-      return 'code';
-    }
-
-    function getFileExtension(filename) {
-      let name = filename ? filename.trim() : '';
-      if (!name) return 'html';
-      if (name.startsWith('.') && !name.includes('.', 1)) return name.substring(1).toLowerCase();
-      if (name.includes('.')) return name.split('.').pop().toLowerCase();
-      return name.toLowerCase();
-    }
 
     let codeEditor = null;
     function initCodeEditor() {
@@ -719,29 +660,6 @@
       renderFileList();
     }
 
-    function getFileIcon(filename) {
-      let ext = getFileExtension(filename);
-      switch(ext) {
-        case 'mp3': case 'wav': case 'ogg': case 'flac': case 'm4a':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="#E04A3A"><path d="M20 3h-7v10.55A3.98 3.98 0 0 0 11 13c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h5v6.55A3.98 3.98 0 0 0 14 13c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V3z"/></svg></div>`;
-        case 'mp4': case 'avi': case 'mkv': case 'mov': case 'webm':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none"><rect x="2" y="4" width="20" height="16" rx="3.5" fill="#5B51DC"/><polygon points="10,8.5 15,12 10,15.5" fill="#FFFFFF"/></svg></div>`;
-        case 'png': case 'jpg': case 'jpeg': case 'svg': case 'gif': case 'webp':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" fill="#0D9488" stroke="none" /><path d="M21 15l-5-5L5 21" /></svg></div>`;
-        case 'py': case 'python':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4"><path fill="#3776AB" d="M11.898 2c-3.15 0-5.068.322-5.068 2.373v1.89h10.136v.945H6.83c-2.453 0-4.33 1.488-4.33 4.33 0 2.843 1.877 4.33 4.33 4.33h1.892v-2.373c0-2.316 1.83-4.254 4.148-4.254h5.068c1.94 0 2.453-.562 2.453-2.373 0-2.115-1.913-4.868-8.523-4.868zm-2.58 1.418a.945.945 0 1 1 0 1.89.945.945 0 0 1 0-1.89z"/><path fill="#FFD43B" d="M12.102 22c3.15 0 5.068-.322 5.068-2.373v-1.89H7.034v-.945h10.136c2.453 0 4.33-1.488 4.33-4.33 0-2.843-1.877-4.33-4.33-4.33h-1.892v2.373c0 2.316-1.83 4.254-4.148 4.254H6.062c-1.94 0-2.453.562-2.453 2.373 0 2.115 1.913 4.868 8.493 4.868zm2.58-1.418a.945.945 0 1 1 0-1.89.945.945 0 0 1 0 1.89z"/></svg></div>`;
-        case 'txt':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#546E7A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
-        case 'html': case 'htm':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#E34F26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg></div>`;
-        case 'js': case 'ts': case 'jsx':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#F7DF1E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4" fill="#F7DF1E"/><text x="12" y="16" font-size="8" font-weight="800" fill="#000" stroke="none" text-anchor="middle">JS</text></svg></div>`;
-        case 'css':
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#16A34A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><text x="12" y="15.5" font-size="7" font-weight="800" fill="#16A34A" stroke="none" text-anchor="middle">css</text></svg></div>`;
-        default:
-          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#718096]"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
-      }
-    }
 
     function renderFileList() {
       const container = document.getElementById('file-list-container');
@@ -1349,13 +1267,7 @@
               <span class="text-[15px] font-semibold text-gray-900 truncate">${project.name}</span>
               <span class="text-xs text-gray-500 truncate mt-0.5">${project.desc || 'Tanpa keterangan'}</span>
             </div>
-            <div class="flex-shrink-0 flex items-center ml-3 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onclick="event.stopPropagation(); navigateTo('/edit/' + project.id)" class="p-2 text-gray-400 hover:text-[#273849] hover:bg-gray-100 rounded-full transition-colors focus:outline-none" title="Edit Proyek">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-              </button>
-            </div>
+
           `;
           listContainer.appendChild(item);
         });
