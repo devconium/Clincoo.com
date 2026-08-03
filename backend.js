@@ -68,16 +68,17 @@ function saveData() {
 }
 
 // --- Override loadData: localStorage first, then merge from D1 ---
-async function loadData() {
+function loadData() {
   _origLoadData();
-  await _syncProjectsFromD1();
+  // Fire D1 sync in background (don't block page load)
+  _syncProjectsFromD1();
 }
 
 // --- Override loadProjectFiles: localStorage first, then merge from D1 ---
-async function loadProjectFiles() {
+function loadProjectFiles() {
   _origLoadProjectFiles();
   if (typeof currentProjectId !== 'undefined' && currentProjectId) {
-    await _syncFilesFromD1(currentProjectId);
+    _syncFilesFromD1(currentProjectId);
   }
 }
 
@@ -138,13 +139,9 @@ async function _syncProjectsFromD1() {
     }
   }
 
-  // Remove local projects that were deleted on D1
-  if (d1Projects.length > 0) {
-    var d1Ids = d1Projects.map(function(p) { return String(p.id); });
-    var before = projects.length;
-    projects = projects.filter(function(p) { return d1Ids.includes(String(p.id)) || !p.id; });
-    if (projects.length !== before) changed = true;
-  }
+  // NOTE: We do NOT remove local-only projects here.
+  // Local projects that haven't synced to D1 yet should be preserved.
+  // Deletions are handled explicitly via _deleteProjectFromD1().
 
   if (changed) {
     filteredProjects = [...projects];
