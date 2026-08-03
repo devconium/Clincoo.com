@@ -18,6 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -472,6 +473,120 @@
     </div>
   </div>
 
+
+  <div id="page-analytics" class="page-view hidden w-full min-h-screen flex flex-col bg-[#f7f7f9]">
+    <!-- Header -->
+    <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
+      <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
+        <div class="flex items-center justify-between h-14">
+          <!-- Left: Hamburger Menu -->
+          <button onclick="toggleSidebar()" class="p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none" aria-label="Menu">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <!-- Right: App Logo + Notification -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </button>
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Content -->
+    <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto py-6">
+      <div class="mb-6">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900" style="font-family: 'Space Grotesk', sans-serif;">
+          Analytics
+        </h1>
+        <p class="text-gray-500 mt-1 text-sm sm:text-base">Visualisasi data dan statistik platform</p>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-5.13a4 4 0 11-8 0 4 4 0 018 0zm6 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-gray-500">Total Pengunjung</span>
+          </div>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">12.480</p>
+          <p class="text-xs text-green-600 font-medium mt-1">+18% bulan ini</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-gray-500">Pendapatan</span>
+          </div>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">Rp 84,2jt</p>
+          <p class="text-xs text-green-600 font-medium mt-1">+7% bulan ini</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-gray-500">Konversi</span>
+          </div>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">3,4%</p>
+          <p class="text-xs text-red-500 font-medium mt-1">-0,5% bulan ini</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-5 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+              <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span class="text-xs font-medium text-gray-500">Sesi Aktif</span>
+          </div>
+          <p class="text-xl sm:text-2xl font-bold text-gray-900">847</p>
+          <p class="text-xs text-green-600 font-medium mt-1">+12 hari ini</p>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="barChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="lineChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="pieChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="doughnutChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="radarChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="polarAreaChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="scatterChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="bubbleChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="mixedChart"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-200/70 p-4 sm:p-6 shadow-sm">
+          <canvas id="horizontalBarChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="notif-dropdown" class="hidden fixed top-16 right-4 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-[90] animate-fade-in">
     <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
       <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
@@ -529,6 +644,12 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Beranda
+                  </button>
+                  <button onclick="sidebarNavigate('/analytics')" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-white text-gray-900 font-semibold transition-colors hover:bg-gray-50 text-sm focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Analytics
                   </button>
                 </nav>
               </div>
@@ -669,6 +790,7 @@
     const pageForm = document.getElementById('page-form');
     const pageProjectDetail = document.getElementById('page-project-detail');
     const pageFileEditor = document.getElementById('page-file-editor');
+    const pageAnalytics = document.getElementById('page-analytics');
     
     const listContainer = document.getElementById('project-list');
     const emptyState = document.getElementById('empty-state');
@@ -736,10 +858,13 @@
         const id = parseInt(path.replace('/proyek/', ''));
         setupDetailPage(id);
         showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor]);
+      } else if (path.startsWith('/analytics')) {
+        showPage(pageAnalytics, [pageMain, pageForm, pageProjectDetail, pageFileEditor]);
+        initAnalyticsCharts();
       } else if (path.startsWith('/editor')) {
         showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail]);
       } else {
-        showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor]);
+        showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor, pageAnalytics]);
         applyFilters();
       }
     }
@@ -1908,6 +2033,210 @@ async function saveDeployDomain() {
         btn.innerHTML = originalHTML;
         btn.disabled = false;
       }
+    }
+
+
+    var _analyticsChartsInited = false;
+
+    function initAnalyticsCharts() {
+      if (typeof Chart === 'undefined') return;
+      if (_analyticsChartsInited) return;
+      _analyticsChartsInited = true;
+
+      Chart.defaults.font.family = "'Inter', sans-serif";
+      Chart.defaults.color = '#6b7280';
+      Chart.defaults.borderColor = '#e5e7eb';
+
+      // 1. Bar Chart
+      new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+          datasets: [{
+            label: 'Jumlah Pengunjung',
+            data: [1200, 1900, 3000, 2500, 2200, 3500],
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Trafik Pengunjung (Bar Chart)', font: { size: 14, weight: 600 } } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // 2. Line Chart
+      new Chart(document.getElementById('lineChart'), {
+        type: 'line',
+        data: {
+          labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+          datasets: [{
+            label: 'Penjualan Mingguan',
+            data: [65, 59, 80, 81, 56, 95, 110],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Tren Penjualan (Line Chart)', font: { size: 14, weight: 600 } } }
+        }
+      });
+
+      // 3. Pie Chart
+      new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+          labels: ['Organik', 'Sosial Media', 'Direct', 'Referral'],
+          datasets: [{
+            label: 'Sumber Trafik',
+            data: [300, 150, 100, 50],
+            backgroundColor: ['rgb(255,99,132)', 'rgb(54,162,235)', 'rgb(255,205,86)', 'rgb(75,192,192)'],
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Sumber Trafik (Pie Chart)', font: { size: 14, weight: 600 } } }
+        }
+      });
+
+      // 4. Doughnut Chart
+      new Chart(document.getElementById('doughnutChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Mobile', 'Desktop', 'Tablet'],
+          datasets: [{
+            label: 'Perangkat',
+            data: [65, 30, 5],
+            backgroundColor: ['rgb(153,102,255)', 'rgb(255,159,64)', 'rgb(201,203,207)'],
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Perangkat Pengguna (Doughnut Chart)', font: { size: 14, weight: 600 } } }
+        }
+      });
+
+      // 5. Radar Chart
+      new Chart(document.getElementById('radarChart'), {
+        type: 'radar',
+        data: {
+          labels: ['Komunikasi', 'Pemecahan Masalah', 'Kerja Sama', 'Inovasi', 'Ketepatan Waktu', 'Kualitas Kerja'],
+          datasets: [{
+            label: 'Tim A', data: [65, 59, 90, 81, 56, 55],
+            fill: true, backgroundColor: 'rgba(255,99,132,0.2)', borderColor: 'rgb(255,99,132)',
+            pointBackgroundColor: 'rgb(255,99,132)', pointBorderColor: '#fff'
+          }, {
+            label: 'Tim B', data: [28, 48, 40, 19, 96, 27],
+            fill: true, backgroundColor: 'rgba(54,162,235,0.2)', borderColor: 'rgb(54,162,235)',
+            pointBackgroundColor: 'rgb(54,162,235)', pointBorderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Analisis Performa (Radar Chart)', font: { size: 14, weight: 600 } } },
+          elements: { line: { borderWidth: 3 } }
+        }
+      });
+
+      // 6. Polar Area Chart
+      new Chart(document.getElementById('polarAreaChart'), {
+        type: 'polarArea',
+        data: {
+          labels: ['Elektronik', 'Pakaian', 'Buku', 'Alat Rumah Tangga', 'Mainan'],
+          datasets: [{
+            label: 'Pendapatan per Kategori', data: [11, 16, 7, 3, 14],
+            backgroundColor: ['rgba(255,99,132,0.5)', 'rgba(75,192,192,0.5)', 'rgba(255,205,86,0.5)', 'rgba(201,203,207,0.5)', 'rgba(54,162,235,0.5)']
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Penjualan Kategori (Polar Area)', font: { size: 14, weight: 600 } } }
+        }
+      });
+
+      // 7. Scatter Chart
+      new Chart(document.getElementById('scatterChart'), {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Sesi Pengguna',
+            data: [{x:10,y:20},{x:15,y:10},{x:20,y:30},{x:25,y:25},{x:30,y:40},{x:35,y:35},{x:40,y:50},{x:45,y:45},{x:50,y:60},{x:55,y:55}],
+            backgroundColor: 'rgb(255,99,132)'
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Waktu vs Halaman (Scatter)', font: { size: 14, weight: 600 } } },
+          scales: {
+            x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Waktu (Menit)' } },
+            y: { title: { display: true, text: 'Jumlah Halaman' } }
+          }
+        }
+      });
+
+      // 8. Bubble Chart
+      new Chart(document.getElementById('bubbleChart'), {
+        type: 'bubble',
+        data: {
+          datasets: [{
+            label: 'Campaign A', data: [{x:20,y:30,r:15},{x:40,y:10,r:10},{x:30,y:25,r:25},{x:50,y:45,r:20}],
+            backgroundColor: 'rgba(255,99,132,0.5)'
+          }, {
+            label: 'Campaign B', data: [{x:15,y:40,r:10},{x:35,y:20,r:15},{x:25,y:35,r:20},{x:45,y:50,r:25}],
+            backgroundColor: 'rgba(54,162,235,0.5)'
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Analisis Campaign (Bubble)', font: { size: 14, weight: 600 } } },
+          scales: {
+            x: { title: { display: true, text: 'Pengunjung (Ribuan)' } },
+            y: { title: { display: true, text: 'Tingkat Konversi (%)' } }
+          }
+        }
+      });
+
+      // 9. Mixed Chart (Bar & Line)
+      new Chart(document.getElementById('mixedChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+          datasets: [{
+            type: 'line', label: 'Target Penjualan', data: [200, 220, 250, 270, 300, 320],
+            borderColor: 'rgb(255,99,132)', borderWidth: 2, fill: false
+          }, {
+            type: 'bar', label: 'Realisasi Penjualan', data: [180, 230, 240, 290, 280, 350],
+            backgroundColor: 'rgba(75,192,192,0.6)', borderColor: 'rgba(75,192,192,1)', borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Penjualan vs Target (Mixed)', font: { size: 14, weight: 600 } } }
+        }
+      });
+
+      // 10. Horizontal Bar Chart
+      new Chart(document.getElementById('horizontalBarChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Amerika Serikat', 'Indonesia', 'India', 'Inggris', 'Brasil'],
+          datasets: [{
+            label: 'Jumlah Pengunjung Aktif', data: [45000, 38000, 25000, 18000, 15000],
+            backgroundColor: ['rgba(255,99,132,0.6)', 'rgba(54,162,235,0.6)', 'rgba(255,205,86,0.6)', 'rgba(75,192,192,0.6)', 'rgba(153,102,255,0.6)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+          plugins: { title: { display: true, text: 'Top Negara Asal (Horizontal Bar)', font: { size: 14, weight: 600 } } }
+        }
+      });
     }
 
     window.addEventListener('DOMContentLoaded', () => {
