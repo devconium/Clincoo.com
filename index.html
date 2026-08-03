@@ -2039,7 +2039,7 @@ async function saveDeployDomain() {
         if (site && site.url) {
           deployToProduction(true);
         }
-      }, 2000);
+      }, 1000);
     }
 
     async function deployToProduction(isAuto) {
@@ -2217,31 +2217,31 @@ async function saveDeployDomain() {
       _analyticsCharts.bar = new Chart(document.getElementById('barChart'), {
         type: 'bar',
         data: { labels: [], datasets: [{ label: 'Page Views', data: [], backgroundColor: 'rgba(54,162,235,0.6)', borderColor: 'rgba(54,162,235,1)', borderWidth: 1 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik Bulanan (Bar)', font: { size: 14, weight: '600' } } }, scales: { y: { beginAtZero: true } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik Bulanan', font: { size: 14, weight: '600' } } }, scales: { y: { beginAtZero: true } } }
       });
 
       _analyticsCharts.line = new Chart(document.getElementById('lineChart'), {
         type: 'line',
         data: { labels: [], datasets: [{ label: 'Views Harian', data: [], fill: false, borderColor: 'rgb(75,192,192)', tension: 0.1 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik 7 Hari (Line)', font: { size: 14, weight: '600' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik 7 Hari', font: { size: 14, weight: '600' } } } }
       });
 
       _analyticsCharts.pie = new Chart(document.getElementById('pieChart'), {
         type: 'pie',
         data: { labels: [], datasets: [{ label: 'Sumber', data: [], backgroundColor: ['rgb(255,99,132)','rgb(54,162,235)','rgb(255,205,86)','rgb(75,192,192)','rgb(153,102,255)','rgb(255,159,64)','rgb(201,203,207)','rgb(54,199,99)'], hoverOffset: 4 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Sumber Trafik (Pie)', font: { size: 14, weight: '600' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Sumber Trafik', font: { size: 14, weight: '600' } } } }
       });
 
       _analyticsCharts.doughnut = new Chart(document.getElementById('doughnutChart'), {
         type: 'doughnut',
         data: { labels: [], datasets: [{ label: 'Perangkat', data: [], backgroundColor: ['rgb(153,102,255)','rgb(255,159,64)','rgb(201,203,207)','rgb(75,192,192)'], hoverOffset: 4 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Perangkat (Doughnut)', font: { size: 14, weight: '600' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Perangkat', font: { size: 14, weight: '600' } } } }
       });
 
       _analyticsCharts.radar = new Chart(document.getElementById('radarChart'), {
         type: 'radar',
         data: { labels: [], datasets: [{ label: 'Bahasa Pengguna', data: [], fill: true, backgroundColor: 'rgba(255,99,132,0.2)', borderColor: 'rgb(255,99,132)', pointBackgroundColor: 'rgb(255,99,132)' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Bahasa (Radar)', font: { size: 14, weight: '600' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Bahasa', font: { size: 14, weight: '600' } } } }
       });
 
       _analyticsCharts.polarArea = new Chart(document.getElementById('polarAreaChart'), {
@@ -2253,13 +2253,13 @@ async function saveDeployDomain() {
       _analyticsCharts.scatter = new Chart(document.getElementById('scatterChart'), {
         type: 'scatter',
         data: { datasets: [{ label: 'Trafik per Jam', data: [], backgroundColor: 'rgb(255,99,132)' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik 24 Jam (Scatter)', font: { size: 14, weight: '600' } } }, scales: { x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jam' } }, y: { title: { display: true, text: 'Views' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Trafik 24 Jam', font: { size: 14, weight: '600' } } }, scales: { x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jam' } }, y: { title: { display: true, text: 'Views' } } } }
       });
 
       _analyticsCharts.bubble = new Chart(document.getElementById('bubbleChart'), {
         type: 'bubble',
         data: { datasets: [{ label: 'Trafik per Jam', data: [], backgroundColor: 'rgba(54,162,235,0.5)' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Visitors x Views (Bubble)', font: { size: 14, weight: '600' } } }, scales: { x: { title: { display: true, text: 'Jam' } }, y: { title: { display: true, text: 'Views' } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Visitors x Views', font: { size: 14, weight: '600' } } }, scales: { x: { title: { display: true, text: 'Jam' } }, y: { title: { display: true, text: 'Views' } } } }
       });
 
       _analyticsCharts.mixed = new Chart(document.getElementById('mixedChart'), {
@@ -2274,15 +2274,15 @@ async function saveDeployDomain() {
       _analyticsCharts.horizontalBar = new Chart(document.getElementById('horizontalBarChart'), {
         type: 'bar',
         data: { labels: [], datasets: [{ label: 'Views', data: [], backgroundColor: ['rgba(255,99,132,0.6)','rgba(54,162,235,0.6)','rgba(255,205,86,0.6)','rgba(75,192,192,0.6)','rgba(153,102,255,0.6)','rgba(255,159,64,0.6)','rgba(201,203,207,0.6)','rgba(99,199,54,0.6)','rgba(199,54,199,0.6)','rgba(54,199,199,0.6)'], borderWidth: 1 }] },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Top Halaman (Horizontal Bar)', font: { size: 14, weight: '600' } } } }
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Top Halaman', font: { size: 14, weight: '600' } } } }
       });
 
       // Fetch real data
       fetchAnalyticsData();
 
-      // Auto-refresh every 30 seconds
+      // Auto-refresh every 5 seconds for real-time data
       if (_analyticsRefreshTimer) clearInterval(_analyticsRefreshTimer);
-      _analyticsRefreshTimer = setInterval(fetchAnalyticsData, 30000);
+      _analyticsRefreshTimer = setInterval(fetchAnalyticsData, 5000);
     }
 
     async function fetchAnalyticsData() {
