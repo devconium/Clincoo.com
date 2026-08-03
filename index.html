@@ -343,7 +343,7 @@
               <p class="text-sm text-gray-800">
                 Situs Anda sudah aktif di <a id="halaman-status-url" href="#" target="_blank" rel="noopener" class="text-gray-900 underline hover:text-black font-medium"></a>
               </p>
-              <p class="text-xs text-gray-500 mt-0.5">Terakhir di-deploy <span id="halaman-status-time"></span></p>
+              <p class="text-xs text-gray-500 mt-0.5">Terakhir dipublikasi <span id="halaman-status-time"></span></p>
             </div>
             <div class="flex items-center gap-2 flex-shrink-0">
               <a id="halaman-visit-btn" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm text-center">Kunjungi Situs</a>
@@ -358,13 +358,13 @@
             <div class="flex flex-col gap-2">
               <label class="text-sm font-medium text-gray-700">Sumber</label>
               <select id="deploy-source" class="custom-input w-full px-4 py-3 rounded-xl border text-sm">
-                <option value="project" selected>Deploy dari berkas proyek</option>
+                <option value="project" selected>Publikasi dari berkas proyek</option>
               </select>
             </div>
 
             <div class="flex flex-col gap-2">
               <label class="text-sm font-medium text-gray-700">Cabang</label>
-              <p class="text-xs text-gray-500 -mt-1">Pilih cabang untuk deploy proyek Anda. Setiap kali disimpan, proyek akan langsung di-deploy ke production.</p>
+              <p class="text-xs text-gray-500 -mt-1">Pilih cabang untuk publikasi proyek Anda. Setiap kali disimpan, proyek akan langsung dipublikasi ke production.</p>
               <div class="flex flex-col sm:flex-row gap-2">
                 <select id="deploy-branch" class="custom-input flex-1 px-4 py-3 rounded-xl border text-sm">
                   <option value="main" selected>main</option>
@@ -409,9 +409,9 @@
             <div id="deploy-list" class="flex flex-col divide-y divide-gray-100"></div>
           </div>
 
-          <!-- Riwayat Deploy -->
+          <!-- Riwayat Publikasi -->
           <div class="flex flex-col gap-4 pt-6 border-t border-gray-100">
-            <h3 class="text-base font-semibold text-gray-900">Riwayat Deploy</h3>
+            <h3 class="text-base font-semibold text-gray-900">Riwayat Publikasi</h3>
             <div id="deploy-history-list" class="flex flex-col divide-y divide-gray-100"></div>
           </div>
 
@@ -1883,7 +1883,7 @@
       const list = document.getElementById('deploy-history-list');
       if (!list) return;
       if (deployHistory.length === 0) {
-        list.innerHTML = '<p class="text-sm text-gray-400 py-2">Belum ada riwayat deploy.</p>';
+        list.innerHTML = '<p class="text-sm text-gray-400 py-2">Belum ada riwayat publikasi.</p>';
         return;
       }
       list.innerHTML = deployHistory.slice(0, 10).map((item) => {
@@ -1892,7 +1892,7 @@
         return '<div class="flex items-center gap-3 py-3">' +
           '<span class="text-xs font-semibold ' + statusColor + ' flex-shrink-0 w-14">' + statusLabel + '</span>' +
           '<div class="flex-1 min-w-0">' +
-            '<span class="text-sm text-gray-800 truncate block">' + escapeHtmlLink(item.url || 'Deploy') + '</span>' +
+            '<span class="text-sm text-gray-800 truncate block">' + escapeHtmlLink(item.url || 'Publikasi') + '</span>' +
             '<span class="text-xs text-gray-400">' + escapeHtmlLink(item.time || '') + (item.files ? ' \u00b7 ' + item.files + ' file' : '') + '</span>' +
           '</div>' +
           (item.url ? '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-xs text-gray-600 hover:text-black font-medium flex-shrink-0 underline">Buka</a>' : '') +
@@ -1926,14 +1926,14 @@
         }
       }
       if (allFiles.length === 0) {
-        showToast('Tidak ada file untuk di-deploy', 'error');
+        showToast('Tidak ada file untuk dipublikasi', 'error');
         return;
       }
 
       var cfConfig = {};
       try { cfConfig = JSON.parse(localStorage.getItem('clincoo_cf_config') || '{}'); } catch(e) {}
       if (!cfConfig.accountId || !cfConfig.apiToken) {
-        showToast('Konfigurasi Cloudflare belum ada. Buka halaman Deployments untuk setup.', 'error');
+        showToast('Konfigurasi Cloudflare belum ada. Buka halaman Publikasi untuk setup.', 'error');
         return;
       }
 
@@ -1976,16 +1976,16 @@
           if (typeof FB !== 'undefined') FB.set(getDeployHistoryKey(), deployHistory);
           renderDeployHistory();
 
-          showToast('Deploy berhasil! ' + allFiles.length + ' file dipublikasikan', 'success');
+          showToast('Publikasi berhasil! ' + allFiles.length + ' file dipublikasikan', 'success');
           btn.innerHTML = originalHTML;
           btn.disabled = false;
         } else {
-          throw new Error(result.error || 'Deploy gagal');
+          throw new Error(result.error || 'Publikasi gagal');
         }
       } catch(err) {
         btn.innerHTML = originalHTML;
         btn.disabled = false;
-        showToast('Deploy gagal: ' + err.message, 'error');
+        showToast('Publikasi gagal: ' + err.message, 'error');
 
         deployHistory.unshift({ status: 'failed', url: '', time: new Date().toLocaleString('id-ID'), files: allFiles.length });
         deployHistory = deployHistory.slice(0, 20);
