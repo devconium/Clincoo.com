@@ -1910,26 +1910,6 @@ async function saveDeployDomain() {
         }
     }
 
-    function {
-      var existing = document.getElementById('clincoo-toast');
-      if (existing) existing.remove();
-      var toast = document.createElement('div');
-      toast.id = 'clincoo-toast';
-      var bg = type === 'error' ? 'bg-red-600' : 'bg-emerald-600';
-      toast.className = 'fixed top-4 right-4 z-[100] px-4 py-2.5 rounded-xl text-white text-sm font-medium shadow-lg flex items-center gap-2 transition-all duration-300 opacity-0 translate-y-[-8px] ' + bg;
-      var icon = type === 'error'
-        ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
-        : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
-      toast.innerHTML = icon + '<span>' + msg + '</span>';
-      document.body.appendChild(toast);
-      requestAnimationFrame(function() {
-        toast.classList.remove('opacity-0', 'translate-y-[-8px]');
-      });
-      setTimeout(function() {
-        toast.classList.add('opacity-0', 'translate-y-[-8px]');
-        setTimeout(function() { toast.remove(); }, 300);
-      }, 2800);
-    }
 
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
