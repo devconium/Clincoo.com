@@ -131,11 +131,8 @@ async function _syncProjectsFromD1() {
       projects.push(d1Proj);
       changed = true;
     } else {
-      if (projects[localIdx].name !== d1Proj.name || projects[localIdx].desc !== d1Proj.desc) {
-        projects[localIdx].name = d1Proj.name;
-        projects[localIdx].desc = d1Proj.desc;
-        changed = true;
-      }
+      // Local is authoritative for existing projects - don't overwrite from D1
+      // D1 sync (push) will keep D1 in sync with local
     }
   }
 
@@ -179,12 +176,33 @@ async function _syncFilesFromD1(projectId) {
   }
 }
 
-async function _deleteProjectFromD1(projectId) {
+async function _deleteProjectFromD1(projectId, projName) {
   var pid = String(projectId);
   _recentlyDeletedIds.add(pid);
   try {
     await _api('DELETE', '/api/projects/' + pid);
     await _api('DELETE', '/api/kv/clincoo_' + pid + '_files');
+
+    // Undeploy from Cloudflare Pages
+    if (!projName) {
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return String(p.id) === pid; }) : null;
+      projName = proj ? proj.name : pid;
+    }
+    var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    if (!projectSlug) projectSlug = 'clincoo-app';
+    try {
+      await fetch('https://clincoo-deploy.clincoo.workers.dev?projectName=' + encodeURIComponent(projectSlug), {
+        method: 'DELETE'
+      });
+    } catch(e2) {
+      console.warn('[Clincoo Sync] Error undeploying from Pages:', e2.message);
+    }
+
+    // Clean up deploy-related localStorage keys
+    localStorage.removeItem('clincoo_' + pid + '_deploy_domain');
+    localStorage.removeItem('clincoo_' + pid + '_deploy_branch');
+    localStorage.removeItem('clincoo_' + pid + '_deploy_site');
+    localStorage.removeItem('clincoo_' + pid + '_deploy_https');
   } catch(e) {
     console.warn('[Clincoo Sync] Error deleting project from D1:', e.message);
   } finally {

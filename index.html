@@ -1557,11 +1557,13 @@
     function confirmDelete() {
       const targetId = parseInt(idInput.value);
       if (targetId) {
+        var projToDelete = projects.find(p => p.id === targetId);
+        var projName = projToDelete ? projToDelete.name : '';
         projects = projects.filter(p => p.id !== targetId);
         localStorage.removeItem('clincoo_' + targetId + '_files');
         saveData();
         navigateTo('/');
-        if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(targetId);
+        if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(targetId, projName);
       }
     }
 
@@ -1632,11 +1634,13 @@
 
     function executeDeleteProject(projectId, btn) {
       btn.closest('.fixed').remove();
+      var projToDelete = projects.find(p => p.id === projectId);
+      var projName = projToDelete ? projToDelete.name : '';
       projects = projects.filter(p => p.id !== projectId);
       localStorage.removeItem('clincoo_' + projectId + '_files');
       saveData();
       applyFilters();
-      if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(projectId);
+      if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(projectId, projName);
     }
 
     document.addEventListener('click', function(e) {
