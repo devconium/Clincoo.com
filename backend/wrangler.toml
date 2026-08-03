@@ -1,0 +1,11 @@
+name = "clincoo-backend"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+[vars]
+RATE_LIMIT = "60"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "clincoo_db"
+database_id = "6e34b6a4-affd-482d-97d1-4fe12c7f694c"
