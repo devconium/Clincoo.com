@@ -245,15 +245,15 @@
         </div>
       </div>
 
-     <!-- Tab Navigasi, sekarang dengan event listener yang aman -->
-     <div class="w-full border-b border-gray-200 mb-6" id="project-nav-tabs">
-        <nav class="-mb-px flex space-x-6 overflow-x-auto hide-scrollbar" aria-label="Tabs">
-          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center focus:outline-none" aria-current="page">
+     <div class="w-full border-b border-gray-200 mb-6 relative" id="project-nav-tabs">
+        <nav class="-mb-px flex gap-6 overflow-x-auto hide-scrollbar relative" aria-label="Tabs">
+          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn text-black whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10" aria-current="page">
             Kode
           </button> 
-          <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center focus:outline-none">
+          <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
             Keamanan
           </button>
+          <div id="tab-indicator" class="absolute bottom-0 left-0 h-[2px] bg-black transition-transform duration-300 ease-in-out pointer-events-none" style="width: 0; transform: translateX(0);"></div>
         </nav>
       </div>
 
@@ -306,7 +306,22 @@
         </div>
 
         <div id="tab-content-keamanan" class="hidden flex-col gap-4 py-8 max-w-4xl mx-auto w-full transition-opacity">
-          <div id="security-scan-results" class="flex flex-col gap-3"></div>
+          
+          <div id="security-empty-state" class="text-center py-12 px-4">
+            <div class="mx-auto h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 class="text-sm font-medium text-gray-900">Belum ada pemindaian</h3>
+            <p class="text-sm text-gray-500 mt-1 mb-6 max-w-sm mx-auto">Jalankan pemindaian untuk menemukan potensi kerentanan keamanan pada kode proyek ini.</p>
+            <button onclick="startSecurityScan()" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-xl shadow-sm hover:bg-gray-50 transition-colors focus:outline-none">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              Pindai Sekarang
+            </button>
+          </div>
+
+          <div id="security-scan-results" class="flex flex-col gap-3 hidden"></div>
         </div>
 
       </div>
@@ -462,9 +477,6 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
-  <script src="security.js"></script>
-  <script src="backend.js"></script>
   <script>
     let projects = [];
     let filteredProjects = [];
@@ -476,6 +488,62 @@
     let modalAction = null;
     let itemBeingRenamed = null;
     let activeItemName = null;
+
+    const defaultTemplates = {
+      'html': '<!DOCTYPE html>\n<html>\n<head>\n  <title>New Page</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n</body>\n</html>',
+      'css': 'body {\n  margin: 0;\n  padding: 0;\n}',
+      'js': 'console.log("Hello World");',
+      'py': 'print("Hello World")',
+      'json': '{\n  "key": "value"\n}'
+    };
+
+    function loadData() {
+      const stored = localStorage.getItem('clincoo_projects');
+      if (stored) {
+        try { projects = JSON.parse(stored); } catch(e) { projects = []; }
+      } else { projects = []; }
+    }
+
+    function saveData() {
+      localStorage.setItem('clincoo_projects', JSON.stringify(projects));
+      if (currentProjectId) {
+        localStorage.setItem('clincoo_' + currentProjectId + '_files', JSON.stringify(projectFilesData));
+      }
+    }
+
+    function loadProjectFiles() {
+      if (!currentProjectId) return;
+      const stored = localStorage.getItem('clincoo_' + currentProjectId + '_files');
+      if (stored) {
+        try { projectFilesData = JSON.parse(stored); } catch(e) { projectFilesData = { 'root': [] }; }
+      } else { projectFilesData = { 'root': [] }; }
+      if (!projectFilesData['root']) projectFilesData['root'] = [];
+    }
+
+    function getFileExtension(filename) {
+      if (!filename || !filename.includes('.')) return '';
+      return filename.split('.').pop().toLowerCase();
+    }
+
+    function getFileType(filename) {
+      const ext = getFileExtension(filename);
+      if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) return 'image';
+      if (['mp3', 'wav', 'ogg'].includes(ext)) return 'audio';
+      if (['mp4', 'webm'].includes(ext)) return 'video';
+      return 'code';
+    }
+
+    function getFileIcon(filename) {
+      const type = getFileType(filename);
+      const ext = getFileExtension(filename);
+      if (type === 'image') return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#ec4899]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>`;
+      if (type === 'audio') return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#8b5cf6]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2-2-2 2 .895 2 2-.895 2-2 2zm12-3c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zM9 10l12-3"></path></svg></div>`;
+      if (type === 'video') return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#ef4444]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></div>`;
+      if (ext === 'html') return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#f97316]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg></div>`;
+      if (ext === 'css') return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#3b82f6]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg></div>`;
+      if (ext === 'js' || ext === 'ts') return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#eab308]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg></div>`;
+      return `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#64748b]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>`;
+    }
 
     let codeEditor = null;
     function initCodeEditor() {
@@ -626,10 +694,11 @@
       modalAction = null;
       itemBeingRenamed = null;
       renderFileList();
-      if (typeof renderSecurityTab === 'function') renderSecurityTab();
       
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      if (tabBtns.length > 0) switchTab('kode', tabBtns[0]);
+      setTimeout(() => {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        if (tabBtns.length > 0) switchTab('kode', tabBtns[0]);
+      }, 50);
 
       const proj = projects.find(p => p.id === id);
       const nameEl = document.getElementById('current-project-name');
@@ -1333,15 +1402,21 @@
       tabBtns.forEach(btn => {
         const isActive = btn.dataset.tab === tabId || btn === element;
         if(isActive) {
-          btn.classList.remove('border-transparent', 'text-gray-500');
-          btn.classList.add('border-black', 'text-black');
+          btn.classList.remove('text-gray-500');
+          btn.classList.add('text-black');
           btn.setAttribute('aria-current', 'page');
         } else {
-          btn.classList.remove('border-black', 'text-black');
-          btn.classList.add('border-transparent', 'text-gray-500');
+          btn.classList.remove('text-black');
+          btn.classList.add('text-gray-500');
           btn.removeAttribute('aria-current');
         }
       });
+      
+      const indicator = document.getElementById('tab-indicator');
+      if(indicator && element) {
+        indicator.style.width = element.offsetWidth + 'px';
+        indicator.style.transform = `translateX(${element.offsetLeft}px)`;
+      }
       
       const contentKode = document.getElementById('tab-content-kode');
       const contentKeamanan = document.getElementById('tab-content-keamanan');
@@ -1354,32 +1429,20 @@
         if(tabId === 'keamanan') {
           contentKeamanan.classList.remove('hidden');
           contentKeamanan.classList.add('flex');
-          if (typeof renderSecurityTab === 'function') renderSecurityTab();
         } else {
           contentKeamanan.classList.add('hidden');
           contentKeamanan.classList.remove('flex');
         }
       }
     }
-
-    function safeNavigate(url) {
-      window.location.href = url;
+    
+    function startSecurityScan() {
+       // Dummy function to prevent error when the button is clicked. 
+       // Logic for security scanning can be added here later.
+       console.log("Memulai pemindaian...");
     }
 
-    document.addEventListener('click', (e) => {
-      const addMenu = document.getElementById('add-menu-dropdown');
-      if (addMenu && !addMenu.contains(e.target)) addMenu.classList.add('hidden');
-      
-      const itemMenu = document.getElementById('item-action-menu');
-      if (itemMenu && !itemMenu.contains(e.target)) itemMenu.classList.add('hidden');
-      
-      const projDropdown = document.getElementById('project-shortcut-dropdown');
-      if (projDropdown && !projDropdown.contains(e.target)) projDropdown.classList.add('hidden');
-      
-      const notifDropdown = document.getElementById('notif-dropdown');
-      if (notifDropdown && !notifDropdown.contains(e.target)) notifDropdown.classList.add('hidden');
-    });
-
+    // Initialize application safely
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
       handleRoute();
