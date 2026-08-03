@@ -347,12 +347,12 @@
             </div>
             <div class="flex items-center gap-2 flex-shrink-0">
               <a id="halaman-visit-btn" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm text-center">Kunjungi Situs</a>
-              <button onclick="unpublishSite()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">Hapus Publikasi</button>
+
             </div>
           </div>
 
           <!-- Pembuatan dan Penerapan -->
-          <div class="flex flex-col gap-4">
+          <div id="deploy-config-section" class="flex flex-col gap-4">
             <h3 class="text-base font-semibold text-gray-900">Pembuatan dan Penerapan</h3>
 
             <div class="flex flex-col gap-2">
@@ -609,6 +609,7 @@
       if (currentProjectId) {
         localStorage.setItem('clincoo_' + currentProjectId + '_files', JSON.stringify(projectFilesData));
       }
+      if (typeof triggerAutoDeploy === 'function') triggerAutoDeploy();
     }
 
     function loadProjectFiles() {
@@ -1702,21 +1703,19 @@
         localStorage.setItem(getEnvKey(), JSON.stringify(envVariables));
         if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         renderEnvList();
-        showToast('Variabel dihapus', 'success');
-    }
+        }
 
     function saveEnv() {
         const keyInput = document.getElementById('env-key');
         const valInput = document.getElementById('env-value');
-        if(!keyInput.value.trim() || !valInput.value) { showToast('Isi kunci dan nilai', 'error'); return; }
+        if(!keyInput.value.trim() || !valInput.value) { return; }
         envVariables.push({ key: keyInput.value.trim(), value: valInput.value });
         localStorage.setItem(getEnvKey(), JSON.stringify(envVariables));
         if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         keyInput.value = '';
         valInput.value = '';
         renderEnvList();
-        showToast('Variabel tersimpan', 'success');
-    }
+        }
 
     function safeNavigate(url) {
       window.location.href = url;
@@ -1748,16 +1747,19 @@
     function renderDeployStatus() {
       const box = document.getElementById('halaman-status-box');
       const dSec = document.getElementById('domain-khusus-section');
+      const cfgSec = document.getElementById('deploy-config-section');
       if (!box) return;
       let site = null;
       try { site = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { site = null; }
       if (!site || !site.url) {
         box.classList.add('hidden');
         if (dSec) { dSec.classList.add('hidden'); dSec.classList.remove('flex'); }
+        if (cfgSec) { cfgSec.classList.remove('hidden'); }
         return;
       }
       box.classList.remove('hidden');
       if (dSec) { dSec.classList.remove('hidden'); dSec.classList.add('flex'); }
+      if (cfgSec) { cfgSec.classList.add('hidden'); }
       const urlEl = document.getElementById('halaman-status-url');
       const visitEl = document.getElementById('halaman-visit-btn');
       const timeEl = document.getElementById('halaman-status-time');
@@ -1766,20 +1768,11 @@
       if (timeEl) timeEl.textContent = site.time || '';
     }
 
-    function unpublishSite() {
-      if (!confirm('Hapus publikasi situs ini? Situs tidak akan bisa diakses lagi.')) return;
-      localStorage.removeItem(getDeploySiteKey());
-      if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), null);
-      renderDeployStatus();
-      showToast('Publikasi situs dihapus', 'success');
-    }
-
-    async function saveDeployDomain() {
+async function saveDeployDomain() {
       const domainInput = document.getElementById('deploy-domain');
       if (!domainInput) return;
       const domain = domainInput.value.trim();
       if (!domain) {
-        showToast('Masukkan nama domain', 'error');
         return;
       }
       localStorage.setItem(getDeployDomainKey(), domain);
@@ -1798,13 +1791,11 @@
         });
         var result = await res.json();
         if (result.success) {
-          showToast(result.message || 'Domain berhasil ditambahkan', 'success');
-        } else {
-          showToast('Domain gagal: ' + (result.error || 'Unknown error'), 'error');
+          } else {
+          , 'error');
         }
       } catch(err) {
-        showToast('Domain tersimpan lokal, tapi gagal kirim ke server: ' + err.message, 'error');
-      }
+        }
     }
 
     async function removeDeployDomain() {
@@ -1826,8 +1817,7 @@
           });
         } catch(err) {}
       }
-      showToast('Domain dihapus', 'success');
-    }
+      }
 
     document.addEventListener('change', function(e) {
       if (e.target && e.target.id === 'deploy-https') {
@@ -1836,10 +1826,22 @@
       }
     });
 
-    async function deployToProduction() {
+    var autoDeployTimer = null;
+    function triggerAutoDeploy() {
+      if (autoDeployTimer) clearTimeout(autoDeployTimer);
+      autoDeployTimer = setTimeout(function() {
+        var site = null;
+        try { site = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+        if (site && site.url) {
+          deployToProduction(true);
+        }
+      }, 2000);
+    }
+
+    async function deployToProduction(isAuto) {
       var btn = document.getElementById('deploy-prod-btn');
       var status = document.getElementById('deploy-prod-status');
-      if (!btn) return;
+      if (!btn && !isAuto) return;
 
       var domainInput = document.getElementById('deploy-domain');
       var branchSelect = document.getElementById('deploy-branch');
@@ -1862,7 +1864,6 @@
         }
       }
       if (allFiles.length === 0) {
-        showToast('Tidak ada file untuk dipublikasi', 'error');
         return;
       }
 
@@ -1897,7 +1898,7 @@
           if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
           renderDeployStatus();
 
-          showToast('Publikasi berhasil! ' + allFiles.length + ' file dipublikasikan', 'success');
+          
           btn.innerHTML = originalHTML;
           btn.disabled = false;
         } else {
@@ -1906,12 +1907,10 @@
       } catch(err) {
         btn.innerHTML = originalHTML;
         btn.disabled = false;
-        showToast('Publikasi gagal: ' + err.message, 'error');
-
-      }
+        }
     }
 
-    function showToast(msg, type) {
+    function {
       var existing = document.getElementById('clincoo-toast');
       if (existing) existing.remove();
       var toast = document.createElement('div');
