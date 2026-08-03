@@ -1,16 +1,9 @@
-/**
- * Clincoo Backend — Cloudflare Worker
- * Database: D1 (clincoo_db)
- * Security: Bot Protection + Rate Limiting + IP Blocking + API Key Auth
- * API Key: Stored as Cloudflare Secret (BACKEND_API_KEY) — not in code, not changeable
- */
 
-// === CONFIG ===
-const RATE_LIMIT = 60; // requests per minute per IP
+
+const RATE_LIMIT = 60;
 const BLOCKED_UAS = ['curl', 'wget', 'python-requests', 'scrapy', 'bot', 'spider', 'headless', 'semrush', 'ahrefs', 'mj12'];
-const MAX_BODY_SIZE = 1024 * 1024; // 1MB
+const MAX_BODY_SIZE = 1024 * 1024;
 
-// === HELPER ===
 function json(data, status = 200, extra = {}) {
   return new Response(JSON.stringify({ success: true, ...data, ...extra }), {
     status,
@@ -51,19 +44,16 @@ function getClientIP(request) {
   return 'unknown';
 }
 
-// === BOT PROTECTION ===
 async function checkBotProtection(request, env, path, hasAuth) {
   const ip = getClientIP(request);
   const ua = (request.headers.get('User-Agent') || '').toLowerCase();
   const now = Date.now();
 
-  // 1. Check blocked IPs
   const blocked = await env.DB.prepare('SELECT ip FROM blocked_ips WHERE ip = ?').bind(ip).first();
   if (blocked) {
     return { blocked: true, reason: 'IP blocked', status: 403 };
   }
 
-  // 2. Check suspicious user agents (skip for authenticated requests)
   if (!hasAuth) {
     for (const bad of BLOCKED_UAS) {
       if (ua.includes(bad) && !path.includes('/health')) {
@@ -71,13 +61,11 @@ async function checkBotProtection(request, env, path, hasAuth) {
       }
     }
 
-    // 3. Empty UA (bot indicator)
     if (!ua && !path.includes('/health')) {
       return { blocked: true, reason: 'Empty user agent', status: 403 };
     }
   }
 
-  // 4. Rate limiting
   const record = await env.DB.prepare('SELECT count, first_request, blocked FROM rate_limits WHERE ip = ?').bind(ip).first();
 
   if (record) {
@@ -107,19 +95,16 @@ async function checkBotProtection(request, env, path, hasAuth) {
   return { blocked: false };
 }
 
-// === AUTH ===
 function checkAuth(request, env) {
   const key = request.headers.get('X-API-Key') || (request.headers.get('Authorization') || '').replace('Bearer ', '');
   return key === env.BACKEND_API_KEY;
 }
 
-// === ROUTER ===
 async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
   const path = url.pathname;
   const method = request.method;
 
-  // CORS preflight
   if (method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
@@ -131,26 +116,21 @@ async function handleRequest(request, env, ctx) {
     });
   }
 
-  // Health check (no auth needed)
   if (path === '/api/health') {
     return json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
   }
 
-  // Auth check first — authenticated requests skip UA bot checks
   const hasAuth = checkAuth(request, env);
 
-  // Bot protection (skip UA check for authenticated requests)
   const protection = await checkBotProtection(request, env, path, hasAuth);
   if (protection.blocked) {
     return error(protection.reason, protection.status);
   }
 
-  // Auth check
   if (!hasAuth) {
     return error('Unauthorized', 401);
   }
 
-  // === PROJECTS ===
   if (path === '/api/projects' && method === 'GET') {
     const results = await env.DB.prepare('SELECT * FROM projects ORDER BY created_date DESC').all();
     return json({ data: results.results });
@@ -185,7 +165,6 @@ async function handleRequest(request, env, ctx) {
     return json({ message: 'Project deleted' });
   }
 
-  // === FILES ===
   if (path.match(/^\/api\/projects\/[\w-]+\/files$/) && method === 'GET') {
     const pid = path.split('/')[3];
     const results = await env.DB.prepare('SELECT * FROM files WHERE project_id = ? ORDER BY name').bind(pid).all();
@@ -214,7 +193,6 @@ async function handleRequest(request, env, ctx) {
     return json({ message: 'File deleted' });
   }
 
-  // === DEPLOYMENTS ===
   if (path.match(/^\/api\/projects\/[\w-]+\/deployments$/) && method === 'GET') {
     const pid = path.split('/')[3];
     const results = await env.DB.prepare('SELECT * FROM deployments WHERE project_id = ? ORDER BY created_date DESC').bind(pid).all();
@@ -238,7 +216,6 @@ async function handleRequest(request, env, ctx) {
     return json({ data: row });
   }
 
-  // === ENV VARS ===
   if (path.match(/^\/api\/projects\/[\w-]+\/env$/) && method === 'GET') {
     const pid = path.split('/')[3];
     const results = await env.DB.prepare('SELECT * FROM env_vars WHERE project_id = ?').bind(pid).all();
@@ -258,7 +235,6 @@ async function handleRequest(request, env, ctx) {
     return json({ message: 'Env var deleted' });
   }
 
-  // === SETTINGS ===
   if (path.match(/^\/api\/projects\/[\w-]+\/settings$/) && method === 'GET') {
     const pid = path.split('/')[3];
     const row = await env.DB.prepare('SELECT data FROM settings WHERE project_id = ?').bind(pid).first();
@@ -271,7 +247,6 @@ async function handleRequest(request, env, ctx) {
     return json({ data: body });
   }
 
-  // === SQL QUERY ===
   if (path === '/api/sql' && method === 'POST') {
     const body = await request.json();
     if (!body.sql) return error('SQL query required', 400);
@@ -288,7 +263,6 @@ async function handleRequest(request, env, ctx) {
     }
   }
 
-  // === SECURITY ===
   if (path === '/api/security/blocked-ips' && method === 'GET') {
     const results = await env.DB.prepare('SELECT * FROM blocked_ips ORDER BY created_date DESC').all();
     return json({ data: results.results });
@@ -312,7 +286,6 @@ async function handleRequest(request, env, ctx) {
     return json({ data: { projects: projects.count, files: files.count, deployments: deploys.count, blocked_ips: blocked.count, rate_limited: rateLimit.count } });
   }
 
-  // === DATABASE INFO ===
   if (path === '/api/database/tables' && method === 'GET') {
     const results = await env.DB.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE '_cf_%' AND name NOT LIKE 'sqlite_%' ORDER BY name").all();
     return json({ data: results.results.map(r => r.name) });

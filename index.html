@@ -5,9 +5,9 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https: blob:;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar Proyek</title>
-  
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E">
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
@@ -20,7 +20,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -40,12 +40,12 @@
       opacity: 1;
       transform: translateY(0);
     }
-    
+
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
-    
+
     .dark-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
     .dark-scrollbar::-webkit-scrollbar-track { background: #1e1e1e; }
     .dark-scrollbar::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
@@ -109,7 +109,7 @@
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
             </svg>
           </div>
-          <input type="text" id="search-input" placeholder="Cari proyek..." 
+          <input type="text" id="search-input" placeholder="Cari proyek..."
                  class="block w-full py-2 bg-transparent text-sm sm:text-base placeholder-gray-400 focus:outline-none text-gray-900 font-medium">
           <div class="hidden sm:flex items-center justify-center px-3 py-1 bg-gray-50 border border-gray-100 rounded-full text-xs font-semibold text-gray-400 ml-2 shadow-inner">
             Pencarian
@@ -137,10 +137,9 @@
           </button>
         </div>
 
-        <!-- UPDATE: Mengubah container menjadi list baris bentuk panjang -->
         <div id="project-list" class="flex flex-col gap-3 pb-4 mt-2">
         </div>
-        
+
         <div id="empty-state" class="hidden text-center py-16 px-4">
           <div class="mx-auto h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 ">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -166,10 +165,10 @@
 
       <div class="w-full">
         <h2 id="view-form-title" class="text-2xl font-bold text-black tracking-tight mb-8 pb-4 border-b border-gray-100">Buat proyek baru</h2>
-        
+
         <form id="project-form" onsubmit="handleFormSubmit(event)">
           <input type="hidden" id="project-id">
-          
+
           <div id="step-1-container" class="transition-opacity">
             <div class="mb-5">
               <label for="project-name" class="block text-sm font-medium text-gray-700 mb-2">Nama proyek *</label>
@@ -178,7 +177,7 @@
                 Nama proyek harus unik agar mudah dikenali.
               </p>
             </div>
-            
+
             <div class="mb-5">
               <label class="block text-sm font-medium text-gray-700 mb-2">Visibilitas Proyek *</label>
               <div class="flex gap-4">
@@ -193,7 +192,7 @@
               </div>
             </div>
           </div>
-          
+
           <div id="form-actions" class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-8 mt-4 border-t border-gray-200">
             <button type="button" id="btn-delete" onclick="confirmDelete()" class="hidden sm:mr-auto px-4 py-2.5 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">
               Hapus
@@ -231,7 +230,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="flex items-center justify-center gap-1.5 sm:gap-2">
             <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -248,7 +247,7 @@
         <nav class="-mb-px flex space-x-6 overflow-x-auto hide-scrollbar" aria-label="Tabs">
           <button onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none" aria-current="page">
             Folder & File
-          </button> 
+          </button>
         </nav>
       </div>
 
@@ -256,8 +255,7 @@
         <div id="tab-content-kode" class="block transition-opacity">
           <div class="flex gap-2 w-full mb-4">
             <div class="relative flex-1 group bg-white rounded-full shadow-sm border border-gray-200/70 px-4 py-1.5 focus-within:shadow-md focus-within:border-gray-300 transition-all duration-300 flex items-center">
-          
-  <!-- Icon Kaca Pembesar -->
+
   <div class="text-gray-400 group-focus-within:text-gray transition-colors mr-3 flex-shrink-0">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
       <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -509,6 +507,53 @@
       localStorage.setItem(STORAGE_KEY_FILES, JSON.stringify(projectFilesData));
     }
 
+    const BACKEND_URL = 'https://clincoo-backend.clincoo.workers.dev/api';
+    const BACKEND_KEY = 'clincoo_2deef0a61ecbc93e6c9bdb027a0ff61bc6ce577024723930';
+    let backendOnline = false;
+
+    async function checkBackend() {
+      try {
+        const res = await fetch(BACKEND_URL + '/health');
+        const data = await res.json();
+        backendOnline = data.status === 'ok';
+      } catch(e) { backendOnline = false; }
+    }
+
+    async function syncToBackend(action, data) {
+      if (!backendOnline) return;
+      try {
+        const opts = { method: action.method, headers: { 'X-API-Key': BACKEND_KEY, 'Content-Type': 'application/json' } };
+        if (action.body) opts.body = JSON.stringify(action.body);
+        await fetch(BACKEND_URL + action.path, opts);
+      } catch(e) { console.warn('Backend sync failed:', e); }
+    }
+
+    async function loadFromBackend() {
+      if (!backendOnline) return;
+      try {
+        const res = await fetch(BACKEND_URL + '/projects', { headers: { 'X-API-Key': BACKEND_KEY } });
+        const data = await res.json();
+        if (data.success && data.data && data.data.length > 0) {
+          const backendProjects = data.data.map(p => ({
+            id: p.id,
+            name: p.name,
+            desc: p.description || 'Tanpa keterangan',
+            visibility: 'public'
+          }));
+          const localIds = projects.map(p => String(p.id));
+          backendProjects.forEach(bp => {
+            if (!localIds.includes(String(bp.id))) {
+              projects.push(bp);
+            }
+          });
+          filteredProjects = [...projects];
+          saveData();
+        }
+      } catch(e) { console.warn('Backend load failed:', e); }
+    }
+
+
+
     const defaultTemplates = {
       'html': '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <title>Proyek Baru</title>\n</head>\n<body>\n  <h1>Halo Dunia!</h1>\n</body>\n</html>',
       'css': 'body {\n  margin: 0;\n  padding: 0;\n  font-family: sans-serif;\n}',
@@ -562,7 +607,7 @@
     const pageForm = document.getElementById('page-form');
     const pageProjectDetail = document.getElementById('page-project-detail');
     const pageFileEditor = document.getElementById('page-file-editor');
-    
+
     const listContainer = document.getElementById('project-list');
     const emptyState = document.getElementById('empty-state');
     const searchInput = document.getElementById('search-input');
@@ -570,14 +615,14 @@
 
     const projectForm = document.getElementById('project-form');
     const btnDelete = document.getElementById('btn-delete');
-    
+
     const idInput = document.getElementById('project-id');
     const nameInput = document.getElementById('project-name');
     const formViewTitle = document.getElementById('view-form-title');
 
     const step1Container = document.getElementById('step-1-container');
     const formActions = document.getElementById('form-actions');
-    
+
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebar-overlay');
     const sidebarPanel = document.getElementById('sidebar-panel');
@@ -652,24 +697,24 @@
     function setupFormPage(id) {
       projectForm.reset();
       idInput.value = '';
-      
+
       const publicRadio = document.querySelector('input[name="project-visibility"][value="public"]');
       if (publicRadio) publicRadio.checked = true;
-      
+
       showFormInput();
-      
+
       if (id) {
         const project = projects.find(p => p.id === id);
         if (project) {
           formViewTitle.textContent = 'Edit proyek';
           idInput.value = project.id;
           nameInput.value = project.name;
-          
+
           if (project.visibility === 'private') {
             const privateRadio = document.querySelector('input[name="project-visibility"][value="private"]');
             if (privateRadio) privateRadio.checked = true;
           }
-          
+
           btnDelete.classList.remove('hidden');
         } else { navigateTo('/'); }
       } else {
@@ -688,7 +733,7 @@
       modalAction = null;
       itemBeingRenamed = null;
       renderFileList();
-      
+
       const tabBtns = document.querySelectorAll('.tab-btn');
       if (tabBtns.length > 0) switchTab('kode', tabBtns[0]);
 
@@ -757,7 +802,7 @@
             accumulatedPath += (index === 0 ? '' : '/') + p;
             const isLast = index === parts.length - 1;
             bcHtml += `<span class="text-gray-300">/</span>`;
-            if (isLast) { bcHtml += `<span class="text-black font-semibold">${p}</span>`; } 
+            if (isLast) { bcHtml += `<span class="text-black font-semibold">${p}</span>`; }
             else { bcHtml += `<button onclick="openFolder('${accumulatedPath}')" class="text-gray-500 hover:text-black transition-colors">${p}</button>`; }
           });
           breadcrumb.innerHTML = bcHtml;
@@ -806,19 +851,19 @@
     function openCreateModal(type) {
       const menu = document.getElementById('add-menu-dropdown');
       if(menu) menu.classList.add('hidden');
-      
+
       modalAction = type === 'folder' ? 'create_folder' : 'create_file';
-      
+
       const title = document.getElementById('input-modal-title');
       const label = document.getElementById('input-modal-label');
       const input = document.getElementById('modal-input-name');
       const typeContainer = document.getElementById('input-modal-type-container');
       const typeSelect = document.getElementById('modal-file-type');
       const errorEl = document.getElementById('input-modal-error');
-      
+
       errorEl.classList.add('hidden');
       input.value = '';
-      
+
       if (type === 'folder') {
         title.textContent = 'Buat Folder Baru';
         label.textContent = 'Nama Folder';
@@ -831,29 +876,29 @@
         typeContainer.classList.remove('hidden');
         typeSelect.value = '';
       }
-      
+
       showInputModal();
     }
 
     function triggerRename() {
       const menu = document.getElementById('item-action-menu');
       if (menu) menu.classList.add('hidden');
-      
+
       modalAction = 'rename';
       itemBeingRenamed = activeItemName;
-      
+
       const title = document.getElementById('input-modal-title');
       const label = document.getElementById('input-modal-label');
       const input = document.getElementById('modal-input-name');
       const typeContainer = document.getElementById('input-modal-type-container');
       const errorEl = document.getElementById('input-modal-error');
-      
+
       errorEl.classList.add('hidden');
       title.textContent = 'Ganti Nama';
       label.textContent = 'Nama Baru';
       input.value = itemBeingRenamed;
       typeContainer.classList.add('hidden');
-      
+
       showInputModal();
     }
 
@@ -865,7 +910,7 @@
         overlay.classList.remove('opacity-0');
         modal.classList.remove('opacity-0', 'scale-95');
         modal.classList.add('opacity-100', 'scale-100');
-        
+
         const input = document.getElementById('modal-input-name');
         input.focus();
         if (modalAction === 'rename') {
@@ -882,11 +927,11 @@
     function closeInputModal() {
       const overlay = document.getElementById('input-modal-overlay');
       const modal = document.getElementById('input-modal');
-      
+
       overlay.classList.add('opacity-0');
       modal.classList.remove('opacity-100', 'scale-100');
       modal.classList.add('opacity-0', 'scale-95');
-      
+
       setTimeout(() => {
         overlay.classList.add('hidden');
         modalAction = null;
@@ -914,13 +959,13 @@
       const input = document.getElementById('modal-input-name');
       const errorEl = document.getElementById('input-modal-error');
       let name = input.value.trim();
-      
-      if(!name) { 
+
+      if(!name) {
          errorEl.textContent = "Nama tidak boleh kosong.";
          errorEl.classList.remove('hidden');
-         return; 
+         return;
       }
-      
+
       const items = projectFilesData[currentFolderPath] || [];
 
       if (modalAction === 'create_file' || modalAction === 'create_folder') {
@@ -937,14 +982,14 @@
               name = name + '.txt';
             }
           }
-          
+
           const exists = items.some(item => item.name.toLowerCase() === name.toLowerCase());
           if (exists) {
              errorEl.textContent = "Nama sudah ada di direktori ini.";
              errorEl.classList.remove('hidden');
              return;
           }
-          
+
           if (!projectFilesData[currentFolderPath]) projectFilesData[currentFolderPath] = [];
 
           if(modalAction === 'create_folder') {
@@ -972,7 +1017,7 @@
              errorEl.classList.remove('hidden');
              return;
           }
-          
+
           const itemIndex = items.findIndex(i => i.name === itemBeingRenamed);
           if(itemIndex !== -1) {
             const item = items[itemIndex];
@@ -981,7 +1026,7 @@
               const newPath = currentFolderPath === 'root' ? name : currentFolderPath + '/' + name;
               item.name = name;
               item.path = newPath;
-              
+
               const keysToUpdate = Object.keys(projectFilesData).filter(k => k === oldPath || k.startsWith(oldPath + '/'));
               keysToUpdate.forEach(key => {
                 const newKey = newPath + key.substring(oldPath.length);
@@ -999,7 +1044,7 @@
             }
           }
       }
-      
+
       saveData();
       if (fileSearchInput) fileSearchInput.value = '';
       renderFileList();
@@ -1013,7 +1058,7 @@
 
       const items = projectFilesData[currentFolderPath] || [];
       const itemIndex = items.findIndex(i => i.name === activeItemName);
-      
+
       if(itemIndex !== -1) {
         const item = items[itemIndex];
         if(item.type === 'folder') {
@@ -1061,7 +1106,7 @@
 
         const filePath = targetPath === 'root' ? file.name : targetPath + '/' + file.name;
         const existingIndex = projectFilesData[targetPath].findIndex(i => i.name === file.name && i.type === 'file');
-        
+
         if (existingIndex !== -1) {
           projectFilesData[targetPath][existingIndex].content = content;
           projectFilesData[targetPath][existingIndex].size = sizeStr;
@@ -1288,7 +1333,7 @@
     function handleCancelBack() { navigateTo('/'); }
 
     function handleFormSubmit(e) {
-      e.preventDefault(); 
+      e.preventDefault();
       if(isSaving) return;
       showLoading();
       setTimeout(() => executeSaveProject(), 400);
@@ -1298,10 +1343,10 @@
       const id = idInput.value;
       const name = nameInput.value.trim();
       const desc = "Tanpa keterangan";
-      
+
       const visibilityInput = document.querySelector('input[name="project-visibility"]:checked');
       const visibility = visibilityInput ? visibilityInput.value : 'public';
-      
+
       if (id) {
         const index = projects.findIndex(p => p.id == id);
         if (index !== -1) projects[index] = { ...projects[index], name, desc, visibility };
@@ -1310,6 +1355,11 @@
         projects.push({ id: newId, name, desc, visibility });
       }
       saveData();
+      if (id) {
+        syncToBackend({ method: 'PUT', path: '/projects/' + id, body: { name, description: desc } });
+      } else {
+        syncToBackend({ method: 'POST', path: '/projects', body: { id: String(newId), name, description: desc } });
+      }
       navigateTo('/');
     }
 
@@ -1318,12 +1368,12 @@
       if (targetId) {
         projects = projects.filter(p => p.id !== targetId);
         localStorage.removeItem('clincoo_' + targetId + '_files');
+        if (targetId) syncToBackend({ method: 'DELETE', path: '/projects/' + targetId });
         saveData();
         navigateTo('/');
       }
     }
 
-    // UPDATE: Render daftar proyek menjadi bentuk list memanjang dengan logo bg putih dan teks 1 baris
     function renderProjects() {
       if(!listContainer) return;
       listContainer.innerHTML = '';
@@ -1334,12 +1384,12 @@
         filteredProjects.forEach(project => {
           const isPrivate = project.visibility === 'private';
           const padlockIcon = isPrivate ? `<div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm border border-gray-100" title="Private Project"><svg class="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg></div>` : '';
-          
+
           const item = document.createElement('div');
-          // Update menjadi flex-row (panjang) dan center alignment
+
           item.className = 'group flex items-center p-3.5 sm:p-4 bg-white rounded-2xl border border-gray-200/80 hover:border-gray-300 hover:shadow-md transition-all duration-200 cursor-pointer w-full';
           item.onclick = (e) => { if (!e.target.closest('button') && !e.target.closest('a')) navigateTo('/proyek/' + project.id); };
-          
+
           item.innerHTML = `
             <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center relative bg-white rounded-xl border border-gray-100 p-2 mr-4 transition-colors">
               <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity">
@@ -1399,7 +1449,7 @@
         list.appendChild(item);
       });
     }
-    
+
     function toggleAddMenu(e) {
       if(e) e.stopPropagation();
       const menu = document.getElementById('add-menu-dropdown');
@@ -1426,10 +1476,10 @@
       });
       btn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
       btn.classList.add('border-black', 'text-black');
-      
+
       const tabKode = document.getElementById('tab-content-kode');
       const tabEmpty = document.getElementById('tab-content-empty');
-      
+
       if (tabId === 'kode') {
         tabKode.classList.remove('hidden');
         tabEmpty.classList.add('hidden');
@@ -1439,22 +1489,25 @@
         tabEmpty.classList.add('flex');
       }
     }
-    
+
     document.addEventListener('click', (e) => {
       const notif = document.getElementById('notif-dropdown');
       const projDrop = document.getElementById('project-shortcut-dropdown');
       const addMenu = document.getElementById('add-menu-dropdown');
       const actionMenu = document.getElementById('item-action-menu');
-      
+
       if (notif && !notif.contains(e.target) && !e.target.closest('[aria-label="Notifikasi"]')) notif.classList.add('hidden');
       if (projDrop && !projDrop.contains(e.target) && !e.target.closest('[aria-label="Pilih Proyek"]')) projDrop.classList.add('hidden');
       if (addMenu && !addMenu.contains(e.target) && !e.target.closest('button[onclick="toggleAddMenu(event)"]')) addMenu.classList.add('hidden');
       if (actionMenu && !actionMenu.contains(e.target) && !e.target.closest('.item-action-btn')) actionMenu.classList.add('hidden');
     });
 
-    window.addEventListener('load', () => {
+    window.addEventListener('load', async () => {
+      await checkBackend();
       loadData();
+      if (backendOnline) await loadFromBackend();
       handleRoute();
+      renderProjects();
     });
   </script>
 </body>
