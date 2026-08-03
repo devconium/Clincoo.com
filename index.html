@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https: blob:;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Proyek</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+    }
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+    .page-view {
+      transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+    }
+    .page-enter {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .page-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+    
+    .dark-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+    .dark-scrollbar::-webkit-scrollbar-track { background: #1e1e1e; }
+    .dark-scrollbar::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+    .dark-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
+
+    .custom-input {
+      background-color: #f3f4f6;
+      border-color: #e5e7eb;
+      color: #111827;
+    }
+    .custom-input:focus {
+      background-color: #ffffff;
+      border-color: #9ca3af;
+      box-shadow: 0 0 0 1px #9ca3af;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+
+    .CodeMirror {
+      width: 100% !important;
+      height: 100% !important;
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      background-color: transparent !important;
+    }
+    .cm-s-dracula.CodeMirror {
+      background-color: #12151c !important;
+      color: #f8f8f2 !important;
+    }
+    .cm-s-dracula .CodeMirror-gutters {
+      background-color: #151821 !important;
+      border-right: 1px solid #212733 !important;
+    }
+    .cm-s-dracula .CodeMirror-linenumber {
+      color: #4d5668 !important;
+    }
+  </style>
+</head>
+<body class="text-gray-900 antialiased min-h-screen relative bg-[#f7f7f9]">
+
+  <div id="page-main" class="page-view hidden w-full min-h-screen flex flex-col items-center pb-16">
+    <div class="w-full max-w-5xl px-4 pt-4 sm:px-6 md:px-8">
+      <div class="flex items-center w-full mt-2">
+        <div class="relative flex-1 group bg-white rounded-full shadow-sm border border-gray-200/70 px-6 py-1 focus-within:shadow-md focus-within:border-gray-300 transition-all duration-300 flex items-center">
+          <div class="text-gray-400 group-focus-within:text-[#273849] transition-colors mr-3 flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <input type="text" id="search-input" placeholder="Cari proyek..." 
+                 class="block w-full py-2 bg-transparent text-sm sm:text-base placeholder-gray-400 focus:outline-none text-gray-900 font-medium">
+          <div class="hidden sm:flex items-center justify-center px-3 py-1 bg-gray-50 border border-gray-100 rounded-full text-xs font-semibold text-gray-400 ml-2 shadow-inner">
+            Pencarian
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="w-full max-w-5xl px-4 pt-8 sm:pt-10">
+      <div class="mb-6">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight" style="font-family: 'Space Grotesk', sans-serif;">
+          <span class="text-black">Hallo, Vylonium</span>
+        </h1>
+        <p class="text-gray-500 mt-2 text-sm sm:text-base">Selamat datang kembali di Clincoo</p>
+      </div>
+
+      <div class="w-full">
+        <div class="flex items-center justify-between pt-1 pb-4 mb-3">
+          <h2 class="text-base font-semibold text-gray-800">Daftar Proyek</h2>
+          <button onclick="navigateTo('/tambah')" class="flex items-center gap-2 px-4 py-2 bg-[#273849] text-white rounded-full shadow-md hover:bg-[#1a2530] transition-all focus:outline-none active:scale-95">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            <span class="font-medium text-sm">Proyek baru</span>
+          </button>
+        </div>
+
+        <!-- UPDATE: Mengubah container menjadi list baris bentuk panjang -->
+        <div id="project-list" class="flex flex-col gap-3 pb-4 mt-2">
+        </div>
+        
+        <div id="empty-state" class="hidden text-center py-16 px-4">
+          <div class="mx-auto h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 ">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <h3 class="text-sm font-medium text-gray-900">Tidak ada proyek</h3>
+          <p class="text-sm text-gray-500 mt-1">Buat proyek pertama Anda atau sesuaikan pencarian.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="page-form" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-6 px-4 sm:pt-10 pb-20 bg-white sm:bg-[#f7f7f9]">
+    <div class="w-full max-w-4xl sm:p-8">
+      <div id="nav-back-container" class="mb-6 flex items-center justify-between transition-opacity">
+        <button onclick="navigateTo('/')" class="flex items-center text-gray-500 hover:text-black transition-all focus:outline-none rounded-full p-2 hover:bg-gray-100 -ml-2" aria-label="Kembali">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="w-full">
+        <h2 id="view-form-title" class="text-2xl font-bold text-black tracking-tight mb-8 pb-4 border-b border-gray-100">Buat proyek baru</h2>
+        
+        <form id="project-form" onsubmit="handleFormSubmit(event)">
+          <input type="hidden" id="project-id">
+          
+          <div id="step-1-container" class="transition-opacity">
+            <div class="mb-5">
+              <label for="project-name" class="block text-sm font-medium text-gray-700 mb-2">Nama proyek *</label>
+              <input type="text" id="project-name" required class="w-full rounded-md border custom-input px-3 py-2 text-sm text-black focus:outline-none transition-all" placeholder="Misal: Aplikasi Toko">
+              <p class="text-xs text-gray-500 mt-2 leading-relaxed">
+                Nama proyek harus unik agar mudah dikenali.
+              </p>
+            </div>
+            
+            <div class="mb-5">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Visibilitas Proyek *</label>
+              <div class="flex gap-4">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="project-visibility" value="public" checked class="text-[#273849] focus:ring-[#273849]">
+                  <span class="text-sm text-gray-700">Publik</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="project-visibility" value="private" class="text-[#273849] focus:ring-[#273849]">
+                  <span class="text-sm text-gray-700">Private</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div id="form-actions" class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-8 mt-4 border-t border-gray-200">
+            <button type="button" id="btn-delete" onclick="confirmDelete()" class="hidden sm:mr-auto px-4 py-2.5 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">
+              Hapus
+            </button>
+            <button type="submit" id="btn-submit-next" class="w-full sm:w-auto px-6 py-2.5 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm">
+              Simpan Proyek
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-project-detail" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
+    <div class="w-full max-w-5xl">
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Ruang Kerja</h2>
+            <span class="text-gray-300 font-medium text-lg flex-shrink-0">/</span>
+            <div class="min-w-0">
+              <button onclick="toggleProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
+                <span id="current-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
+                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              <div id="project-shortcut-dropdown" class="hidden absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all z-50">
+                <div class="p-1 max-h-60 overflow-y-auto hide-scrollbar" id="project-shortcut-list">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
+            <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+            </button>
+            <a href="profile.html" class="flex items-center justify-center">
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+            </a>
+        </div>
+      </div>
+
+      <div class="w-full border-b border-gray-200 mb-6" id="project-nav-tabs">
+        <nav class="-mb-px flex space-x-6 overflow-x-auto hide-scrollbar" aria-label="Tabs">
+          <button onclick="switchTab('kode', this)" class="tab-btn border-black text-black whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors focus:outline-none" aria-current="page">
+            Folder & File
+          </button> 
+        </nav>
+      </div>
+
+      <div class="w-full mt-2 relative pb-20">
+        <div id="tab-content-kode" class="block transition-opacity">
+          <div class="flex gap-2 w-full mb-4">
+            <div class="relative flex-1 group bg-white rounded-full shadow-sm border border-gray-200/70 px-4 py-1.5 focus-within:shadow-md focus-within:border-gray-300 transition-all duration-300 flex items-center">
+          
+  <!-- Icon Kaca Pembesar -->
+  <div class="text-gray-400 group-focus-within:text-gray transition-colors mr-3 flex-shrink-0">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+    </svg>
+  </div>
+
+  <input type="text" id="file-search-input" placeholder="Cari file..."
+         class="block w-full py-1 bg-transparent text-sm sm:text-base placeholder-gray-400 focus:outline-none text-gray-900 font-medium">
+
+  <div class="hidden sm:flex items-center justify-center px-3 py-1 bg-gray-50 border-gray-100 rounded-full text-xs font-semibold text-gray-400 ml-2 shadow-inner">
+    File
+  </div>
+</div>
+            <div class="relative flex items-center justify-end">
+              <button onclick="toggleAddMenu(event)" class="w-10 h-10 flex items-center justify-center bg-[#273849] text-white rounded-full shadow-sm hover:bg-[#1a2530] transition-all focus:outline-none active:scale-95 flex-shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+              </button>
+              <div id="add-menu-dropdown" class="hidden absolute top-full mt-2 right-0 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all z-50">
+                <div class="p-1">
+                  <button onclick="openCreateModal('folder')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-[#a0aec0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    Buat Folder
+                  </button>
+                  <button onclick="openCreateModal('file')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-[#718096]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    Buat File
+                  </button>
+                  <div class="h-px bg-gray-100 my-1"></div>
+                  <button onclick="triggerImport('folder')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                    Import Folder
+                  </button>
+                  <button onclick="triggerImport('file')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                    Import File
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="file-breadcrumb" class="mb-3 flex items-center gap-1.5 text-xs font-medium text-gray-500 overflow-x-auto pb-1">
+          </div>
+
+          <div id="file-list-container" class="flex flex-col">
+          </div>
+        </div>
+
+        <div id="tab-content-empty" class="hidden flex-col items-center justify-center py-20 text-center transition-opacity">
+          <div class="mx-auto h-16 w-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 ">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h3 class="text-sm font-medium text-gray-900">Halaman Kosong</h3>
+          <p class="text-sm text-gray-500 mt-1">Konten untuk bagian ini belum tersedia.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="page-file-editor" class="page-view hidden w-full min-h-screen flex flex-col bg-[#141820] text-gray-200 font-sans fixed inset-0 z-50 overflow-hidden">
+    <div class="bg-[#1b202b] border-b border-[#2a303f] flex items-center px-4 h-12 flex-shrink-0 select-none justify-between">
+      <div class="flex items-center gap-3 min-w-0">
+        <button onclick="navigateBackFromEditor()" class="p-1.5 text-gray-400 hover:text-white rounded-lg transition-colors flex items-center gap-1.5 focus:outline-none" title="Kembali & Simpan Otomatis">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span class="text-xs font-medium text-gray-300 hidden sm:inline">Kembali</span>
+        </button>
+        <div class="h-4 w-px bg-[#2a303f]"></div>
+        <div class="flex items-center gap-2 min-w-0">
+          <span id="editor-file-icon" class="flex-shrink-0"></span>
+          <span id="editor-filename-label" class="text-sm font-semibold text-gray-100 truncate">index.html</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative flex-1 flex overflow-hidden bg-[#12151c]">
+      <div id="editor-code-container" class="w-full h-full flex flex-1 overflow-hidden">
+        <textarea id="editor-code-textarea" class="hidden"></textarea>
+      </div>
+      <div id="editor-audio-container" class="hidden w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#12151c]">
+        <div class="w-full flex-1 flex flex-col items-center justify-center max-w-md">
+          <div class="w-28 h-28 rounded-full bg-[#1b202b] border-2 border-[#2d3547] flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+            <svg viewBox="0 0 24 24" class="w-14 h-14 text-red-500 ml-1" fill="currentColor">
+              <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/>
+            </svg>
+          </div>
+          <audio id="audio-player" controls class="w-full rounded-full shadow-lg focus:outline-none"></audio>
+        </div>
+      </div>
+      <div id="editor-video-container" class="hidden w-full h-full flex flex-col items-center justify-center p-6 text-center bg-black">
+        <div class="w-full flex-1 flex items-center justify-center max-w-4xl">
+          <video id="video-player" controls class="w-full max-h-[80vh] rounded-lg shadow-2xl focus:outline-none bg-black object-contain"></video>
+        </div>
+      </div>
+      <div id="editor-image-container" class="hidden w-full h-full flex flex-col items-center justify-center p-6 text-center bg-[#0d1017]">
+        <div class="w-full flex-1 flex items-center justify-center max-w-4xl">
+          <div class="p-2 bg-[#1b202b]/50 border border-[#2d3547]/50 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center max-h-full">
+            <img id="image-preview" src="" alt="Preview" class="max-w-full max-h-[75vh] object-contain rounded-lg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="notif-dropdown" class="hidden fixed top-16 right-4 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-[90] animate-fade-in">
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
+      <button onclick="toggleNotifications(event)" class="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+    <div class="py-8 text-center">
+      <div class="mx-auto h-12 w-12 bg-gray-50 rounded-full flex items-center justify-center mb-3 border border-gray-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+      </div>
+      <p class="text-sm text-gray-500">Tidak ada notifikasi baru</p>
+    </div>
+  </div>
+
+  <input type="file" id="import-file-input" class="hidden" multiple onchange="handleImportFiles(event)">
+  <input type="file" id="import-folder-input" class="hidden" webkitdirectory directory multiple onchange="handleImportFolder(event)">
+
+  <div id="item-action-menu" class="hidden fixed w-44 bg-white rounded-xl shadow-xl overflow-hidden transition-all z-[100] py-1">
+    <button onclick="triggerRename()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      Edit Nama
+    </button>
+    <button onclick="triggerDownload()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      Unduh Berkas
+    </button>
+    <button onclick="triggerZip()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      Kompres ZIP
+    </button>
+    <div class="h-px bg-gray-100 my-1"></div>
+    <button onclick="confirmItemDelete()" class="flex items-center w-full px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 transition-colors">
+      Hapus
+    </button>
+  </div>
+
+  <div id="sidebar" class="fixed inset-0 z-[70] hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300" onclick="toggleSidebar()"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10">
+          <div id="sidebar-panel" class="pointer-events-auto w-64 max-w-xs transform -translate-x-full transition duration-300 ease-in-out">
+            <div class="flex h-full flex-col bg-white py-6 shadow-xl border-r border-gray-200">
+              <div class="px-4 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-gray-900" id="slide-over-title" style="font-family: 'Space Grotesk', sans-serif;">Menu Utama</h2>
+                <button onclick="toggleSidebar()" class="rounded-full p-2 bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none transition-colors">
+                  <span class="sr-only">Tutup menu</span>
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div class="mt-6 flex-1 px-3">
+                <nav class="flex flex-col gap-1">
+                  <button onclick="sidebarNavigate('/')" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-white text-gray-900 font-semibold transition-colors hover:bg-gray-50 text-sm focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Beranda
+                  </button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="input-modal-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+    <div id="input-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
+      <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <h3 id="input-modal-title" class="text-lg font-bold text-gray-900">Buat File Baru</h3>
+        <button onclick="closeInputModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="p-6">
+        <div id="input-modal-type-container" class="mb-4 hidden">
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Tipe File</label>
+          <select id="modal-file-type" onchange="handleModalFileTypeChange(event)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#273849] focus:border-transparent transition-all cursor-pointer">
+              <option value="">Otomatis dari ekstensi...</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="js">JavaScript</option>
+              <option value="py">Python</option>
+              <option value="json">JSON</option>
+              <option value="txt">Teks</option>
+              <option value="md">Markdown</option>
+              <option value="xml">XML</option>
+              <option value="sql">SQL</option>
+              <option value="sh">Shell</option>
+          </select>
+        </div>
+        <div>
+          <label id="input-modal-label" class="block text-sm font-medium text-gray-700 mb-1.5">Nama File</label>
+          <input type="text" id="modal-input-name" onkeydown="handleModalInputKeydown(event)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#273849] focus:border-transparent transition-all" placeholder="Misal: index.html" autocomplete="off">
+          <p id="input-modal-error" class="text-xs text-red-500 mt-2 hidden">Nama tidak boleh kosong atau sudah ada.</p>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 rounded-b-2xl">
+        <button onclick="closeInputModal()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">Batal</button>
+        <button id="modal-btn-submit" onclick="submitInputModal()" class="px-4 py-2 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] shadow-sm transition-colors focus:outline-none">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let projects = [];
+    let filteredProjects = [];
+    let isSaving = false;
+    let currentFolderPath = 'root';
+    let editingFileName = null;
+    let projectFilesData = { 'root': [] };
+    let currentProjectId = null;
+    let modalAction = null;
+    let itemBeingRenamed = null;
+    let activeItemName = null;
+
+    const STORAGE_KEY_PROJECTS = 'clincoo_projects_v2';
+    let STORAGE_KEY_FILES = 'clincoo_files_v2';
+
+    function updateFilesKey() { STORAGE_KEY_FILES = 'clincoo_' + (currentProjectId || 'default') + '_files'; }
+
+    function loadData() {
+      const savedProjects = localStorage.getItem(STORAGE_KEY_PROJECTS);
+      if (savedProjects) {
+        try { projects = JSON.parse(savedProjects); } catch (e) { projects = []; }
+      }
+      filteredProjects = [...projects];
+    }
+
+    function loadProjectFiles() {
+      updateFilesKey();
+      const savedFiles = localStorage.getItem(STORAGE_KEY_FILES);
+      if (savedFiles) {
+        try { projectFilesData = JSON.parse(savedFiles); } catch (e) { projectFilesData = { 'root': [] }; }
+      } else {
+        projectFilesData = { 'root': [] };
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
+      localStorage.setItem(STORAGE_KEY_FILES, JSON.stringify(projectFilesData));
+    }
+
+    const defaultTemplates = {
+      'html': '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="UTF-8">\n  <title>Proyek Baru</title>\n</head>\n<body>\n  <h1>Halo Dunia!</h1>\n</body>\n</html>',
+      'css': 'body {\n  margin: 0;\n  padding: 0;\n  font-family: sans-serif;\n}',
+      'js': 'console.log("Hello from Clincoo!");',
+      'py': 'def main():\n  print("Hello, World!")\n\nif __name__ == "__main__":\n  main()',
+      'json': '{\n  "name": "project",\n  "version": "1.0.0"\n}',
+      'txt': 'Ini adalah berkas teks catatan baru.'
+    };
+
+    function showNotification(message) {
+      console.log("Notifikasi:", message);
+    }
+
+    function getFileType(filename) {
+      if (!filename) return 'code';
+      let ext = getFileExtension(filename);
+      const audioExts = ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac'];
+      const videoExts = ['mp4', 'avi', 'mkv', 'mov', 'webm'];
+      const imageExts = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp', 'bmp', 'ico'];
+      if (audioExts.includes(ext)) return 'audio';
+      if (videoExts.includes(ext)) return 'video';
+      if (imageExts.includes(ext)) return 'image';
+      return 'code';
+    }
+
+    function getFileExtension(filename) {
+      let name = filename ? filename.trim() : '';
+      if (!name) return 'html';
+      if (name.startsWith('.') && !name.includes('.', 1)) return name.substring(1).toLowerCase();
+      if (name.includes('.')) return name.split('.').pop().toLowerCase();
+      return name.toLowerCase();
+    }
+
+    let codeEditor = null;
+    function initCodeEditor() {
+      if (codeEditor) return;
+      const textarea = document.getElementById('editor-code-textarea');
+      if (textarea) {
+        codeEditor = CodeMirror.fromTextArea(textarea, {
+          lineNumbers: true,
+          theme: 'dracula',
+          mode: 'htmlmixed',
+          indentUnit: 4,
+          lineWrapping: true,
+          scrollbarStyle: 'native'
+        });
+      }
+    }
+
+    const pageMain = document.getElementById('page-main');
+    const pageForm = document.getElementById('page-form');
+    const pageProjectDetail = document.getElementById('page-project-detail');
+    const pageFileEditor = document.getElementById('page-file-editor');
+    
+    const listContainer = document.getElementById('project-list');
+    const emptyState = document.getElementById('empty-state');
+    const searchInput = document.getElementById('search-input');
+    const fileSearchInput = document.getElementById('file-search-input');
+
+    const projectForm = document.getElementById('project-form');
+    const btnDelete = document.getElementById('btn-delete');
+    
+    const idInput = document.getElementById('project-id');
+    const nameInput = document.getElementById('project-name');
+    const formViewTitle = document.getElementById('view-form-title');
+
+    const step1Container = document.getElementById('step-1-container');
+    const formActions = document.getElementById('form-actions');
+    
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const sidebarPanel = document.getElementById('sidebar-panel');
+    let isSidebarOpen = false;
+
+    function toggleSidebar() {
+      isSidebarOpen = !isSidebarOpen;
+      if (isSidebarOpen) {
+        sidebar.classList.remove('hidden');
+        setTimeout(() => {
+          sidebarOverlay.classList.remove('opacity-0');
+          sidebarPanel.classList.remove('-translate-x-full');
+        }, 10);
+      } else {
+        sidebarOverlay.classList.add('opacity-0');
+        sidebarPanel.classList.add('-translate-x-full');
+        setTimeout(() => {
+          sidebar.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    function sidebarNavigate(path) {
+      toggleSidebar();
+      setTimeout(() => navigateTo(path), 300);
+    }
+
+    function navigateTo(path) {
+      const url = new URL(window.location);
+      if (path === '/' || path === '') url.searchParams.delete('p');
+      else url.searchParams.set('p', path);
+      window.history.pushState({}, '', url);
+      handleRoute();
+    }
+
+    function handleRoute() {
+      const params = new URLSearchParams(window.location.search);
+      const path = params.get('p') || '/';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (path.startsWith('/tambah')) {
+        setupFormPage(null);
+        showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor]);
+      } else if (path.startsWith('/edit/')) {
+        const id = parseInt(path.replace('/edit/', ''));
+        setupFormPage(id);
+        showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor]);
+      } else if (path.startsWith('/proyek/')) {
+        const id = parseInt(path.replace('/proyek/', ''));
+        setupDetailPage(id);
+        showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor]);
+      } else if (path.startsWith('/editor')) {
+        showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail]);
+      } else {
+        showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor]);
+        applyFilters();
+      }
+    }
+
+    window.addEventListener('popstate', handleRoute);
+
+    function showPage(activePage, inactivePages) {
+      inactivePages.forEach(page => {
+        if(page) { page.classList.add('hidden'); page.classList.remove('page-active'); }
+      });
+      if(activePage) {
+        activePage.classList.remove('hidden');
+        setTimeout(() => activePage.classList.add('page-active'), 10);
+      }
+    }
+
+    function setupFormPage(id) {
+      projectForm.reset();
+      idInput.value = '';
+      
+      const publicRadio = document.querySelector('input[name="project-visibility"][value="public"]');
+      if (publicRadio) publicRadio.checked = true;
+      
+      showFormInput();
+      
+      if (id) {
+        const project = projects.find(p => p.id === id);
+        if (project) {
+          formViewTitle.textContent = 'Edit proyek';
+          idInput.value = project.id;
+          nameInput.value = project.name;
+          
+          if (project.visibility === 'private') {
+            const privateRadio = document.querySelector('input[name="project-visibility"][value="private"]');
+            if (privateRadio) privateRadio.checked = true;
+          }
+          
+          btnDelete.classList.remove('hidden');
+        } else { navigateTo('/'); }
+      } else {
+        formViewTitle.textContent = 'Buat proyek baru';
+        btnDelete.classList.add('hidden');
+      }
+    }
+
+    function setupDetailPage(id) {
+      if (currentProjectId !== id) {
+        currentFolderPath = 'root';
+      }
+      currentProjectId = id;
+      loadProjectFiles();
+      if (fileSearchInput) fileSearchInput.value = '';
+      modalAction = null;
+      itemBeingRenamed = null;
+      renderFileList();
+      
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      if (tabBtns.length > 0) switchTab('kode', tabBtns[0]);
+
+      const proj = projects.find(p => p.id === id);
+      const nameEl = document.getElementById('current-project-name');
+      if (nameEl && proj) {
+        nameEl.textContent = proj.name;
+      }
+    }
+
+    function openFolder(folderPath) {
+      currentFolderPath = folderPath;
+      modalAction = null;
+      itemBeingRenamed = null;
+      if (fileSearchInput) fileSearchInput.value = '';
+      renderFileList();
+    }
+
+    function navigateFolderUp() {
+      if (currentFolderPath === 'root') return;
+      const parts = currentFolderPath.split('/');
+      parts.pop();
+      currentFolderPath = parts.length === 0 ? 'root' : parts.join('/');
+      renderFileList();
+    }
+
+    function getFileIcon(filename) {
+      let ext = getFileExtension(filename);
+      switch(ext) {
+        case 'mp3': case 'wav': case 'ogg': case 'flac': case 'm4a':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="#E04A3A"><path d="M20 3h-7v10.55A3.98 3.98 0 0 0 11 13c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h5v6.55A3.98 3.98 0 0 0 14 13c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V3z"/></svg></div>`;
+        case 'mp4': case 'avi': case 'mkv': case 'mov': case 'webm':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none"><rect x="2" y="4" width="20" height="16" rx="3.5" fill="#5B51DC"/><polygon points="10,8.5 15,12 10,15.5" fill="#FFFFFF"/></svg></div>`;
+        case 'png': case 'jpg': case 'jpeg': case 'svg': case 'gif': case 'webp':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" /><circle cx="8.5" cy="8.5" r="1.5" fill="#0D9488" stroke="none" /><path d="M21 15l-5-5L5 21" /></svg></div>`;
+        case 'py': case 'python':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4"><path fill="#3776AB" d="M11.898 2c-3.15 0-5.068.322-5.068 2.373v1.89h10.136v.945H6.83c-2.453 0-4.33 1.488-4.33 4.33 0 2.843 1.877 4.33 4.33 4.33h1.892v-2.373c0-2.316 1.83-4.254 4.148-4.254h5.068c1.94 0 2.453-.562 2.453-2.373 0-2.115-1.913-4.868-8.523-4.868zm-2.58 1.418a.945.945 0 1 1 0 1.89.945.945 0 0 1 0-1.89z"/><path fill="#FFD43B" d="M12.102 22c3.15 0 5.068-.322 5.068-2.373v-1.89H7.034v-.945h10.136c2.453 0 4.33-1.488 4.33-4.33 0-2.843-1.877-4.33-4.33-4.33h-1.892v2.373c0 2.316-1.83 4.254-4.148 4.254H6.062c-1.94 0-2.453.562-2.453 2.373 0 2.115 1.913 4.868 8.493 4.868zm2.58-1.418a.945.945 0 1 1 0-1.89.945.945 0 0 1 0 1.89z"/></svg></div>`;
+        case 'txt':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#546E7A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
+        case 'html': case 'htm':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#E34F26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg></div>`;
+        case 'js': case 'ts': case 'jsx':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#F7DF1E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4" fill="#F7DF1E"/><text x="12" y="16" font-size="8" font-weight="800" fill="#000" stroke="none" text-anchor="middle">JS</text></svg></div>`;
+        case 'css':
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#16A34A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><text x="12" y="15.5" font-size="7" font-weight="800" fill="#16A34A" stroke="none" text-anchor="middle">css</text></svg></div>`;
+        default:
+          return `<div class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#718096]"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
+      }
+    }
+
+    function renderFileList() {
+      const container = document.getElementById('file-list-container');
+      const breadcrumb = document.getElementById('file-breadcrumb');
+      if (!container) return;
+
+      const searchTerm = fileSearchInput ? fileSearchInput.value.toLowerCase().trim() : '';
+
+      if (breadcrumb) {
+        if (currentFolderPath === 'root') {
+          breadcrumb.innerHTML = '';
+        } else {
+          const parts = currentFolderPath.split('/');
+          let bcHtml = `<button onclick="openFolder('root')" class="text-gray-500 hover:text-black flex items-center gap-1 font-medium transition-colors"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Utama</button>`;
+          let accumulatedPath = '';
+          parts.forEach((p, index) => {
+            accumulatedPath += (index === 0 ? '' : '/') + p;
+            const isLast = index === parts.length - 1;
+            bcHtml += `<span class="text-gray-300">/</span>`;
+            if (isLast) { bcHtml += `<span class="text-black font-semibold">${p}</span>`; } 
+            else { bcHtml += `<button onclick="openFolder('${accumulatedPath}')" class="text-gray-500 hover:text-black transition-colors">${p}</button>`; }
+          });
+          breadcrumb.innerHTML = bcHtml;
+        }
+      }
+
+      let items = projectFilesData[currentFolderPath] || [];
+      if (searchTerm) items = items.filter(item => item.name.toLowerCase().includes(searchTerm));
+
+      container.innerHTML = '';
+
+      if (currentFolderPath !== 'root' && !searchTerm) {
+        const backRow = document.createElement('div');
+        backRow.className = 'flex items-center gap-3 py-2.5 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors rounded-lg px-2 -mx-2';
+        backRow.onclick = navigateFolderUp;
+        backRow.innerHTML = `<svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path></svg><span class="text-sm font-medium text-gray-600">Kembali</span>`;
+        container.appendChild(backRow);
+      }
+
+      if (items.length === 0) {
+        container.innerHTML += `<div class="py-12 text-center text-gray-400 text-sm">Tidak ada berkas atau folder di sini.</div>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-4 py-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50/80 transition-colors px-1 group';
+
+        const safeName = item.name.replace(/'/g, "\\'");
+        const actionBtnHTML = `<button onclick="event.stopPropagation(); openItemActionMenu(event, '${safeName}')" class="p-1.5 text-gray-400 hover:text-gray-800 hover:bg-gray-200 rounded-full transition-colors focus:outline-none opacity-0 group-hover:opacity-100 sm:opacity-100 item-action-btn"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg></button>`;
+
+        if (item.type === 'folder') {
+          const subItems = projectFilesData[item.path] || [];
+          row.onclick = () => openFolder(item.path);
+          row.innerHTML = `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#a0aec0]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div><div class="flex-1 min-w-0"><h3 class="text-[#334155] font-medium text-[15px] leading-tight hover:text-black transition-colors truncate">${item.name}</h3><p class="text-gray-500 text-[12px] mt-0.5">Berkas (${subItems.length}) - <span class="text-[#16a34a]">Folder</span></p></div>${actionBtnHTML}`;
+        } else {
+          row.onclick = () => openFileInEditor(item.name);
+          row.innerHTML = `${getFileIcon(item.name)}<div class="flex-1 min-w-0"><h3 class="text-[#334155] font-medium text-[15px] leading-tight hover:text-black transition-colors truncate">${item.name}</h3><p class="text-gray-500 text-[12px] mt-0.5">${item.size || '0,00 B'}</p></div>${actionBtnHTML}`;
+        }
+        container.appendChild(row);
+      });
+    }
+
+    if (fileSearchInput) fileSearchInput.addEventListener('input', renderFileList);
+
+    function openCreateModal(type) {
+      const menu = document.getElementById('add-menu-dropdown');
+      if(menu) menu.classList.add('hidden');
+      
+      modalAction = type === 'folder' ? 'create_folder' : 'create_file';
+      
+      const title = document.getElementById('input-modal-title');
+      const label = document.getElementById('input-modal-label');
+      const input = document.getElementById('modal-input-name');
+      const typeContainer = document.getElementById('input-modal-type-container');
+      const typeSelect = document.getElementById('modal-file-type');
+      const errorEl = document.getElementById('input-modal-error');
+      
+      errorEl.classList.add('hidden');
+      input.value = '';
+      
+      if (type === 'folder') {
+        title.textContent = 'Buat Folder Baru';
+        label.textContent = 'Nama Folder';
+        input.placeholder = 'Misal: assets';
+        typeContainer.classList.add('hidden');
+      } else {
+        title.textContent = 'Buat File Baru';
+        label.textContent = 'Nama File';
+        input.placeholder = 'Misal: index.html';
+        typeContainer.classList.remove('hidden');
+        typeSelect.value = '';
+      }
+      
+      showInputModal();
+    }
+
+    function triggerRename() {
+      const menu = document.getElementById('item-action-menu');
+      if (menu) menu.classList.add('hidden');
+      
+      modalAction = 'rename';
+      itemBeingRenamed = activeItemName;
+      
+      const title = document.getElementById('input-modal-title');
+      const label = document.getElementById('input-modal-label');
+      const input = document.getElementById('modal-input-name');
+      const typeContainer = document.getElementById('input-modal-type-container');
+      const errorEl = document.getElementById('input-modal-error');
+      
+      errorEl.classList.add('hidden');
+      title.textContent = 'Ganti Nama';
+      label.textContent = 'Nama Baru';
+      input.value = itemBeingRenamed;
+      typeContainer.classList.add('hidden');
+      
+      showInputModal();
+    }
+
+    function showInputModal() {
+      const overlay = document.getElementById('input-modal-overlay');
+      const modal = document.getElementById('input-modal');
+      overlay.classList.remove('hidden');
+      setTimeout(() => {
+        overlay.classList.remove('opacity-0');
+        modal.classList.remove('opacity-0', 'scale-95');
+        modal.classList.add('opacity-100', 'scale-100');
+        
+        const input = document.getElementById('modal-input-name');
+        input.focus();
+        if (modalAction === 'rename') {
+           const item = (projectFilesData[currentFolderPath] || []).find(i => i.name === itemBeingRenamed);
+           if(item && item.type === 'file' && input.value.includes('.')) {
+              input.setSelectionRange(0, input.value.lastIndexOf('.'));
+           } else {
+              input.select();
+           }
+        }
+      }, 10);
+    }
+
+    function closeInputModal() {
+      const overlay = document.getElementById('input-modal-overlay');
+      const modal = document.getElementById('input-modal');
+      
+      overlay.classList.add('opacity-0');
+      modal.classList.remove('opacity-100', 'scale-100');
+      modal.classList.add('opacity-0', 'scale-95');
+      
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+        modalAction = null;
+        itemBeingRenamed = null;
+      }, 300);
+    }
+
+    function handleModalFileTypeChange(e) {
+      const input = document.getElementById('modal-input-name');
+      const ext = e.target.value;
+      const baseName = input.value.replace(/\.[^.]+$/, '');
+      input.value = baseName;
+      input.placeholder = ext ? 'Nama file (akan jadi .' + ext + ')' : 'Nama file (tanpa ekstensi)';
+    }
+
+    function handleModalInputKeydown(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitInputModal();
+      }
+      if (e.key === 'Escape') closeInputModal();
+    }
+
+    function submitInputModal() {
+      const input = document.getElementById('modal-input-name');
+      const errorEl = document.getElementById('input-modal-error');
+      let name = input.value.trim();
+      
+      if(!name) { 
+         errorEl.textContent = "Nama tidak boleh kosong.";
+         errorEl.classList.remove('hidden');
+         return; 
+      }
+      
+      const items = projectFilesData[currentFolderPath] || [];
+
+      if (modalAction === 'create_file' || modalAction === 'create_folder') {
+          if (modalAction === 'create_file') {
+            const typeSelect = document.getElementById('modal-file-type');
+            const selectedType = typeSelect ? typeSelect.value : '';
+            if (selectedType) {
+              let baseName = name;
+              if(name.includes('.')) {
+                 baseName = name.substring(0, name.lastIndexOf('.'));
+              }
+              name = baseName + '.' + selectedType;
+            } else if (!name.includes('.')) {
+              name = name + '.txt';
+            }
+          }
+          
+          const exists = items.some(item => item.name.toLowerCase() === name.toLowerCase());
+          if (exists) {
+             errorEl.textContent = "Nama sudah ada di direktori ini.";
+             errorEl.classList.remove('hidden');
+             return;
+          }
+          
+          if (!projectFilesData[currentFolderPath]) projectFilesData[currentFolderPath] = [];
+
+          if(modalAction === 'create_folder') {
+            const newPath = currentFolderPath === 'root' ? name : currentFolderPath + '/' + name;
+            projectFilesData[currentFolderPath].push({ type: 'folder', name: name, path: newPath, fileCount: 0, previewText: 'Folder' });
+          } else {
+            const ext = getFileExtension(name);
+            const content = defaultTemplates[ext] || '';
+            const bytes = new Blob([content]).size;
+            let sizeStr = '0,00 B';
+            if (bytes > 1024 * 1024) sizeStr = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            else if (bytes > 1024) sizeStr = (bytes / 1024).toFixed(1) + ' KB';
+            else if (bytes > 0) sizeStr = bytes + ' B';
+
+            const filePath = currentFolderPath === 'root' ? name : currentFolderPath + '/' + name;
+            projectFilesData[currentFolderPath].push({ type: 'file', name: name, size: sizeStr, path: filePath, content: content });
+          }
+      } else if (modalAction === 'rename') {
+          if (name === itemBeingRenamed) {
+             closeInputModal();
+             return;
+          }
+          if(items.find(i => i.name.toLowerCase() === name.toLowerCase())) {
+             errorEl.textContent = "Nama sudah digunakan.";
+             errorEl.classList.remove('hidden');
+             return;
+          }
+          
+          const itemIndex = items.findIndex(i => i.name === itemBeingRenamed);
+          if(itemIndex !== -1) {
+            const item = items[itemIndex];
+            if(item.type === 'folder') {
+              const oldPath = item.path;
+              const newPath = currentFolderPath === 'root' ? name : currentFolderPath + '/' + name;
+              item.name = name;
+              item.path = newPath;
+              
+              const keysToUpdate = Object.keys(projectFilesData).filter(k => k === oldPath || k.startsWith(oldPath + '/'));
+              keysToUpdate.forEach(key => {
+                const newKey = newPath + key.substring(oldPath.length);
+                projectFilesData[newKey] = projectFilesData[key];
+                delete projectFilesData[key];
+                projectFilesData[newKey].forEach(child => {
+                  if (child.path.startsWith(oldPath + '/')) {
+                    child.path = newPath + child.path.substring(oldPath.length);
+                  }
+                });
+              });
+            } else {
+              item.name = name;
+              item.path = currentFolderPath === 'root' ? name : currentFolderPath + '/' + name;
+            }
+          }
+      }
+      
+      saveData();
+      if (fileSearchInput) fileSearchInput.value = '';
+      renderFileList();
+      closeInputModal();
+    }
+
+    function confirmItemDelete() {
+      const menu = document.getElementById('item-action-menu');
+      if (menu) menu.classList.add('hidden');
+      if(!activeItemName) return;
+
+      const items = projectFilesData[currentFolderPath] || [];
+      const itemIndex = items.findIndex(i => i.name === activeItemName);
+      
+      if(itemIndex !== -1) {
+        const item = items[itemIndex];
+        if(item.type === 'folder') {
+          const prefix = item.path;
+          Object.keys(projectFilesData).forEach(key => {
+            if (key === prefix || key.startsWith(prefix + '/')) {
+              delete projectFilesData[key];
+            }
+          });
+        }
+        items.splice(itemIndex, 1);
+      }
+      saveData();
+      renderFileList();
+    }
+
+    function triggerImport(type) {
+      const menu = document.getElementById('add-menu-dropdown');
+      if(menu) menu.classList.add('hidden');
+      if (type === 'file') {
+        const input = document.getElementById('import-file-input');
+        if (input) input.click();
+      } else if (type === 'folder') {
+        const input = document.getElementById('import-folder-input');
+        if (input) input.click();
+      }
+    }
+
+    function handleImportFiles(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      Array.from(files).forEach(file => importSingleFile(file, currentFolderPath));
+      e.target.value = '';
+    }
+
+    function importSingleFile(file, targetPath) {
+      if (!projectFilesData[targetPath]) projectFilesData[targetPath] = [];
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const content = event.target.result;
+        let sizeStr = '0,00 B';
+        if (file.size > 1024 * 1024) sizeStr = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+        else if (file.size > 1024) sizeStr = (file.size / 1024).toFixed(1) + ' KB';
+        else if (file.size > 0) sizeStr = file.size + ' B';
+
+        const filePath = targetPath === 'root' ? file.name : targetPath + '/' + file.name;
+        const existingIndex = projectFilesData[targetPath].findIndex(i => i.name === file.name && i.type === 'file');
+        
+        if (existingIndex !== -1) {
+          projectFilesData[targetPath][existingIndex].content = content;
+          projectFilesData[targetPath][existingIndex].size = sizeStr;
+        } else {
+          projectFilesData[targetPath].push({ type: 'file', name: file.name, size: sizeStr, path: filePath, content: content });
+        }
+        saveData();
+        if (targetPath === currentFolderPath || targetPath.startsWith(currentFolderPath)) renderFileList();
+      };
+      const type = getFileType(file.name);
+      if (type === 'code') reader.readAsText(file);
+      else reader.readAsDataURL(file);
+    }
+
+    function handleImportFolder(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      let fallbackFolderName = "Folder_Import";
+      let fallbackFolderCreated = false;
+      let fallbackPath = currentFolderPath === 'root' ? fallbackFolderName : currentFolderPath + '/' + fallbackFolderName;
+
+      Array.from(files).forEach(file => {
+        let pathParts = file.webkitRelativePath ? file.webkitRelativePath.split('/') : [];
+
+        if (pathParts.length <= 1) {
+          if (!fallbackFolderCreated) {
+            if (!projectFilesData[currentFolderPath]) projectFilesData[currentFolderPath] = [];
+            let counter = 1;
+            let finalFolderName = fallbackFolderName;
+            while(projectFilesData[currentFolderPath].find(i => i.type === 'folder' && i.name === finalFolderName)) {
+              finalFolderName = fallbackFolderName + '_' + counter;
+              counter++;
+            }
+            fallbackPath = currentFolderPath === 'root' ? finalFolderName : currentFolderPath + '/' + finalFolderName;
+            projectFilesData[currentFolderPath].push({
+              type: 'folder', name: finalFolderName, path: fallbackPath, fileCount: 0, previewText: 'Folder'
+            });
+            fallbackFolderCreated = true;
+          }
+          importSingleFile(file, fallbackPath);
+          return;
+        }
+
+        const fileName = pathParts.pop();
+        let currentPathIter = currentFolderPath;
+        for (const part of pathParts) {
+          if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
+          const existingFolder = projectFilesData[currentPathIter].find(i => i.type === 'folder' && i.name === part);
+          const newPath = currentPathIter === 'root' ? part : currentPathIter + '/' + part;
+          if (!existingFolder) {
+            projectFilesData[currentPathIter].push({ type: 'folder', name: part, path: newPath, fileCount: 0, previewText: 'Folder' });
+          }
+          currentPathIter = newPath;
+        }
+        importSingleFile(file, currentPathIter);
+      });
+      e.target.value = '';
+      renderFileList();
+    }
+
+    function openFileInEditor(filename) {
+      editingFileName = filename;
+      const items = projectFilesData[currentFolderPath] || [];
+      const fileObj = items.find(i => i.type === 'file' && i.name === filename);
+      const fileType = getFileType(filename);
+      const ext = getFileExtension(filename);
+
+      const labelEl = document.getElementById('editor-filename-label');
+      const iconEl = document.getElementById('editor-file-icon');
+      if (labelEl) labelEl.textContent = filename;
+      if (iconEl) iconEl.innerHTML = getFileIcon(filename);
+
+      const codeContainer = document.getElementById('editor-code-container');
+      const audioContainer = document.getElementById('editor-audio-container');
+      const videoContainer = document.getElementById('editor-video-container');
+      const imageContainer = document.getElementById('editor-image-container');
+
+      codeContainer.classList.add('hidden'); audioContainer.classList.add('hidden');
+      videoContainer.classList.add('hidden'); imageContainer.classList.add('hidden');
+
+      const audioPlayer = document.getElementById('audio-player');
+      const videoPlayer = document.getElementById('video-player');
+      if (audioPlayer) audioPlayer.pause();
+      if (videoPlayer) videoPlayer.pause();
+
+      if (fileType === 'audio') {
+        audioContainer.classList.remove('hidden');
+        if (audioPlayer) { audioPlayer.src = fileObj && fileObj.content ? fileObj.content : ''; audioPlayer.load(); }
+      } else if (fileType === 'video') {
+        videoContainer.classList.remove('hidden');
+        if (videoPlayer) { videoPlayer.src = fileObj && fileObj.content ? fileObj.content : ''; videoPlayer.load(); }
+      } else if (fileType === 'image') {
+        imageContainer.classList.remove('hidden');
+        const img = document.getElementById('image-preview');
+        if (img) img.src = fileObj && fileObj.content ? fileObj.content : '';
+      } else {
+        codeContainer.classList.remove('hidden');
+        initCodeEditor();
+        let mode = 'htmlmixed';
+        if (ext === 'js' || ext === 'json' || ext === 'ts' || ext === 'jsx') mode = 'javascript';
+        else if (ext === 'css') mode = 'css';
+        else if (ext === 'py' || ext === 'python') mode = 'python';
+        if (codeEditor) {
+          codeEditor.setOption('mode', mode);
+          codeEditor.setValue(fileObj ? (fileObj.content || '') : '');
+          setTimeout(() => codeEditor.refresh(), 50);
+        }
+      }
+      navigateTo('/editor');
+    }
+
+    function navigateBackFromEditor() {
+      if (editingFileName) {
+        const fileType = getFileType(editingFileName);
+        if (fileType === 'code' && codeEditor) {
+          const codeContent = codeEditor.getValue();
+          const bytes = new Blob([codeContent]).size;
+          let sizeStr = '0,00 B';
+          if (bytes > 1024 * 1024) sizeStr = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+          else if (bytes > 1024) sizeStr = (bytes / 1024).toFixed(1) + ' KB';
+          else if (bytes > 0) sizeStr = bytes + ' B';
+
+          if (!projectFilesData[currentFolderPath]) projectFilesData[currentFolderPath] = [];
+          const itemIndex = projectFilesData[currentFolderPath].findIndex(i => i.type === 'file' && i.name === editingFileName);
+          if (itemIndex !== -1) {
+            projectFilesData[currentFolderPath][itemIndex].content = codeContent;
+            projectFilesData[currentFolderPath][itemIndex].size = sizeStr;
+            saveData();
+          }
+        }
+        const audioPlayer = document.getElementById('audio-player');
+        if (audioPlayer) { audioPlayer.pause(); audioPlayer.src = ''; }
+        const videoPlayer = document.getElementById('video-player');
+        if (videoPlayer) { videoPlayer.pause(); videoPlayer.src = ''; }
+      }
+      editingFileName = null;
+      navigateTo('/proyek/' + currentProjectId);
+      renderFileList();
+    }
+
+    function triggerDownload() {
+      const menu = document.getElementById('item-action-menu');
+      if (menu) menu.classList.add('hidden');
+      const item = (projectFilesData[currentFolderPath] || []).find(i => i.name === activeItemName);
+      if(!item || item.type !== 'file') return;
+      const a = document.createElement('a');
+      if (item.content.startsWith('http') || item.content.startsWith('data:') || item.content.startsWith('blob:')) {
+        a.href = item.content;
+      } else {
+        const blob = new Blob([item.content], { type: 'text/plain' });
+        a.href = URL.createObjectURL(blob);
+      }
+      a.download = item.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    async function triggerZip() {
+      const menu = document.getElementById('item-action-menu');
+      if (menu) menu.classList.add('hidden');
+      const item = (projectFilesData[currentFolderPath] || []).find(i => i.name === activeItemName);
+      if(!item || typeof JSZip === 'undefined') return;
+
+      const zip = new JSZip();
+      if (item.type === 'file') {
+        let contentData = item.content;
+        if (contentData.startsWith('http') || contentData.startsWith('blob:') || contentData.startsWith('data:')) {
+          try { const response = await fetch(contentData); contentData = await response.blob(); } catch (e) {}
+        }
+        zip.file(item.name, contentData);
+      } else if (item.type === 'folder') {
+        await addFolderToZipAsync(zip.folder(item.name), item.path);
+      }
+
+      zip.generateAsync({type:"blob"}).then(function(content) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(content);
+        a.download = item.name + '.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
+
+    async function addFolderToZipAsync(zipFolder, folderPath) {
+      const items = projectFilesData[folderPath] || [];
+      for (let child of items) {
+        if (child.type === 'file') {
+          let contentData = child.content;
+          if (contentData.startsWith('http') || contentData.startsWith('blob:') || contentData.startsWith('data:')) {
+            try { const response = await fetch(contentData); contentData = await response.blob(); } catch(e){}
+          }
+          zipFolder.file(child.name, contentData);
+        } else if (child.type === 'folder') {
+          await addFolderToZipAsync(zipFolder.folder(child.name), child.path);
+        }
+      }
+    }
+
+    function showFormInput() {
+      isSaving = false;
+      step1Container.classList.remove('hidden');
+      formActions.classList.remove('hidden');
+      const btnSubmit = document.getElementById('btn-submit-next');
+      if (btnSubmit) {
+        btnSubmit.textContent = 'Simpan Proyek';
+        btnSubmit.disabled = false;
+        btnSubmit.classList.remove('opacity-70', 'cursor-not-allowed');
+      }
+    }
+
+    function showLoading() {
+      isSaving = true;
+      const btnSubmit = document.getElementById('btn-submit-next');
+      if (btnSubmit) {
+        btnSubmit.textContent = 'Menyimpan...';
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add('opacity-70', 'cursor-not-allowed');
+      }
+    }
+
+    function handleCancelBack() { navigateTo('/'); }
+
+    function handleFormSubmit(e) {
+      e.preventDefault(); 
+      if(isSaving) return;
+      showLoading();
+      setTimeout(() => executeSaveProject(), 400);
+    }
+
+    function executeSaveProject() {
+      const id = idInput.value;
+      const name = nameInput.value.trim();
+      const desc = "Tanpa keterangan";
+      
+      const visibilityInput = document.querySelector('input[name="project-visibility"]:checked');
+      const visibility = visibilityInput ? visibilityInput.value : 'public';
+      
+      if (id) {
+        const index = projects.findIndex(p => p.id == id);
+        if (index !== -1) projects[index] = { ...projects[index], name, desc, visibility };
+      } else {
+        const newId = projects.length > 0 ? Math.max(...projects.map(p => p.id)) + 1 : 1;
+        projects.push({ id: newId, name, desc, visibility });
+      }
+      saveData();
+      navigateTo('/');
+    }
+
+    function confirmDelete() {
+      const targetId = parseInt(idInput.value);
+      if (targetId) {
+        projects = projects.filter(p => p.id !== targetId);
+        localStorage.removeItem('clincoo_' + targetId + '_files');
+        saveData();
+        navigateTo('/');
+      }
+    }
+
+    // UPDATE: Render daftar proyek menjadi bentuk list memanjang dengan logo bg putih dan teks 1 baris
+    function renderProjects() {
+      if(!listContainer) return;
+      listContainer.innerHTML = '';
+      if (filteredProjects.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        filteredProjects.forEach(project => {
+          const isPrivate = project.visibility === 'private';
+          const padlockIcon = isPrivate ? `<div class="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm border border-gray-100" title="Private Project"><svg class="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg></div>` : '';
+          
+          const item = document.createElement('div');
+          // Update menjadi flex-row (panjang) dan center alignment
+          item.className = 'group flex items-center p-3.5 sm:p-4 bg-white rounded-2xl border border-gray-200/80 hover:border-gray-300 hover:shadow-md transition-all duration-200 cursor-pointer w-full';
+          item.onclick = (e) => { if (!e.target.closest('button') && !e.target.closest('a')) navigateTo('/proyek/' + project.id); };
+          
+          item.innerHTML = `
+            <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center relative bg-white rounded-xl border border-gray-100 p-2 mr-4 transition-colors">
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity">
+              ${padlockIcon}
+            </div>
+            <div class="flex flex-col flex-1 min-w-0">
+              <span class="text-[15px] font-semibold text-gray-900 group-hover:text-[#273849] transition-colors mb-0.5 truncate">${project.name}</span>
+              <span class="text-xs text-gray-500 truncate leading-relaxed">${project.desc || 'Tanpa keterangan'}</span>
+            </div>
+            <div class="ml-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </div>
+          `;
+          listContainer.appendChild(item);
+        });
+      }
+    }
+
+    function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      filteredProjects = projects.filter(p => p.name.toLowerCase().includes(searchTerm));
+      renderProjects();
+    }
+
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+
+    function toggleNotifications(e) {
+      if(e) e.stopPropagation();
+      const dropdown = document.getElementById('notif-dropdown');
+      if (dropdown) dropdown.classList.toggle('hidden');
+    }
+
+    function toggleProjectDropdown(e) {
+      if(e) e.stopPropagation();
+      const dropdown = document.getElementById('project-shortcut-dropdown');
+      if (dropdown) {
+        dropdown.classList.toggle('hidden');
+        if (!dropdown.classList.contains('hidden')) {
+          renderProjectShortcuts();
+        }
+      }
+    }
+
+    function renderProjectShortcuts() {
+      const list = document.getElementById('project-shortcut-list');
+      if (!list) return;
+      list.innerHTML = '';
+      if (projects.length === 0) {
+        list.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 text-center">Tidak ada proyek</div>';
+        return;
+      }
+      projects.forEach(p => {
+        const item = document.createElement('button');
+        item.className = `w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center gap-2 ${p.id === currentProjectId ? 'bg-gray-50 text-[#273849] font-medium' : 'text-gray-700 hover:bg-gray-50'}`;
+        item.onclick = () => { navigateTo('/proyek/' + p.id); document.getElementById('project-shortcut-dropdown').classList.add('hidden'); };
+        item.innerHTML = `<span class="truncate">${p.name}</span>`;
+        list.appendChild(item);
+      });
+    }
+    
+    function toggleAddMenu(e) {
+      if(e) e.stopPropagation();
+      const menu = document.getElementById('add-menu-dropdown');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    function openItemActionMenu(e, itemName) {
+      if(e) e.stopPropagation();
+      activeItemName = itemName;
+      const menu = document.getElementById('item-action-menu');
+      if (menu) {
+        menu.classList.remove('hidden');
+        menu.style.top = e.clientY + 'px';
+        const menuWidth = 176;
+        const leftPos = e.clientX + menuWidth > window.innerWidth ? window.innerWidth - menuWidth - 10 : e.clientX;
+        menu.style.left = leftPos + 'px';
+      }
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('border-black', 'text-black');
+        b.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+      });
+      btn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+      btn.classList.add('border-black', 'text-black');
+      
+      const tabKode = document.getElementById('tab-content-kode');
+      const tabEmpty = document.getElementById('tab-content-empty');
+      
+      if (tabId === 'kode') {
+        tabKode.classList.remove('hidden');
+        tabEmpty.classList.add('hidden');
+      } else {
+        tabKode.classList.add('hidden');
+        tabEmpty.classList.remove('hidden');
+        tabEmpty.classList.add('flex');
+      }
+    }
+    
+    document.addEventListener('click', (e) => {
+      const notif = document.getElementById('notif-dropdown');
+      const projDrop = document.getElementById('project-shortcut-dropdown');
+      const addMenu = document.getElementById('add-menu-dropdown');
+      const actionMenu = document.getElementById('item-action-menu');
+      
+      if (notif && !notif.contains(e.target) && !e.target.closest('[aria-label="Notifikasi"]')) notif.classList.add('hidden');
+      if (projDrop && !projDrop.contains(e.target) && !e.target.closest('[aria-label="Pilih Proyek"]')) projDrop.classList.add('hidden');
+      if (addMenu && !addMenu.contains(e.target) && !e.target.closest('button[onclick="toggleAddMenu(event)"]')) addMenu.classList.add('hidden');
+      if (actionMenu && !actionMenu.contains(e.target) && !e.target.closest('.item-action-btn')) actionMenu.classList.add('hidden');
+    });
+
+    window.addEventListener('load', () => {
+      loadData();
+      handleRoute();
+    });
+  </script>
+</body>
+</html>
