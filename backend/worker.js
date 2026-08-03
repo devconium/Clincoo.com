@@ -300,6 +300,24 @@ async function handleRequest(request, env, ctx) {
     return json({ data: schemas });
   }
 
+  // === KEY-VALUE STORE (for localStorage sync) ===
+  if (path.match(/^\/api\/kv\/[\w_-]+$/) && method === 'GET') {
+    const key = path.split('/')[3];
+    const row = await env.DB.prepare('SELECT data FROM settings WHERE project_id = ?').bind(key).first();
+    return json({ data: row ? JSON.parse(row.data) : null });
+  }
+  if (path.match(/^\/api\/kv\/[\w_-]+$/) && method === 'PUT') {
+    const key = path.split('/')[3];
+    const body = await request.json();
+    await env.DB.prepare('INSERT OR REPLACE INTO settings (project_id, data) VALUES (?, ?)').bind(key, JSON.stringify(body)).run();
+    return json({ data: body });
+  }
+  if (path.match(/^\/api\/kv\/[\w_-]+$/) && method === 'DELETE') {
+    const key = path.split('/')[3];
+    await env.DB.prepare('DELETE FROM settings WHERE project_id = ?').bind(key).run();
+    return json({ message: 'KV deleted: ' + key });
+  }
+
   return error('Endpoint not found: ' + method + ' ' + path, 404);
 }
 
