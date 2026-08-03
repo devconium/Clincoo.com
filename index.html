@@ -247,11 +247,17 @@
 
      <div class="w-full border-b border-gray-200 mb-6 relative" id="project-nav-tabs">
         <nav class="-mb-px flex gap-6 overflow-x-auto hide-scrollbar relative" aria-label="Tabs">
-          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn text-black whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10" aria-current="page">
+          <button data-tab="kode" onclick="switchTab('kode', this)" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
             Kode
           </button> 
           <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
             Keamanan
+          </button>
+          <button onclick="safeNavigate('env.html')" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
+            Env
+          </button>
+          <button data-tab="halaman" onclick="switchTab('halaman', this)" class="tab-btn text-black whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10" aria-current="page">
+            Halaman
           </button>
           <div id="tab-indicator" class="absolute bottom-0 left-0 h-[2px] bg-black transition-transform duration-300 ease-in-out pointer-events-none" style="width: 0; transform: translateX(0);"></div>
         </nav>
@@ -322,6 +328,46 @@
           </div>
 
           <div id="security-scan-results" class="flex flex-col gap-3 hidden"></div>
+        </div>
+
+        <div id="tab-content-halaman" class="hidden flex-col gap-6 py-6 max-w-4xl mx-auto w-full transition-opacity">
+          
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-gray-800">Hyperlink</label>
+              <input type="url" id="deploy-hyperlink" placeholder="https://..." class="custom-input px-4 py-3 rounded-xl border text-sm font-mono">
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-gray-800">Teks Tampilan</label>
+              <input type="text" id="deploy-text" placeholder="Teks untuk tautan" class="custom-input px-4 py-3 rounded-xl border text-sm">
+            </div>
+            <div class="flex justify-end w-full">
+              <button onclick="saveDeployLink()" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">
+                Simpan
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 flex flex-col gap-4">
+            <h3 class="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-3">Deploy</h3>
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium text-gray-600">Domain Custom</label>
+              <input type="text" id="deploy-domain" placeholder="namadomain.com" class="custom-input px-4 py-3 rounded-xl border text-sm font-mono">
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium text-gray-600">Branch</label>
+              <select id="deploy-branch" class="custom-input px-4 py-3 rounded-xl border text-sm">
+                <option value="main" selected>main</option>
+              </select>
+            </div>
+            <div class="flex justify-end w-full">
+              <button onclick="deployProject()" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">
+                Deploy
+              </button>
+            </div>
+          </div>
+
+          <div id="deploy-list" class="flex flex-col gap-3 mt-2"></div>
         </div>
 
       </div>
@@ -696,8 +742,8 @@
       renderFileList();
       
       setTimeout(() => {
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        if (tabBtns.length > 0) switchTab('kode', tabBtns[0]);
+        const halamanBtn = document.querySelector('[data-tab="halaman"]');
+        if (halamanBtn) switchTab('halaman', halamanBtn);
       }, 50);
 
       const proj = projects.find(p => p.id === id);
@@ -1434,19 +1480,92 @@
           contentKeamanan.classList.remove('flex');
         }
       }
+      const contentHalaman = document.getElementById('tab-content-halaman');
+      if(contentHalaman) {
+        if(tabId === 'halaman') {
+          contentHalaman.classList.remove('hidden');
+          contentHalaman.classList.add('flex');
+          loadDeployData();
+        } else {
+          contentHalaman.classList.add('hidden');
+          contentHalaman.classList.remove('flex');
+        }
+      }
     }
     
     function startSecurityScan() {
-       // Dummy function to prevent error when the button is clicked. 
-       // Logic for security scanning can be added here later.
        console.log("Memulai pemindaian...");
     }
 
-    // Initialize application safely
+    function safeNavigate(url) {
+      window.location.href = url;
+    }
+
+    const STORAGE_KEY_DEPLOY = 'clincoo_deploy_links';
+    let deployLinks = [];
+
+    function loadDeployData() {
+      const saved = localStorage.getItem(STORAGE_KEY_DEPLOY);
+      if (saved) {
+        try { deployLinks = JSON.parse(saved); } catch (e) { deployLinks = []; }
+      }
+      renderDeployLinks();
+      const savedDomain = localStorage.getItem('clincoo_deploy_domain');
+      if (savedDomain) {
+        const domainEl = document.getElementById('deploy-domain');
+        if (domainEl) domainEl.value = savedDomain;
+      }
+    }
+
+    function saveDeployLink() {
+      const linkInput = document.getElementById('deploy-hyperlink');
+      const textInput = document.getElementById('deploy-text');
+      if (!linkInput.value) return;
+      deployLinks.push({ url: linkInput.value, text: textInput.value || linkInput.value });
+      localStorage.setItem(STORAGE_KEY_DEPLOY, JSON.stringify(deployLinks));
+      linkInput.value = '';
+      textInput.value = '';
+      renderDeployLinks();
+    }
+
+    function renderDeployLinks() {
+      const list = document.getElementById('deploy-list');
+      if (!list) return;
+      if (deployLinks.length === 0) {
+        list.innerHTML = '';
+        return;
+      }
+      list.innerHTML = deployLinks.map((item, i) => 
+        '<div class="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3 shadow-sm">' +
+          '<a href="' + item.url + '" target="_blank" class="flex-1 min-w-0 text-sm font-medium text-gray-800 hover:text-[#273849] truncate">' + (item.text || item.url) + '</a>' +
+          '<span class="text-xs text-gray-400 font-mono truncate hidden sm:block">' + item.url + '</span>' +
+          '<button onclick="deleteDeployLink(' + i + ')" class="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0">' +
+            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
+          '</button>' +
+        '</div>'
+      ).join('');
+    }
+
+    function deleteDeployLink(index) {
+      deployLinks.splice(index, 1);
+      localStorage.setItem(STORAGE_KEY_DEPLOY, JSON.stringify(deployLinks));
+      renderDeployLinks();
+    }
+
+    function deployProject() {
+      const domainInput = document.getElementById('deploy-domain');
+      const branchSelect = document.getElementById('deploy-branch');
+      if (domainInput) {
+        localStorage.setItem('clincoo_deploy_domain', domainInput.value);
+      }
+      if (typeof saveData === 'function') saveData();
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
       handleRoute();
     });
   </script>
+  <script src="backend.js"></script>
 </body>
 </html>
