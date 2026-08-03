@@ -335,8 +335,84 @@
           <div id="security-scan-results" class="flex flex-col gap-3 hidden"></div>
         </div>
 
-        <div id="tab-content-halaman" class="hidden flex-col gap-6 py-6 max-w-4xl mx-auto w-full transition-opacity">
+        <div id="tab-content-halaman" class="hidden flex-col gap-8 py-6 max-w-4xl mx-auto w-full transition-opacity">
 
+          <!-- Status: situs aktif -->
+          <div id="halaman-status-box" class="hidden rounded-lg border border-gray-200 px-4 py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+            <div class="min-w-0">
+              <p class="text-sm text-gray-800">
+                Situs Anda sudah aktif di <a id="halaman-status-url" href="#" target="_blank" rel="noopener" class="text-gray-900 underline hover:text-black font-medium"></a>
+              </p>
+              <p class="text-xs text-gray-500 mt-0.5">Terakhir di-deploy <span id="halaman-status-time"></span></p>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <a id="halaman-visit-btn" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm text-center">Kunjungi Situs</a>
+              <button onclick="unpublishSite()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">Hapus Publikasi</button>
+            </div>
+          </div>
+
+          <!-- Pembuatan dan Penerapan -->
+          <div class="flex flex-col gap-4">
+            <h3 class="text-base font-semibold text-gray-900">Pembuatan dan Penerapan</h3>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium text-gray-700">Sumber</label>
+              <select id="deploy-source" class="custom-input w-full px-4 py-3 rounded-xl border text-sm">
+                <option value="project" selected>Deploy dari berkas proyek</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-medium text-gray-700">Cabang</label>
+              <p class="text-xs text-gray-500 -mt-1">Pilih cabang untuk deploy proyek Anda. Setiap kali disimpan, proyek akan langsung di-deploy ke production.</p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <select id="deploy-branch" class="custom-input flex-1 px-4 py-3 rounded-xl border text-sm">
+                  <option value="main" selected>main</option>
+                  <option value="preview">preview</option>
+                </select>
+                <button onclick="deployToProduction()" id="deploy-prod-btn" class="px-5 py-3 rounded-xl border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm flex-shrink-0 flex items-center justify-center gap-2">
+                  <span>Menyimpan</span>
+                </button>
+              </div>
+              <span id="deploy-prod-status" class="text-xs text-gray-400"></span>
+            </div>
+          </div>
+
+          <!-- Domain Khusus -->
+          <div class="flex flex-col gap-4 pt-6 border-t border-gray-100">
+            <h3 class="text-base font-semibold text-gray-900">Domain Khusus</h3>
+            <p class="text-xs text-gray-500 -mt-2">Domain kustom memungkinkan Anda menyajikan situs dari domain selain domain bawaan.</p>
+            <div class="flex flex-col gap-2">
+              <input type="text" id="deploy-domain" placeholder="namadomain.com" class="custom-input w-full px-4 py-3 rounded-xl border text-sm font-mono">
+              <div class="flex items-center gap-2">
+                <button onclick="saveDeployDomain()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm">Menyimpan</button>
+                <button onclick="removeDeployDomain()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">Menghapus</button>
+              </div>
+            </div>
+            <label class="flex items-center gap-2 mt-1 cursor-pointer select-none">
+              <input type="checkbox" id="deploy-https" checked class="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-0 focus:ring-offset-0">
+              <span class="text-sm text-gray-700">Terapkan HTTPS</span>
+            </label>
+          </div>
+
+          <!-- Tautan -->
+          <div class="flex flex-col gap-4 pt-6 border-t border-gray-100">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-semibold text-gray-900">Tautan</h3>
+              <span id="deploy-link-count" class="text-xs text-gray-400">0</span>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input type="url" id="deploy-hyperlink" placeholder="https://..." class="custom-input flex-1 min-w-0 px-4 py-2.5 rounded-xl border text-sm font-mono">
+              <input type="text" id="deploy-text" placeholder="Teks tampilan" class="custom-input flex-1 min-w-0 px-4 py-2.5 rounded-xl border text-sm">
+              <button onclick="saveDeployLink()" class="px-4 py-2.5 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm flex-shrink-0">Tambah</button>
+            </div>
+            <div id="deploy-list" class="flex flex-col divide-y divide-gray-100"></div>
+          </div>
+
+          <!-- Riwayat Deploy -->
+          <div class="flex flex-col gap-4 pt-6 border-t border-gray-100">
+            <h3 class="text-base font-semibold text-gray-900">Riwayat Deploy</h3>
+            <div id="deploy-history-list" class="flex flex-col divide-y divide-gray-100"></div>
           </div>
 
         </div>
@@ -1673,24 +1749,85 @@
     function getDeployDomainKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_domain'; }
     function getDeployBranchKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_branch'; }
     function getDeployHistoryKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_history'; }
+    function getDeploySiteKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_site'; }
+    function getDeployHttpsKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_https'; }
 
     function loadDeployData() {
       try { deployLinks = JSON.parse(localStorage.getItem(getDeployKey()) || '[]'); } catch(e) { deployLinks = []; }
       try { deployHistory = JSON.parse(localStorage.getItem(getDeployHistoryKey()) || '[]'); } catch(e) { deployHistory = []; }
+
       const savedDomain = localStorage.getItem(getDeployDomainKey());
-      if (savedDomain) { const el = document.getElementById('deploy-domain'); if (el) el.value = savedDomain; }
+      const domainEl = document.getElementById('deploy-domain');
+      if (domainEl) domainEl.value = savedDomain || '';
+
       const savedBranch = localStorage.getItem(getDeployBranchKey());
-      if (savedBranch) { const el = document.getElementById('deploy-branch'); if (el) el.value = savedBranch; }
+      const branchEl = document.getElementById('deploy-branch');
+      if (branchEl && savedBranch) branchEl.value = savedBranch;
+
+      const httpsSaved = localStorage.getItem(getDeployHttpsKey());
+      const httpsEl = document.getElementById('deploy-https');
+      if (httpsEl) httpsEl.checked = httpsSaved === null ? true : httpsSaved === 'true';
+
       renderDeployLinks();
       renderDeployHistory();
+      renderDeployStatus();
     }
+
+    function renderDeployStatus() {
+      const box = document.getElementById('halaman-status-box');
+      if (!box) return;
+      let site = null;
+      try { site = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { site = null; }
+      if (!site || !site.url) {
+        box.classList.add('hidden');
+        return;
+      }
+      box.classList.remove('hidden');
+      const urlEl = document.getElementById('halaman-status-url');
+      const visitEl = document.getElementById('halaman-visit-btn');
+      const timeEl = document.getElementById('halaman-status-time');
+      if (urlEl) { urlEl.textContent = site.url; urlEl.href = site.url; }
+      if (visitEl) visitEl.href = site.url;
+      if (timeEl) timeEl.textContent = site.time || '';
+    }
+
+    function unpublishSite() {
+      if (!confirm('Hapus publikasi situs ini? Situs tidak akan bisa diakses lagi.')) return;
+      localStorage.removeItem(getDeploySiteKey());
+      if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), null);
+      renderDeployStatus();
+      showToast('Publikasi situs dihapus', 'success');
+    }
+
+    function saveDeployDomain() {
+      const domainInput = document.getElementById('deploy-domain');
+      if (!domainInput) return;
+      localStorage.setItem(getDeployDomainKey(), domainInput.value.trim());
+      if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), domainInput.value.trim());
+      showToast('Domain disimpan', 'success');
+    }
+
+    function removeDeployDomain() {
+      const domainInput = document.getElementById('deploy-domain');
+      if (domainInput) domainInput.value = '';
+      localStorage.removeItem(getDeployDomainKey());
+      if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), '');
+      showToast('Domain dihapus', 'success');
+    }
+
+    document.addEventListener('change', function(e) {
+      if (e.target && e.target.id === 'deploy-https') {
+        localStorage.setItem(getDeployHttpsKey(), String(e.target.checked));
+        if (typeof FB !== 'undefined') FB.set(getDeployHttpsKey(), e.target.checked);
+      }
+    });
 
     function saveDeployLink() {
       const linkInput = document.getElementById('deploy-hyperlink');
       const textInput = document.getElementById('deploy-text');
       if (!linkInput || !linkInput.value.trim()) {
         showToast('Masukkan URL terlebih dahulu', 'error');
-        linkInput.focus();
+        if (linkInput) linkInput.focus();
         return;
       }
       try { new URL(linkInput.value); } catch(e) {
@@ -1712,24 +1849,16 @@
       if (!list) return;
       if (countEl) countEl.textContent = deployLinks.length;
       if (deployLinks.length === 0) {
-        list.innerHTML = '<div class="flex flex-col items-center justify-center py-8 text-center">' +
-          '<div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3 border border-gray-100">' +
-            '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>' +
-          '</div>' +
-          '<p class="text-xs text-gray-400">Belum ada tautan terpasang</p>' +
-        '</div>';
+        list.innerHTML = '<p class="text-sm text-gray-400 py-2">Belum ada tautan terpasang.</p>';
         return;
       }
       list.innerHTML = deployLinks.map((item, i) =>
-        '<div class="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-xl px-3 py-2.5 group hover:bg-gray-50 transition-colors">' +
-          '<div class="w-8 h-8 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center flex-shrink-0">' +
-            '<svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>' +
-          '</div>' +
+        '<div class="flex items-center gap-3 py-3 group">' +
           '<div class="flex-1 min-w-0">' +
-            '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-sm font-medium text-gray-800 hover:text-gray-900 truncate block">' + escapeHtmlLink(item.text || item.url) + '</a>' +
+            '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-sm font-medium text-gray-800 hover:text-black truncate block">' + escapeHtmlLink(item.text || item.url) + '</a>' +
             '<span class="text-xs text-gray-400 font-mono truncate block">' + escapeHtmlLink(item.url) + '</span>' +
           '</div>' +
-          '<button onclick="deleteDeployLink(' + i + ')" class="p-1.5 text-gray-300 hover:text-red-500 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100">' +
+          '<button onclick="deleteDeployLink(' + i + ')" class="p-1.5 text-gray-300 hover:text-red-500 rounded-md hover:bg-gray-50 transition-colors flex-shrink-0">' +
             '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' +
           '</button>' +
         '</div>'
@@ -1754,28 +1883,19 @@
       const list = document.getElementById('deploy-history-list');
       if (!list) return;
       if (deployHistory.length === 0) {
-        list.innerHTML = '<div class="flex flex-col items-center justify-center py-8 text-center">' +
-          '<div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3 border border-gray-100">' +
-            '<svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' +
-          '</div>' +
-          '<p class="text-xs text-gray-400">Belum ada riwayat deploy</p>' +
-        '</div>';
+        list.innerHTML = '<p class="text-sm text-gray-400 py-2">Belum ada riwayat deploy.</p>';
         return;
       }
       list.innerHTML = deployHistory.slice(0, 10).map((item) => {
-        var statusColor = item.status === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700';
-        var statusIcon = item.status === 'success'
-          ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'
-          : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
-        return '<div class="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-xl px-3 py-2.5">' +
-          '<div class="w-8 h-8 rounded-lg ' + statusColor + ' flex items-center justify-center flex-shrink-0">' +
-            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">' + statusIcon + '</svg>' +
-          '</div>' +
+        var statusLabel = item.status === 'success' ? 'Berhasil' : 'Gagal';
+        var statusColor = item.status === 'success' ? 'text-gray-700' : 'text-red-600';
+        return '<div class="flex items-center gap-3 py-3">' +
+          '<span class="text-xs font-semibold ' + statusColor + ' flex-shrink-0 w-14">' + statusLabel + '</span>' +
           '<div class="flex-1 min-w-0">' +
-            '<span class="text-sm font-medium text-gray-800 truncate block">' + escapeHtmlLink(item.url || 'Deploy') + '</span>' +
+            '<span class="text-sm text-gray-800 truncate block">' + escapeHtmlLink(item.url || 'Deploy') + '</span>' +
             '<span class="text-xs text-gray-400">' + escapeHtmlLink(item.time || '') + (item.files ? ' \u00b7 ' + item.files + ' file' : '') + '</span>' +
           '</div>' +
-          (item.url ? '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-xs text-blue-500 hover:text-blue-600 font-medium flex-shrink-0">Buka</a>' : '') +
+          (item.url ? '<a href="' + item.url + '" target="_blank" rel="noopener" class="text-xs text-gray-600 hover:text-black font-medium flex-shrink-0 underline">Buka</a>' : '') +
         '</div>';
       }).join('');
     }
@@ -1822,8 +1942,9 @@
       var projectSlug = 'clincoo-' + projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
       var branch = branchSelect ? branchSelect.value : 'main';
 
+      var originalHTML = btn.innerHTML;
       btn.disabled = true;
-      btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Deploying...</span>';
+      btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menyimpan...</span>';
       if (status) status.textContent = '';
 
       try {
@@ -1840,17 +1961,15 @@
         });
         var result = await res.json();
         if (result.success) {
-          btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Berhasil</span>';
-          btn.classList.remove('bg-gray-900', 'hover:bg-gray-800');
-          btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
-          if (status) status.innerHTML = '<a href="' + (result.url || result.productionUrl || '') + '" target="_blank" class="text-blue-500 hover:text-blue-600 font-medium">' + (result.url || result.productionUrl || 'Lihat') + '</a>';
+          var siteUrl = result.url || result.productionUrl || '';
+          var nowStr = new Date().toLocaleString('id-ID');
 
-          var histItem = {
-            status: 'success',
-            url: result.url || result.productionUrl || '',
-            time: new Date().toLocaleString('id-ID'),
-            files: allFiles.length
-          };
+          var siteInfo = { url: siteUrl, time: nowStr };
+          localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
+          if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
+          renderDeployStatus();
+
+          var histItem = { status: 'success', url: siteUrl, time: nowStr, files: allFiles.length };
           deployHistory.unshift(histItem);
           deployHistory = deployHistory.slice(0, 20);
           localStorage.setItem(getDeployHistoryKey(), JSON.stringify(deployHistory));
@@ -1858,18 +1977,13 @@
           renderDeployHistory();
 
           showToast('Deploy berhasil! ' + allFiles.length + ' file dipublikasikan', 'success');
-
-          setTimeout(function() {
-            btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg><span>Deploy Sekarang</span>';
-            btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
-            btn.classList.add('bg-gray-900', 'hover:bg-gray-800');
-            btn.disabled = false;
-          }, 3000);
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
         } else {
           throw new Error(result.error || 'Deploy gagal');
         }
       } catch(err) {
-        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg><span>Deploy Sekarang</span>';
+        btn.innerHTML = originalHTML;
         btn.disabled = false;
         showToast('Deploy gagal: ' + err.message, 'error');
 
