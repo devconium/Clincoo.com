@@ -1743,22 +1743,21 @@
       if (httpsEl) httpsEl.checked = httpsSaved === null ? true : httpsSaved === 'true';
 
       renderDeployStatus();
-      var existingSite = null;
-      try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
-      var domainSection = document.getElementById('domain-khusus-section');
-      if (domainSection && existingSite && existingSite.url) { domainSection.classList.remove('hidden'); domainSection.classList.add('flex'); }
     }
 
     function renderDeployStatus() {
       const box = document.getElementById('halaman-status-box');
+      const dSec = document.getElementById('domain-khusus-section');
       if (!box) return;
       let site = null;
       try { site = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { site = null; }
       if (!site || !site.url) {
         box.classList.add('hidden');
+        if (dSec) { dSec.classList.add('hidden'); dSec.classList.remove('flex'); }
         return;
       }
       box.classList.remove('hidden');
+      if (dSec) { dSec.classList.remove('hidden'); dSec.classList.add('flex'); }
       const urlEl = document.getElementById('halaman-status-url');
       const visitEl = document.getElementById('halaman-visit-btn');
       const timeEl = document.getElementById('halaman-status-time');
@@ -1772,8 +1771,6 @@
       localStorage.removeItem(getDeploySiteKey());
       if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), null);
       renderDeployStatus();
-      var ds = document.getElementById('domain-khusus-section');
-      if (ds) { ds.classList.add('hidden'); ds.classList.remove('flex'); }
       showToast('Publikasi situs dihapus', 'success');
     }
 
@@ -1867,8 +1864,7 @@
           var siteInfo = { url: siteUrl, time: nowStr };
           localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
           if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
-          var dSec = document.getElementById('domain-khusus-section');
-          if (dSec) { dSec.classList.remove('hidden'); dSec.classList.add('flex'); }
+          renderDeployStatus();
 
           showToast('Publikasi berhasil! ' + allFiles.length + ' file dipublikasikan', 'success');
           btn.innerHTML = originalHTML;
