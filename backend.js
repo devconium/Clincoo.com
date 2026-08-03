@@ -62,20 +62,20 @@ function _debouncedSync() {
 }
 
 // --- Override saveData: localStorage + D1 sync ---
-function saveData() {
+var saveData = function() {
   _origSaveData();
   if (!_isSyncing) _debouncedSync();
 }
 
 // --- Override loadData: localStorage first, then merge from D1 ---
-function loadData() {
+var loadData = function() {
   _origLoadData();
   // Fire D1 sync in background (don't block page load)
   _syncProjectsFromD1();
 }
 
 // --- Override loadProjectFiles: localStorage first, then merge from D1 ---
-function loadProjectFiles() {
+var loadProjectFiles = function() {
   _origLoadProjectFiles();
   if (typeof currentProjectId !== 'undefined' && currentProjectId) {
     _syncFilesFromD1(currentProjectId);
