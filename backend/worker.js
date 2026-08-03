@@ -61,13 +61,18 @@ async function checkBotProtection(request, env, path, hasAuth) {
 
   if (!hasAuth) {
     for (const bad of BLOCKED_UAS) {
-      if (ua.includes(bad) && !path.includes('/health')) {
+      if (ua.includes(bad) && !path.includes('/health') && !path.includes('/analytics/track')) {
         return { blocked: true, reason: 'Suspicious user agent', status: 403 };
       }
     }
-    if (!ua && !path.includes('/health')) {
+    if (!ua && !path.includes('/health') && !path.includes('/analytics/track')) {
       return { blocked: true, reason: 'Empty user agent', status: 403 };
     }
+  }
+
+  // Skip rate limiting for analytics tracking (high volume by nature)
+  if (path.includes('/analytics/track')) {
+    return { blocked: false };
   }
 
   const record = await env.DB.prepare('SELECT count, first_request, blocked FROM rate_limits WHERE ip = ?').bind(ip).first();
@@ -104,6 +109,240 @@ function checkAuth(request, env) {
   return key === env.BACKEND_API_KEY;
 }
 
+async function ensureAnalyticsTable(env) {
+  await env.DB.prepare(`CREATE TABLE IF NOT EXISTS analytics_events (
+    id TEXT PRIMARY KEY,
+    domain TEXT,
+    path TEXT,
+    event_type TEXT DEFAULT 'pageview',
+    visitor_id TEXT,
+    session_id TEXT,
+    user_agent TEXT,
+    referrer TEXT,
+    screen_w INTEGER,
+    screen_h INTEGER,
+    language TEXT,
+    country TEXT,
+    duration INTEGER DEFAULT 0,
+    created_date TEXT
+  )`).run();
+}
+
+async function handleAnalyticsTrack(request, env, ctx) {
+  try {
+    const body = await request.json();
+    if (!body) return error('Invalid body', 400);
+
+    await ensureAnalyticsTable(env);
+
+    const ip = getClientIP(request);
+    const cf = request.cf || {};
+    const id = genId();
+    const now = new Date().toISOString();
+
+    await env.DB.prepare(
+      'INSERT INTO analytics_events (id, domain, path, event_type, visitor_id, session_id, user_agent, referrer, screen_w, screen_h, language, country, duration, created_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    ).bind(
+      id,
+      body.domain || 'unknown',
+      body.path || '/',
+      body.event_type || 'pageview',
+      body.visitor_id || '',
+      body.session_id || '',
+      (request.headers.get('User-Agent') || '').substring(0, 500),
+      body.referrer || '',
+      body.screen_w || 0,
+      body.screen_h || 0,
+      body.language || '',
+      cf.country || body.country || '',
+      body.duration || 0,
+      now
+    ).run();
+
+    return json({ ok: true });
+  } catch(e) {
+    return error('Track error: ' + e.message, 500);
+  }
+}
+
+async function handleAnalyticsStats(request, env) {
+  await ensureAnalyticsTable(env);
+
+  // 1. Monthly visitors (last 6 months) — Bar Chart
+  const monthly = await env.DB.prepare(`
+    SELECT 
+      substr(created_date, 1, 7) as month,
+      COUNT(*) as views,
+      COUNT(DISTINCT visitor_id) as unique_visitors
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-6 months')
+    GROUP BY month
+    ORDER BY month
+  `).all();
+
+  // 2. Daily traffic (last 7 days) — Line Chart
+  const daily = await env.DB.prepare(`
+    SELECT 
+      DATE(created_date) as day,
+      COUNT(*) as views,
+      COUNT(DISTINCT visitor_id) as visitors
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-7 days')
+    GROUP BY day
+    ORDER BY day
+  `).all();
+
+  // 3. Traffic sources (referrer domains) — Pie Chart
+  const sources = await env.DB.prepare(`
+    SELECT 
+      CASE 
+        WHEN referrer = '' OR referrer IS NULL THEN 'Direct'
+        WHEN referrer LIKE '%google%' THEN 'Google'
+        WHEN referrer LIKE '%facebook%' OR referrer LIKE '%fb%' THEN 'Facebook'
+        WHEN referrer LIKE '%instagram%' THEN 'Instagram'
+        WHEN referrer LIKE '%twitter%' OR referrer LIKE '%x.com%' THEN 'Twitter/X'
+        WHEN referrer LIKE '%linkedin%' THEN 'LinkedIn'
+        WHEN referrer LIKE '%youtube%' THEN 'YouTube'
+        WHEN referrer LIKE '%t.co%' THEN 'Twitter/X'
+        ELSE substr(referrer, 1, 30)
+      END as source,
+      COUNT(*) as count
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-30 days')
+    GROUP BY source
+    ORDER BY count DESC
+    LIMIT 8
+  `).all();
+
+  // 4. Device types — Doughnut Chart
+  const devices = await env.DB.prepare(`
+    SELECT 
+      CASE 
+        WHEN screen_w > 0 AND screen_w <= 768 THEN 'Mobile'
+        WHEN screen_w > 768 AND screen_w <= 1024 THEN 'Tablet'
+        WHEN screen_w > 1024 THEN 'Desktop'
+        ELSE 'Unknown'
+      END as device,
+      COUNT(*) as count
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-30 days')
+    GROUP BY device
+    ORDER BY count DESC
+  `).all();
+
+  // 5. Top pages — Horizontal Bar Chart
+  const topPages = await env.DB.prepare(`
+    SELECT path, COUNT(*) as views
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-30 days')
+    GROUP BY path
+    ORDER BY views DESC
+    LIMIT 10
+  `).all();
+
+  // 6. Countries — Polar Area Chart
+  const countries = await env.DB.prepare(`
+    SELECT 
+      COALESCE(NULLIF(country, ''), 'Unknown') as country,
+      COUNT(*) as count
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-30 days')
+    GROUP BY country
+    ORDER BY count DESC
+    LIMIT 8
+  `).all();
+
+  // 7. Hourly traffic (last 24h) — Scatter Chart
+  const hourly = await env.DB.prepare(`
+    SELECT 
+      CAST(strftime('%H', created_date) AS INTEGER) as hour,
+      COUNT(*) as views,
+      COUNT(DISTINCT visitor_id) as visitors
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-1 day')
+    GROUP BY hour
+    ORDER BY hour
+  `).all();
+
+  // 8. Hourly traffic for bubble (visitors x views x sessions)
+  const bubbleData = await env.DB.prepare(`
+    SELECT 
+      CAST(strftime('%H', created_date) AS INTEGER) as hour,
+      COUNT(DISTINCT visitor_id) as visitors,
+      COUNT(*) as views,
+      COUNT(DISTINCT session_id) as sessions
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-7 days')
+    GROUP BY hour
+    ORDER BY hour
+  `).all();
+
+  // 9. Daily views vs unique visitors (last 14 days) — Mixed Chart
+  const dailyMixed = await env.DB.prepare(`
+    SELECT 
+      DATE(created_date) as day,
+      COUNT(*) as views,
+      COUNT(DISTINCT visitor_id) as visitors
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-14 days')
+    GROUP BY day
+    ORDER BY day
+  `).all();
+
+  // 10. Languages — Radar Chart
+  const languages = await env.DB.prepare(`
+    SELECT 
+      COALESCE(NULLIF(language, ''), 'Unknown') as lang,
+      COUNT(*) as count
+    FROM analytics_events
+    WHERE created_date >= datetime('now', '-30 days')
+    GROUP BY lang
+    ORDER BY count DESC
+    LIMIT 6
+  `).all();
+
+  // Summary counts
+  const totalToday = await env.DB.prepare(`
+    SELECT COUNT(*) as count FROM analytics_events 
+    WHERE DATE(created_date) = DATE('now')
+  `).first();
+
+  const totalVisitors = await env.DB.prepare(`
+    SELECT COUNT(DISTINCT visitor_id) as count FROM analytics_events
+    WHERE created_date >= datetime('now', '-30 days')
+  `).first();
+
+  const totalEvents = await env.DB.prepare(`
+    SELECT COUNT(*) as count FROM analytics_events
+  `).first();
+
+  const avgDuration = await env.DB.prepare(`
+    SELECT AVG(duration) as avg FROM analytics_events
+    WHERE duration > 0 AND created_date >= datetime('now', '-30 days')
+  `).first();
+
+  return json({
+    data: {
+      summary: {
+        total_today: totalToday ? totalToday.count : 0,
+        total_visitors_30d: totalVisitors ? totalVisitors.count : 0,
+        total_events: totalEvents ? totalEvents.count : 0,
+        avg_duration: avgDuration ? Math.round(avgDuration.avg || 0) : 0
+      },
+      monthly: monthly.results,
+      daily: daily.results,
+      sources: sources.results,
+      devices: devices.results,
+      topPages: topPages.results,
+      countries: countries.results,
+      hourly: hourly.results,
+      bubbleData: bubbleData.results,
+      dailyMixed: dailyMixed.results,
+      languages: languages.results
+    }
+  });
+}
+
 async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
   const path = url.pathname;
@@ -124,6 +363,11 @@ async function handleRequest(request, env, ctx) {
     return json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
   }
 
+  // === PUBLIC: Analytics tracking endpoint (no auth needed — visitors send data) ===
+  if (path === '/api/analytics/track' && method === 'POST') {
+    return handleAnalyticsTrack(request, env, ctx);
+  }
+
   const hasAuth = checkAuth(request, env);
   const protection = await checkBotProtection(request, env, path, hasAuth);
   if (protection.blocked) {
@@ -131,6 +375,11 @@ async function handleRequest(request, env, ctx) {
   }
   if (!hasAuth) {
     return error('Unauthorized', 401);
+  }
+
+  // === AUTHENTICATED: Analytics stats endpoint (dashboard reads data) ===
+  if (path === '/api/analytics/stats' && method === 'GET') {
+    return handleAnalyticsStats(request, env);
   }
 
   if (path === '/api/projects' && method === 'GET') {
@@ -197,7 +446,7 @@ async function handleRequest(request, env, ctx) {
 
   if (path.match(/^\/api\/projects\/[\w-]+\/deployments$/) && method === 'GET') {
     const pid = path.split('/')[3];
-    const results = await env.DB.prepare('SELECT * FROM deployments WHERE project_id = ? ORDER BY created_date DESC').bind(pid).all();
+    const results = await env.DB.prepare('SELECT * FROM deployments WHERE project_id = ? ORDER BY created_date DESC').all();
     return json({ data: results.results });
   }
   if (path.match(/^\/api\/projects\/[\w-]+\/deployments$/) && method === 'POST') {
