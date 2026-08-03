@@ -253,7 +253,7 @@
           <button data-tab="keamanan" onclick="switchTab('keamanan', this)" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
             Keamanan
           </button>
-          <button onclick="safeNavigate('env.html')" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
+          <button data-tab="env" onclick="switchTab('env', this)" class="tab-btn text-gray-500 hover:text-gray-700 whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10">
             Env
           </button>
           <button data-tab="halaman" onclick="switchTab('halaman', this)" class="tab-btn text-black whitespace-nowrap py-3 px-1 font-medium text-sm flex items-center focus:outline-none relative z-10" aria-current="page">
@@ -368,6 +368,24 @@
           </div>
 
           <div id="deploy-list" class="flex flex-col gap-3 mt-2"></div>
+        </div>
+
+        <div id="tab-content-env" class="hidden flex-col gap-6 py-6 max-w-4xl mx-auto w-full transition-opacity">
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-row gap-2 sm:gap-4 items-center w-full">
+              <input type="text" id="env-key" placeholder="Kunci (contoh: API_KEY)" class="flex-1 min-w-0 custom-input px-3 sm:px-4 py-3 rounded-xl border focus:outline-none focus:ring-0 text-xs sm:text-sm font-mono">
+              <input type="text" id="env-value" placeholder="Nilai" class="flex-1 min-w-0 custom-input px-3 sm:px-4 py-3 rounded-xl border focus:outline-none focus:ring-0 text-xs sm:text-sm font-mono">
+            </div>
+            <div class="flex justify-end w-full">
+              <button onclick="saveEnv()" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">
+                Simpan
+              </button>
+            </div>
+          </div>
+          <div class="mt-4 flex flex-col gap-4">
+            <h3 class="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-3">Environtment variabel</h3>
+            <div class="flex flex-col gap-3 w-full" id="env-list"></div>
+          </div>
         </div>
 
       </div>
@@ -1491,10 +1509,63 @@
           contentHalaman.classList.remove('flex');
         }
       }
+      const contentEnv = document.getElementById('tab-content-env');
+      if(contentEnv) {
+        if(tabId === 'env') {
+          contentEnv.classList.remove('hidden');
+          contentEnv.classList.add('flex');
+          loadEnvVariables();
+        } else {
+          contentEnv.classList.add('hidden');
+          contentEnv.classList.remove('flex');
+        }
+      }
     }
     
     function startSecurityScan() {
        console.log("Memulai pemindaian...");
+    }
+
+    let envVariables = [];
+    const STORAGE_KEY_ENV = 'clincoo_env_variables';
+
+    function loadEnvVariables() {
+        const saved = localStorage.getItem(STORAGE_KEY_ENV);
+        if (saved) {
+            try { envVariables = JSON.parse(saved); } catch (e) { envVariables = []; }
+        }
+        renderEnvList();
+    }
+
+    function renderEnvList() {
+        const list = document.getElementById('env-list');
+        if (!list) return;
+        list.innerHTML = envVariables.map((item, i) =>
+            '<div class="flex items-center gap-2 sm:gap-3 w-full group">' +
+               '<input type="text" value="' + item.key + '" readonly class="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-500 px-3 sm:px-4 py-3 rounded-xl text-xs sm:text-sm font-mono cursor-not-allowed focus:outline-none pointer-events-none truncate">' +
+               '<input type="password" value="' + item.value + '" readonly class="flex-1 min-w-0 bg-gray-50 border border-gray-200 text-gray-500 px-3 sm:px-4 py-3 rounded-xl text-xs sm:text-sm font-mono cursor-not-allowed focus:outline-none pointer-events-none tracking-widest sm:tracking-[0.2em] truncate">' +
+               '<button onclick="deleteEnv(' + i + ')" class="p-2 sm:p-2.5 text-gray-400 hover:text-red-500 rounded-xl hover:bg-gray-200 transition-colors focus:outline-none flex-shrink-0" aria-label="Hapus">' +
+                  '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>' +
+               '</button>' +
+            '</div>'
+        ).join('');
+    }
+
+    function deleteEnv(index) {
+        envVariables.splice(index, 1);
+        localStorage.setItem(STORAGE_KEY_ENV, JSON.stringify(envVariables));
+        renderEnvList();
+    }
+
+    function saveEnv() {
+        const keyInput = document.getElementById('env-key');
+        const valInput = document.getElementById('env-value');
+        if(!keyInput.value || !valInput.value) return;
+        envVariables.push({ key: keyInput.value, value: valInput.value });
+        localStorage.setItem(STORAGE_KEY_ENV, JSON.stringify(envVariables));
+        keyInput.value = '';
+        valInput.value = '';
+        renderEnvList();
     }
 
     function safeNavigate(url) {
