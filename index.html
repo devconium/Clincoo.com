@@ -932,8 +932,8 @@
       renderFileList();
       
       setTimeout(() => {
-        const halamanBtn = document.querySelector('[data-tab="halaman"]');
-        if (halamanBtn) switchTab('halaman', halamanBtn);
+        const kodeBtn = document.querySelector('[data-tab="kode"]');
+        if (kodeBtn) switchTab('kode', kodeBtn);
         if (typeof runSecurityScan === 'function') runSecurityScan(true);
       }, 50);
 
