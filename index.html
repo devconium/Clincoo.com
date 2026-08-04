@@ -225,6 +225,13 @@
                 </label>
               </div>
             </div>
+            
+            <div id="github-repo-checkbox-container" class="mb-5 hidden">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input type="checkbox" id="create-github-repo" checked class="w-4 h-4 rounded border-gray-300 text-[#273849] focus:ring-0 focus:ring-offset-0">
+                <span class="text-sm text-gray-700">Buat repo GitHub otomatis</span>
+              </label>
+            </div>
           </div>
           
           <div id="form-actions" class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-8 mt-4 border-t border-gray-200">
@@ -818,7 +825,7 @@
         </div>
         <div>
           <label id="input-modal-label" class="block text-sm font-medium text-gray-700 mb-1.5">Nama File</label>
-          <input type="text" id="modal-input-name" onkeydown="handleModalInputKeydown(event)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#273849] focus:border-transparent transition-all" placeholder="Misal: index.html" autocomplete="off">
+          <input type="text" id="modal-input-name" onkeydown="handleModalInputKeydown(event)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none transition-all" placeholder="Misal: index.html" autocomplete="off">
           <p id="input-modal-error" class="text-xs text-red-500 mt-2 hidden">Nama tidak boleh kosong atau sudah ada.</p>
         </div>
       </div>
@@ -1337,6 +1344,15 @@
       } else {
         formViewTitle.textContent = 'Buat proyek baru';
         btnDelete.classList.add('hidden');
+        // Show GitHub repo checkbox only if connected
+        var ghContainer = document.getElementById('github-repo-checkbox-container');
+        if (ghContainer) {
+          if (getGithubToken()) {
+            ghContainer.classList.remove('hidden');
+          } else {
+            ghContainer.classList.add('hidden');
+          }
+        }
       }
     }
 
@@ -1478,7 +1494,7 @@
         title.textContent = 'Buat File Baru';
         label.textContent = 'Nama File';
         input.placeholder = 'Misal: index.html';
-        typeContainer.classList.remove('hidden');
+        typeContainer.classList.add('hidden');
         typeSelect.value = '';
       }
       
@@ -1575,16 +1591,20 @@
 
       if (modalAction === 'create_file' || modalAction === 'create_folder') {
           if (modalAction === 'create_file') {
-            const typeSelect = document.getElementById('modal-file-type');
-            const selectedType = typeSelect ? typeSelect.value : '';
-            if (selectedType) {
-              let baseName = name;
-              if(name.includes('.')) {
-                 baseName = name.substring(0, name.lastIndexOf('.'));
-              }
-              name = baseName + '.' + selectedType;
-            } else if (!name.includes('.')) {
-              name = name + '.txt';
+            if (!name.includes('.')) {
+              var lowerName = name.toLowerCase();
+              var autoExt = 'txt';
+              if (lowerName === 'index' || lowerName === 'home' || lowerName === 'main') autoExt = 'html';
+              else if (lowerName === 'style' || lowerName === 'styles' || lowerName === 'stylesheet') autoExt = 'css';
+              else if (lowerName === 'script' || lowerName === 'app' || lowerName === 'main-js') autoExt = 'js';
+              else if (lowerName === 'config' || lowerName === 'package') autoExt = 'json';
+              else if (lowerName === 'readme' || lowerName === 'changelog') autoExt = 'md';
+              else if (lowerName === 'server' || lowerName === 'api') autoExt = 'js';
+              else if (lowerName === 'robots') autoExt = 'txt';
+              else if (lowerName === 'sitemap') autoExt = 'xml';
+              else if (lowerName === 'favicon') autoExt = 'svg';
+              else if (lowerName === 'dockerfile' || lowerName === 'makefile') autoExt = '';
+              if (autoExt) name = name + '.' + autoExt;
             }
           }
           
@@ -2330,23 +2350,27 @@
         const index = projects.findIndex(p => p.id == parseInt(id));
         if (index !== -1) projects[index] = { ...projects[index], name, desc, visibility };
       } else {
-        const existingIds = projects.map(p => p.id);
-        let newId = projects.length > 0 ? Math.max(...existingIds) + 1 : 1;
-        // Ensure ID is truly unique (not recycled from deleted project)
-        while (localStorage.getItem('clincoo_' + newId + '_deploy_site')) {
-          newId++;
-        }
+        let newId = Date.now();
         // Clear any stale deploy keys for this ID
         localStorage.removeItem('clincoo_' + newId + '_deploy_site');
         localStorage.removeItem('clincoo_' + newId + '_deploy_domain');
+        localStorage.removeItem('clincoo_' + newId + '_deploy_branch');
+        localStorage.removeItem('clincoo_' + newId + '_deploy_https');
+        localStorage.removeItem('clincoo_' + newId + '_cf_project');
+        // Clean up any stale D1 data for this ID
+        if (typeof _api === 'function') {
+          _api('DELETE', '/api/kv/clincoo_' + newId + '_files');
+        }
         localStorage.removeItem('clincoo_' + newId + '_deploy_branch');
         localStorage.removeItem('clincoo_' + newId + '_deploy_https');
         projects.push({ id: newId, name, desc, visibility });
         currentProjectId = newId;
         projectFilesData = { 'root': [] };
         localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
-        // Auto-create GitHub repo if connected
-        if (getGithubToken()) {
+        // Auto-create GitHub repo if connected and checkbox is checked
+        var ghCheckbox = document.getElementById('create-github-repo');
+        var ghContainer = document.getElementById('github-repo-checkbox-container');
+        if (getGithubToken() && ghCheckbox && ghCheckbox.checked) {
           autoCreateGithubRepo(name, newId, visibility === 'private');
         }
       }
@@ -2359,6 +2383,12 @@
       if (targetId) {
         var projToDelete = projects.find(p => p.id === targetId);
         var projName = projToDelete ? projToDelete.name : '';
+        // Delete GitHub repo if linked
+        var repoInfoStr = localStorage.getItem('clincoo_' + targetId + '_github_repo');
+        if (repoInfoStr && getGithubToken()) {
+          deleteGithubRepoForProject(targetId);
+        }
+        localStorage.removeItem('clincoo_' + targetId + '_github_repo');
         projects = projects.filter(p => p.id !== targetId);
         localStorage.removeItem('clincoo_' + targetId + '_files');
         localStorage.removeItem('clincoo_' + targetId + '_deploy_site');
@@ -2366,8 +2396,15 @@
         localStorage.removeItem('clincoo_' + targetId + '_deploy_branch');
         localStorage.removeItem('clincoo_' + targetId + '_deploy_https');
         localStorage.removeItem('clincoo_' + targetId + '_security_findings');
+        localStorage.removeItem('clincoo_' + targetId + '_cf_project');
+        localStorage.removeItem('clincoo_' + targetId + '_env_variables');
         saveData();
         navigateTo('/');
+        // Deploy 404 page to overwrite old content before deletion
+        if (projName) {
+          var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+          if (projectSlug) deploy404Page(projectSlug);
+        }
         if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(targetId, projName);
       }
     }
@@ -2412,25 +2449,35 @@
     }
 
     function showConfirmDeleteProject(projectId, projectName) {
+      var hasGithubRepo = !!localStorage.getItem('clincoo_' + projectId + '_github_repo');
       const modal = document.createElement('div');
       modal.className = 'fixed inset-0 z-[200] flex items-center justify-center p-4';
       modal.innerHTML = `
         <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" onclick="this.parentElement.remove()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-fade-in">
-          <div class="flex items-center justify-center w-12 h-12 bg-red-50 rounded-full mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden animate-fade-in">
+          <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">Hapus Proyek</h3>
+            <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600 focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
           </div>
-          <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Hapus Proyek</h3>
-          <p class="text-sm text-gray-500 text-center mb-6">Yakin ingin menghapus <span class="font-semibold text-gray-700">"${projectName}"</span>? Semua file dan data akan dihapus permanen.</p>
-          <div class="flex gap-3">
-            <button onclick="this.closest('.fixed').remove()" class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all">
-              Batal
-            </button>
-            <button onclick="executeDeleteProject(${projectId}, this)" class="flex-1 px-4 py-2.5 rounded-lg bg-red-500 text-sm font-semibold text-white hover:bg-red-600 transition-all">
-              Hapus
-            </button>
+          <div class="p-6">
+            <div class="flex items-center justify-center w-12 h-12 bg-red-50 rounded-full mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <p class="text-sm text-gray-500 text-center mb-6">Yakin ingin menghapus <span class="font-semibold text-gray-700">"${projectName}"</span>? Semua file dan data akan dihapus permanen.</p>
+            ` + (hasGithubRepo ? `
+            <label class="flex items-center gap-2 cursor-pointer select-none mb-4 justify-center">
+              <input type="checkbox" id="delete-github-repo-${projectId}" class="w-4 h-4 rounded border-gray-300 text-red-500 focus:ring-0 focus:ring-offset-0">
+              <span class="text-sm text-gray-700">Hapus juga repo GitHub</span>
+            </label>
+            ` : '') + `
+          </div>
+          <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 rounded-b-2xl">
+            <button onclick="this.closest('.fixed').remove()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">Batal</button>
+            <button onclick="executeDeleteProject(${projectId}, this)" class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-xl hover:bg-red-600 shadow-sm transition-colors focus:outline-none">Hapus</button>
           </div>
         </div>
       `;
@@ -2438,9 +2485,17 @@
     }
 
     function executeDeleteProject(projectId, btn) {
+      // Check GitHub delete checkbox
+      var ghCheckbox = document.getElementById('delete-github-repo-' + projectId);
+      var deleteGithubRepo = ghCheckbox && ghCheckbox.checked;
       btn.closest('.fixed').remove();
       var projToDelete = projects.find(p => p.id === projectId);
       var projName = projToDelete ? projToDelete.name : '';
+      // Delete GitHub repo if checkbox is checked
+      if (deleteGithubRepo) {
+        deleteGithubRepoForProject(projectId);
+      }
+      localStorage.removeItem('clincoo_' + projectId + '_github_repo');
       projects = projects.filter(p => p.id !== projectId);
       localStorage.removeItem('clincoo_' + projectId + '_files');
       localStorage.removeItem('clincoo_' + projectId + '_deploy_site');
@@ -2448,9 +2503,40 @@
       localStorage.removeItem('clincoo_' + projectId + '_deploy_branch');
       localStorage.removeItem('clincoo_' + projectId + '_deploy_https');
       localStorage.removeItem('clincoo_' + projectId + '_security_findings');
+      localStorage.removeItem('clincoo_' + projectId + '_cf_project');
+      localStorage.removeItem('clincoo_' + projectId + '_env_variables');
       saveData();
       applyFilters();
+      // Deploy 404 page to overwrite old content before deletion
+      if (projName) {
+        var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        if (projectSlug) deploy404Page(projectSlug);
+      }
       if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(projectId, projName);
+    }
+
+    async function deleteGithubRepoForProject(projectId) {
+      var repoInfoStr = localStorage.getItem('clincoo_' + projectId + '_github_repo');
+      if (!repoInfoStr) return;
+      var token = getGithubToken();
+      if (!token) return;
+      try {
+        var repoInfo = JSON.parse(repoInfoStr);
+        var parts = repoInfo.full_name.split('/');
+        var owner = parts[0];
+        var repo = parts[1];
+        var res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+        });
+        if (res.status === 204) {
+          console.log('[Clincoo] GitHub repo deleted:', repoInfo.full_name);
+        } else {
+          console.warn('[Clincoo] GitHub repo delete failed:', res.status);
+        }
+      } catch(e) {
+        console.warn('[Clincoo] GitHub repo delete error:', e.message);
+      }
     }
 
     document.addEventListener('click', function(e) {
@@ -3089,7 +3175,7 @@ async function saveDeployDomain() {
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
         if (success) {
-          dnsStatus.textContent = 'Domain disimpan. Mengecek DNS...';
+          dnsStatus.textContent = 'Domain disimpan. Mengecek DNS...!';
           dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
           setTimeout(function() { checkDNS(); }, 600);
           // Deploy 404 page if no real deployment exists yet
@@ -3099,7 +3185,7 @@ async function saveDeployDomain() {
             deploy404Page(projectSlug);
           }
         } else {
-          dnsStatus.textContent = 'Gagal menyimpan domain. Coba lagi.';
+          dnsStatus.textContent = 'Gagal menyimpan domain. Coba lagi!';
           dnsStatus.className = 'text-xs font-medium mt-1 text-red-600';
         }
       }
@@ -3127,7 +3213,7 @@ async function saveDeployDomain() {
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
-        dnsStatus.textContent = 'Domain berhasil dihapus.';
+        dnsStatus.textContent = 'Domain berhasil dihapus!';
         dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
       }
     }
@@ -3171,7 +3257,7 @@ async function saveDeployDomain() {
       if (!domainInput || !statusEl) return;
       var domain = domainInput.value.trim();
       if (!domain) {
-        statusEl.textContent = 'Isi domain dulu';
+        statusEl.textContent = 'Isi domain dulu!';
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         return;
       }
@@ -3182,7 +3268,7 @@ async function saveDeployDomain() {
       if (!projectSlug) projectSlug = 'clincoo-app';
       var expectedTarget = projectSlug + '.pages.dev';
 
-      statusEl.textContent = 'Mengecek DNS...';
+      statusEl.textContent = 'Mengecek DNS...!';
       statusEl.className = 'text-xs font-medium mt-1 text-gray-500';
 
       // Domain yang dicek: domain asli + www. variant
@@ -3200,12 +3286,12 @@ async function saveDeployDomain() {
               if (data.Answer[i].type === 5) {
                 var cnameTarget = data.Answer[i].data.replace(/\.$/, '');
                 if (cnameTarget === expectedTarget) {
-                  statusEl.textContent = 'Domain terhubung';
+                  statusEl.textContent = 'Domain terhubung!';
                   statusEl.className = 'text-xs font-medium mt-1 text-green-600';
                   found = true;
                   break;
                 } else if (cnameTarget.indexOf('pages.dev') !== -1) {
-                  statusEl.textContent = 'DNS belum terhubung';
+                  statusEl.textContent = 'DNS belum terhubung!';
                   statusEl.className = 'text-xs font-medium mt-1 text-red-600';
                   found = true;
                   break;
@@ -3221,18 +3307,18 @@ async function saveDeployDomain() {
           if (aData.Answer && aData.Answer.length > 0) {
             var aTarget = aData.Answer[0].data;
             if (aTarget.indexOf('172.66') !== -1 || aTarget.indexOf('104.') !== -1) {
-              statusEl.textContent = 'Domain terhubung';
+              statusEl.textContent = 'Domain terhubung!';
               statusEl.className = 'text-xs font-medium mt-1 text-green-600';
               found = true;
             }
           }
         }
         if (!found) {
-          statusEl.textContent = 'DNS belum terhubung';
+          statusEl.textContent = 'DNS belum terhubung!';
           statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         }
       } catch(err) {
-        statusEl.textContent = 'Gagal mengecek DNS';
+        statusEl.textContent = 'Gagal mengecek DNS!';
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
       }
     }
@@ -3328,7 +3414,7 @@ async function saveDeployDomain() {
       // Auto-inject analytics tracking script into HTML files
       var _trackerScript = '<script>\n' +
         '(function(){\n' +
-        'var T="https://elowen-d02cebb0.base44.app/functions/analyticsTrack";\n' +
+        'var T="https://clincoo-backend.clincoo.workers.dev/api/analytics/track";\n' +
         'var v=localStorage.getItem("_cv")||("v-"+Date.now().toString(36)+Math.random().toString(36).substr(2,8));\n' +
         'localStorage.setItem("_cv",v);\n' +
         'var s=sessionStorage.getItem("_cs")||("s-"+Date.now().toString(36)+Math.random().toString(36).substr(2,6));\n' +
@@ -3467,8 +3553,8 @@ async function saveDeployDomain() {
     var _analyticsChartsInited = false;
     var _analyticsCharts = {};
     var _analyticsRefreshTimer = null;
-    var ANALYTICS_STATS_URL = 'https://elowen-d02cebb0.base44.app/functions/analyticsStats';
-    var ANALYTICS_TRACK_URL = 'https://elowen-d02cebb0.base44.app/functions/analyticsTrack';
+    var ANALYTICS_STATS_URL = 'https://clincoo-backend.clincoo.workers.dev/api/analytics/stats';
+    var ANALYTICS_TRACK_URL = 'https://clincoo-backend.clincoo.workers.dev/api/analytics/track';
 
     // === TRACKING: Self-track the Clincoo dashboard itself ===
     var _clincooVisitorId = localStorage.getItem('clincoo_vid') || '';
@@ -3610,12 +3696,12 @@ async function saveDeployDomain() {
 
       // Auto-refresh every 5 seconds for real-time data
       if (_analyticsRefreshTimer) clearInterval(_analyticsRefreshTimer);
-      _analyticsRefreshTimer = setInterval(fetchAnalyticsData, 5000);
+      _analyticsRefreshTimer = setInterval(fetchAnalyticsData, 3000);
     }
 
     async function fetchAnalyticsData() {
       try {
-        var res = await fetch(ANALYTICS_STATS_URL, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+        var res = await fetch(ANALYTICS_STATS_URL, { method: 'GET', headers: { 'Content-Type': 'application/json', 'X-API-Key': BACKEND_API_KEY } });
         if (!res.ok) return;
         var result = await res.json();
         if (!result || !result.data) return;
