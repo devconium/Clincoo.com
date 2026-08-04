@@ -127,6 +127,49 @@ async function handleRequest(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
 
+  // === GITHUB OAUTH ENDPOINTS ===
+  if (path === '/github/auth') {
+    const clientId = env.GH_CLIENT_ID;
+    if (!clientId) return jsonRes({ success: false, error: 'GH_CLIENT_ID not set' }, 500);
+    const redirectUri = 'https://clincoo-deploy.clincoo.workers.dev/github/callback';
+    const redirectBack = url.searchParams.get('redirect') || '';
+    const state = redirectBack;
+    const authUrl = 'https://github.com/login/oauth/authorize?client_id=' + clientId +
+      '&redirect_uri=' + encodeURIComponent(redirectUri) +
+      '&scope=repo&state=' + encodeURIComponent(state);
+    return Response.redirect(authUrl, 302);
+  }
+
+  if (path === '/github/callback') {
+    const code = url.searchParams.get('code');
+    const state = url.searchParams.get('state') || '';
+    if (!code) return jsonRes({ success: false, error: 'No code received' }, 400);
+    const clientId = env.GH_CLIENT_ID;
+    const clientSecret = env.GH_CLIENT_SECRET;
+    if (!clientId || !clientSecret) return jsonRes({ success: false, error: 'GitHub OAuth not configured' }, 500);
+    try {
+      const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          code: code,
+          redirect_uri: 'https://clincoo-deploy.clincoo.workers.dev/github/callback'
+        })
+      });
+      const tokenData = await tokenRes.json();
+      const accessToken = tokenData.access_token;
+      if (!accessToken) return jsonRes({ success: false, error: 'Failed to get token: ' + (tokenData.error || 'unknown') }, 400);
+      const redirectBack = state || 'https://clincoo.com';
+      const sep = redirectBack.includes('?') ? '&' : '?';
+      return Response.redirect(redirectBack + sep + 'github_token=' + accessToken, 302);
+    } catch(e) {
+      return jsonRes({ success: false, error: 'Token exchange failed: ' + e.message }, 500);
+    }
+  }
+  // === END GITHUB OAUTH ===
+
   const cfAccountId = env.CF_ACCOUNT_ID;
   const cfApiToken = env.CF_API_TOKEN;
   if (!cfAccountId || !cfApiToken) {

@@ -831,20 +831,42 @@
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
-      <div class="p-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">URL Repository GitHub</label>
-          <input type="text" id="github-url-input" onkeydown="if(event.key==='Enter') startGithubImport()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#273849] focus:border-transparent transition-all" placeholder="https://github.com/user/repo" autocomplete="off">
-          <p id="github-modal-error" class="text-xs text-red-500 mt-2 hidden">URL tidak valid. Contoh: https://github.com/user/repo</p>
-          <div id="github-import-status" class="hidden mt-3 text-xs text-gray-500 flex items-center gap-2">
-            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-            <span id="github-import-progress">Mengambil data...</span>
+      <div class="p-6 max-h-[60vh] overflow-y-auto">
+        <!-- Connect view (shown when not connected) -->
+        <div id="github-connect-view">
+          <div class="text-center py-4">
+            <svg class="w-12 h-12 mx-auto mb-4 text-gray-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            <p class="text-sm text-gray-500 mb-4">Hubungkan akun GitHub Anda untuk memilih dan mengimpor repository secara langsung.</p>
+            <button onclick="connectGithub()" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition-colors focus:outline-none shadow-sm">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              Connect ke GitHub
+            </button>
           </div>
         </div>
+        <!-- Repo list view (shown when connected) -->
+        <div id="github-repos-view" class="hidden">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-medium text-gray-500">Pilih repository</p>
+            <button onclick="disconnectGithub()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">Putuskan</button>
+          </div>
+          <div id="github-repo-list" class="space-y-1.5 max-h-[40vh] overflow-y-auto">
+            <div class="flex items-center justify-center py-8 text-xs text-gray-400">
+              <svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+              Memuat repository...
+            </div>
+          </div>
+        </div>
+        <!-- Import progress view -->
+        <div id="github-progress-view" class="hidden">
+          <div class="flex flex-col items-center py-6">
+            <svg class="w-8 h-8 animate-spin mb-4 text-[#273849]" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+            <p id="github-import-progress" class="text-sm text-gray-600 text-center">Mengimpor repository...</p>
+          </div>
+        </div>
+        <p id="github-modal-error" class="text-xs text-red-500 mt-3 hidden text-center"></p>
       </div>
       <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 rounded-b-2xl">
-        <button onclick="closeGithubModal()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">Batal</button>
-        <button id="github-btn-import" onclick="startGithubImport()" class="px-4 py-2 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] shadow-sm transition-colors focus:outline-none">Import</button>
+        <button onclick="closeGithubModal()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">Tutup</button>
       </div>
     </div>
   </div>
@@ -1675,10 +1697,41 @@
       else reader.readAsDataURL(file);
     }
 
+    function getGithubToken() {
+      return localStorage.getItem('clincoo_github_token') || '';
+    }
+
+    function connectGithub() {
+      var currentUrl = window.location.origin + window.location.pathname + window.location.search;
+      window.location.href = 'https://clincoo-deploy.clincoo.workers.dev/github/auth?redirect=' + encodeURIComponent(currentUrl);
+    }
+
+    function disconnectGithub() {
+      localStorage.removeItem('clincoo_github_token');
+      showGithubConnectView();
+    }
+
+    function showGithubConnectView() {
+      document.getElementById('github-connect-view').classList.remove('hidden');
+      document.getElementById('github-repos-view').classList.add('hidden');
+      document.getElementById('github-progress-view').classList.add('hidden');
+    }
+
+    function showGithubReposView() {
+      document.getElementById('github-connect-view').classList.add('hidden');
+      document.getElementById('github-repos-view').classList.remove('hidden');
+      document.getElementById('github-progress-view').classList.add('hidden');
+    }
+
+    function showGithubProgressView() {
+      document.getElementById('github-connect-view').classList.add('hidden');
+      document.getElementById('github-repos-view').classList.add('hidden');
+      document.getElementById('github-progress-view').classList.remove('hidden');
+    }
+
     function openGithubModal() {
       var overlay = document.getElementById('github-modal-overlay');
       var modal = document.getElementById('github-modal');
-      var status = document.getElementById('github-import-status');
       var errEl = document.getElementById('github-modal-error');
       if (!overlay) return;
       overlay.classList.remove('hidden');
@@ -1686,10 +1739,13 @@
       overlay.classList.remove('opacity-0');
       modal.classList.remove('scale-95', 'opacity-0');
       modal.classList.add('scale-100', 'opacity-100');
-      if (status) status.classList.add('hidden');
       if (errEl) errEl.classList.add('hidden');
-      var input = document.getElementById('github-url-input');
-      if (input) { input.value = ''; setTimeout(function() { input.focus(); }, 100); }
+      if (getGithubToken()) {
+        showGithubReposView();
+        loadGithubRepos();
+      } else {
+        showGithubConnectView();
+      }
     }
 
     function closeGithubModal() {
@@ -1704,54 +1760,82 @@
       }
     }
 
-    async function startGithubImport() {
-      var urlInput = document.getElementById('github-url-input');
+    async function loadGithubRepos() {
+      var token = getGithubToken();
+      var listEl = document.getElementById('github-repo-list');
       var errEl = document.getElementById('github-modal-error');
-      var status = document.getElementById('github-import-status');
-      var progressEl = document.getElementById('github-import-progress');
-      var btnImport = document.getElementById('github-btn-import');
-      if (!urlInput) return;
-      var url = urlInput.value.trim();
-      if (errEl) errEl.classList.add('hidden');
-
-      var match = url.match(/github\.com[\/:]([^\/:]+)[\/:]([^\/:\s?#]+)/);
-      if (!match) {
-        if (errEl) { errEl.textContent = 'URL tidak valid. Contoh: https://github.com/user/repo'; errEl.classList.remove('hidden'); }
-        return;
-      }
-      var owner = match[1];
-      var repo = match[2].replace(/\.git$/, '');
-      var branch = 'main';
-
-      if (status) status.classList.remove('hidden');
-      if (progressEl) progressEl.textContent = 'Mengambil struktur repository...';
-      if (btnImport) btnImport.disabled = true;
-
+      if (!token) { showGithubConnectView(); return; }
+      if (listEl) listEl.innerHTML = '<div class="flex items-center justify-center py-8 text-xs text-gray-400"><svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Memuat repository...</div>';
       try {
-        var treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1');
+        var res = await fetch('https://api.github.com/user/repos?sort=updated&per_page=100', {
+          headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('clincoo_github_token');
+            showGithubConnectView();
+            return;
+          }
+          throw new Error('Gagal memuat repository (' + res.status + ')');
+        }
+        var repos = await res.json();
+        if (repos.length === 0) {
+          if (listEl) listEl.innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Tidak ada repository ditemukan</p>';
+          return;
+        }
+        var html = '';
+        for (var i = 0; i < repos.length; i++) {
+          var r = repos[i];
+          html += '<button onclick="startGithubImport(\'' + r.full_name + '\', \'' + (r.default_branch || 'main') + '\')" class="flex items-center gap-2.5 w-full px-3 py-2.5 text-left bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors focus:outline-none">' +
+            '<svg class="w-4 h-4 text-gray-500 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-6M14 4h6m0 0v6m0-6L10 14"/></svg>' +
+            '<div class="min-w-0 flex-1">' +
+            '<p class="text-xs font-semibold text-gray-800 truncate">' + r.name + '</p>' +
+            '<p class="text-xs text-gray-400 truncate">' + (r.description || r.full_name) + '</p>' +
+            '</div>' +
+            '</button>';
+        }
+        if (listEl) listEl.innerHTML = html;
+      } catch(err) {
+        if (errEl) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+        if (listEl) listEl.innerHTML = '<p class="text-xs text-red-500 text-center py-4">' + err.message + '</p>';
+      }
+    }
+
+    async function startGithubImport(fullName, branch) {
+      var errEl = document.getElementById('github-modal-error');
+      var progressEl = document.getElementById('github-import-progress');
+      var token = getGithubToken();
+      if (!token) { showGithubConnectView(); return; }
+      var parts = fullName.split('/');
+      var owner = parts[0];
+      var repo = parts[1];
+      showGithubProgressView();
+      if (progressEl) progressEl.textContent = 'Mengambil struktur repository...';
+      try {
+        var treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1', {
+          headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+        });
         if (!treeRes.ok) {
           if (treeRes.status === 404) {
-            branch = 'master';
-            treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1');
+            treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/master?recursive=1', {
+              headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+            });
           }
         }
-        if (!treeRes.ok) throw new Error('Repository tidak ditemukan atau private');
+        if (!treeRes.ok) throw new Error('Repository tidak ditemukan');
         var treeData = await treeRes.json();
         var files = (treeData.tree || []).filter(function(item) { return item.type === 'blob'; });
-
         if (files.length === 0) throw new Error('Tidak ada file di repository');
         if (progressEl) progressEl.textContent = '0/' + files.length + ' file...';
-
         var importedCount = 0;
         var batchSize = 5;
         for (var i = 0; i < files.length; i++) {
           var filePath = files[i].path;
-          var parts = filePath.split('/');
-          var fileName = parts.pop();
+          var pathParts = filePath.split('/');
+          var fileName = pathParts.pop();
           var currentPathIter = currentFolderPath;
-
-          for (var j = 0; j < parts.length; j++) {
-            var part = parts[j];
+          for (var j = 0; j < pathParts.length; j++) {
+            var part = pathParts[j];
             if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
             var existingFolder = projectFilesData[currentPathIter].find(function(item) { return item.type === 'folder' && item.name === part; });
             var newPath = currentPathIter === 'root' ? part : currentPathIter + '/' + part;
@@ -1760,7 +1844,6 @@
             }
             currentPathIter = newPath;
           }
-
           var rawUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/' + filePath;
           var fileRes = await fetch(rawUrl);
           if (!fileRes.ok) continue;
@@ -1776,7 +1859,6 @@
               r.readAsDataURL(blob);
             });
           }
-
           if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
           var sizeStr = '0,00 B';
           var rawSize = content.length;
@@ -1801,14 +1883,26 @@
         saveData();
         renderFileList();
         if (progressEl) progressEl.textContent = 'Selesai! ' + importedCount + ' file diimport.';
-        setTimeout(function() { closeGithubModal(); }, 1200);
+        setTimeout(function() { closeGithubModal(); }, 1500);
       } catch(err) {
         console.error('[Clincoo GitHub] Error:', err.message);
-        if (errEl) { errEl.textContent = 'Error: ' + err.message; errEl.classList.remove('hidden'); }
-        if (status) status.classList.add('hidden');
+        if (errEl) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+        showGithubReposView();
       }
-      if (btnImport) btnImport.disabled = false;
     }
+
+    // Detect github_token from URL after OAuth callback
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var ghToken = params.get('github_token');
+      if (ghToken) {
+        localStorage.setItem('clincoo_github_token', ghToken);
+        params.delete('github_token');
+        var newUrl = window.location.pathname;
+        if (params.toString()) newUrl += '?' + params.toString();
+        window.history.replaceState({}, '', newUrl);
+      }
+    })();
 
     async function handleImportZip(e) {
       const file = e.target.files[0];
