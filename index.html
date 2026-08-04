@@ -783,7 +783,7 @@
         <p class="text-xs text-gray-500 leading-relaxed">Buka pengaturan DNS di provider domain Anda, lalu buat record CNAME dengan:</p>
         <div class="mt-1.5 bg-gray-50 rounded-lg px-3 py-2 text-xs font-mono text-gray-700 space-y-0.5">
           <p><span class="text-gray-400">Name:</span> @ atau www</p>
-          <p><span class="text-gray-400">Target:</span> clincoo-app.pages.dev</p>
+          <p><span class="text-gray-400">Target:</span> <span id="cname-target-value">clincoo-app.pages.dev</span></p>
           <p><span class="text-gray-400">Tipe:</span> CNAME</p>
         </div>
       </div>
@@ -1235,6 +1235,13 @@
       if (!popup) return;
       // If already open, close it (toggle behavior)
       if (_domainInfoOpen) { closeDomainInfo(); return; }
+      // Update target CNAME sesuai project slug
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+      var projName = proj ? proj.name : (currentProjectId || 'project');
+      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!projectSlug) projectSlug = 'clincoo-app';
+      var targetSpan = document.getElementById('cname-target-value');
+      if (targetSpan) targetSpan.textContent = projectSlug + '.pages.dev';
       popup.classList.remove('hidden');
       _domainInfoOpen = true;
       if (e) {
@@ -3154,32 +3161,37 @@ async function saveDeployDomain() {
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         return;
       }
-      if (checkBtn) { checkBtn.disabled = true; checkBtn.textContent = 'Memeriksa...'; }
+      // Hitung project slug untuk verifikasi target CNAME
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+      var projName = proj ? proj.name : (currentProjectId || 'project');
+      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!projectSlug) projectSlug = 'clincoo-app';
+      var expectedTarget = projectSlug + '.pages.dev';
+
       statusEl.textContent = 'Sedang memeriksa DNS...';
       statusEl.className = 'text-xs font-medium mt-1 text-gray-500';
       try {
-        // Cari CNAME record untuk domain
         var res = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(domain) + '&type=CNAME');
         var data = await res.json();
         var cnameFound = false;
         var cnameTarget = '';
         if (data.Answer) {
           for (var i = 0; i < data.Answer.length; i++) {
-            if (data.Answer[i].type === 5) { // type 5 = CNAME
+            if (data.Answer[i].type === 5) {
               cnameFound = true;
-              cnameTarget = data.Answer[i].data;
+              cnameTarget = data.Answer[i].data.replace(/\.$/, '');
               break;
             }
           }
         }
-        if (cnameFound && cnameTarget.includes('pages.dev')) {
-          statusEl.textContent = 'DNS terhubung! CNAME mengarah ke ' + cnameTarget + '. SSL akan aktif otomatis.';
+        if (cnameFound && cnameTarget === expectedTarget) {
+          statusEl.textContent = 'DNS terhubung! ' + domain + ' mengarah ke ' + cnameTarget + '. SSL aktif otomatis.';
           statusEl.className = 'text-xs font-medium mt-1 text-green-600';
         } else if (cnameFound) {
-          statusEl.textContent = 'CNAME ditemukan tapi mengarah ke ' + cnameTarget + ', bukan ke layanan ini. Pastikan target CNAME benar.';
+          statusEl.textContent = 'CNAME mengarah ke ' + cnameTarget + ', seharusnya ke ' + expectedTarget + '. Perbaiki target CNAME Anda.';
           statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         } else {
-          statusEl.textContent = 'DNS belum terhubung. Pastikan CNAME sudah dibuat dengan benar, lalu coba lagi.';
+          statusEl.textContent = 'DNS belum terhubung. Pastikan CNAME sudah dibuat dengan target ' + expectedTarget + '.';
           statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         }
       } catch(err) {
