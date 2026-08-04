@@ -2294,6 +2294,7 @@
     var dbFilterCategory = 'ALL';
 
     function initDatabasePage() {
+      loadDatabaseItems();
       if (typeof lucide !== 'undefined') lucide.createIcons();
       if (!_dbInitialized) {
         _dbInitialized = true;
@@ -2364,7 +2365,7 @@
       if (!tbody) return;
       tbody.innerHTML = '';
       if (pageData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-gray-400"><i data-lucide="folder-open" class="w-8 h-8 mx-auto mb-2 opacity-50"></i><p class="text-sm font-medium">Tidak ada data yang ditemukan.</p></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-gray-400"><i data-lucide="folder-open" class="w-8 h-8 mx-auto mb-2 opacity-50"></i><p class="text-sm font-medium">Belum ada proyek. Buat proyek baru untuk melihat data di sini.</p></td></tr>';
       } else {
         pageData.forEach(function(item) {
           var isChecked = dbSelectedIds.has(item.id);
@@ -2474,9 +2475,21 @@
       document.getElementById('db-modal-title').innerText = 'Tambah Entitas Baru';
       document.getElementById('db-entity-id').value = '';
       document.getElementById('db-entity-name').value = '';
-      document.getElementById('db-entity-code').value = 'PRJ-' + Math.floor(1000 + Math.random() * 9000) + 'A';
-      document.getElementById('db-entity-category').value = 'Proyek Desain';
-      document.getElementById('db-entity-status').value = 'Aktif';
+      document.getElementById('db-entity-code').value = '';
+      document.getElementById('db-entity-category').value = 'Proyek Web';
+      document.getElementById('db-entity-status').value = 'Draft';
+      dbOpenModal('db-data-modal');
+    }
+
+    function openDbEditModal(id) {
+      var item = databaseItems.find(function(i) { return i.id === id; });
+      if (!item) return;
+      document.getElementById('db-modal-title').innerText = 'Edit Entitas';
+      document.getElementById('db-entity-id').value = item.id;
+      document.getElementById('db-entity-name').value = item.name;
+      document.getElementById('db-entity-code').value = item.code;
+      document.getElementById('db-entity-category').value = item.category;
+      document.getElementById('db-entity-status').value = item.status;
       dbOpenModal('db-data-modal');
     }
 
@@ -2596,18 +2609,28 @@
         entityForm.addEventListener('submit', function(e) {
           e.preventDefault();
           var id = document.getElementById('db-entity-id').value;
-          var name = document.getElementById('db-entity-name').value;
-          var code = document.getElementById('db-entity-code').value;
+          var name = document.getElementById('db-entity-name').value.trim();
+          if (!name) { dbShowToast('Nama wajib diisi'); return; }
           var category = document.getElementById('db-entity-category').value;
           var status = document.getElementById('db-entity-status').value;
           if (id) {
             var idx = databaseItems.findIndex(function(i) { return i.id === id; });
             if (idx !== -1) {
-              databaseItems[idx] = Object.assign({}, databaseItems[idx], { name: name, code: code, category: category, status: status, updated: 'Baru saja' });
+              databaseItems[idx] = Object.assign({}, databaseItems[idx], { name: name, category: category, status: status, updated: 'Baru saja' });
+              var projIdx = projects.findIndex(function(p) { return p.id === id; });
+              if (projIdx !== -1) {
+                projects[projIdx].name = name;
+                saveData();
+              }
               dbShowToast('Data berhasil diperbarui');
             }
           } else {
-            databaseItems.unshift({ id: Date.now().toString(), code: code, name: name, category: category, status: status, updated: 'Baru saja' });
+            var newId = String(Date.now());
+            projects.push({ id: newId, name: name, desc: '', visibility: 'public' });
+            projectFilesData = { 'root': [] };
+            localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
+            saveData();
+            databaseItems.unshift({ id: newId, code: 'PRJ-' + newId.substring(0, 6).toUpperCase(), name: name, category: category, status: status, updated: 'Baru saja' });
             dbShowToast('Data baru berhasil ditambahkan');
           }
           dbCloseModal('db-data-modal');
@@ -2620,10 +2643,29 @@
       if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener('click', function() {
           if (dbIsBatchDelete) {
+            dbSelectedIds.forEach(function(id) {
+              var projIdx = projects.findIndex(function(p) { return p.id === id; });
+              if (projIdx !== -1) { projects.splice(projIdx, 1); }
+              localStorage.removeItem('clincoo_' + id + '_files');
+              localStorage.removeItem('clincoo_' + id + '_deploy_site');
+              localStorage.removeItem('clincoo_' + id + '_deploy_domain');
+              localStorage.removeItem('clincoo_' + id + '_env_variables');
+              localStorage.removeItem('clincoo_' + id + '_github_repo');
+              localStorage.removeItem('clincoo_' + id + '_security_findings');
+            });
+            saveData();
             databaseItems = databaseItems.filter(function(item) { return !dbSelectedIds.has(item.id); });
             dbShowToast(dbSelectedIds.size + ' data berhasil dihapus');
             dbSelectedIds.clear();
           } else if (dbActiveDeleteId) {
+            var projIdx = projects.findIndex(function(p) { return p.id === dbActiveDeleteId; });
+            if (projIdx !== -1) { projects.splice(projIdx, 1); saveData(); }
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_files');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_deploy_site');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_deploy_domain');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_env_variables');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_github_repo');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_security_findings');
             databaseItems = databaseItems.filter(function(item) { return item.id !== dbActiveDeleteId; });
             dbSelectedIds.delete(dbActiveDeleteId);
             dbShowToast('Data berhasil dihapus');
@@ -2688,6 +2730,81 @@
     // === STORAGE PAGE ===
     function initStoragePage() {
       if (typeof lucide !== 'undefined') lucide.createIcons();
+      calculateStorageUsage();
+    }
+
+    function calculateStorageUsage() {
+      var totalBytes = 0;
+      var filesBytes = 0;
+      var envBytes = 0;
+      var configBytes = 0;
+
+      var stored = localStorage.getItem('clincoo_projects');
+      var projs = [];
+      if (stored) { try { projs = JSON.parse(stored); } catch(e) {} }
+
+      projs.forEach(function(proj) {
+        var filesStr = localStorage.getItem('clincoo_' + proj.id + '_files');
+        if (filesStr) {
+          var size = new Blob([filesStr]).size;
+          filesBytes += size;
+          totalBytes += size;
+        }
+        
+        var envStr = localStorage.getItem('clincoo_' + proj.id + '_env_variables');
+        if (envStr) {
+          var eSize = new Blob([envStr]).size;
+          envBytes += eSize;
+          totalBytes += eSize;
+        }
+
+        ['_deploy_site', '_deploy_domain', '_deploy_branch', '_deploy_https', '_github_repo', '_cf_project', '_security_findings'].forEach(function(suffix) {
+          var cStr = localStorage.getItem('clincoo_' + proj.id + suffix);
+          if (cStr) {
+            var cSize = new Blob([cStr]).size;
+            configBytes += cSize;
+            totalBytes += cSize;
+          }
+        });
+      });
+
+      // Also count the projects list itself
+      if (stored) {
+        var pSize = new Blob([stored]).size;
+        totalBytes += pSize;
+        configBytes += pSize;
+      }
+
+      var totalMB = totalBytes / (1024 * 1024);
+      var filesMB = filesBytes / (1024 * 1024);
+      var envMB = envBytes / (1024 * 1024);
+      var configMB = configBytes / (1024 * 1024);
+      var maxMB = 50; // 50MB localStorage limit
+      var usedPct = Math.min((totalMB / maxMB) * 100, 100);
+      var remainingMB = Math.max(maxMB - totalMB, 0);
+
+      function fmt(mb) {
+        if (mb < 1) return (mb * 1024).toFixed(1) + ' KB';
+        return mb.toFixed(2) + ' MB';
+      }
+
+      var usedEl = document.getElementById('storage-used-display');
+      if (usedEl) usedEl.textContent = fmt(totalMB);
+      
+      var barEl = document.getElementById('storage-bar');
+      if (barEl) barEl.style.width = usedPct + '%';
+      
+      var remEl = document.getElementById('storage-remaining');
+      if (remEl) remEl.textContent = fmt(remainingMB) + ' tersisa di penyimpanan Anda.';
+      
+      var filesEl = document.getElementById('storage-files-size');
+      if (filesEl) filesEl.textContent = fmt(filesMB);
+      
+      var envEl = document.getElementById('storage-env-size');
+      if (envEl) envEl.textContent = fmt(envMB);
+      
+      var configEl = document.getElementById('storage-config-size');
+      if (configEl) configEl.textContent = fmt(configMB);
     }
 
     // === SQL CONNECTION PAGE ===
@@ -2780,6 +2897,10 @@
         btnConnect.disabled = false;
         btnConnect.innerHTML = originalIcon + '<span class="text-[16px] font-semibold tracking-wide text-gray-900" id="sql-btn-text">Simpan & Uji Koneksi</span>';
         if (typeof lucide !== 'undefined') lucide.createIcons();
+        var connections = [];
+        try { connections = JSON.parse(localStorage.getItem('clincoo_sql_connections') || '[]'); } catch(e) {}
+        connections.push({ host: host.value, port: port.value, username: username.value, database: dbname.value, created: new Date().toISOString() });
+        localStorage.setItem('clincoo_sql_connections', JSON.stringify(connections));
         showSqlModal('success', 'Koneksi Berhasil', 'Berhasil mengautentikasi dan terhubung ke database "' + dbname.value + '".');
       }, 1200);
     }
