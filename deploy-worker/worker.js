@@ -14,7 +14,7 @@ function jsonRes(data, status = 200) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, X-GitHub-Token',
     }
   });
 }
@@ -119,7 +119,7 @@ async function handleRequest(request, env) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Headers': 'Content-Type, X-GitHub-Token',
       }
     });
   }
@@ -169,6 +169,85 @@ async function handleRequest(request, env) {
     }
   }
   // === END GITHUB OAUTH ===
+
+  // === GITHUB API PROXY (avoids client-side network/CORS issues) ===
+  if (path === '/github/repos') {
+    const token = request.headers.get('X-GitHub-Token') || url.searchParams.get('token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    try {
+      const ghRes = await fetch('https://api.github.com/user/repos?sort=updated&per_page=100', {
+        headers: {
+          'Authorization': 'token ' + token,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Clincoo-App'
+        }
+      });
+      const data = await ghRes.json();
+      if (!ghRes.ok) {
+        return jsonRes({ success: false, error: (data && data.message) || ('GitHub error ' + ghRes.status), status: ghRes.status }, ghRes.status === 401 ? 401 : 500);
+      }
+      return jsonRes({ success: true, data: data });
+    } catch(e) {
+      return jsonRes({ success: false, error: 'Proxy error: ' + e.message }, 500);
+    }
+  }
+
+  if (path === '/github/tree') {
+    const token = request.headers.get('X-GitHub-Token') || url.searchParams.get('token') || '';
+    const owner = url.searchParams.get('owner') || '';
+    const repo = url.searchParams.get('repo') || '';
+    let branch = url.searchParams.get('branch') || 'main';
+    if (!token || !owner || !repo) return jsonRes({ success: false, error: 'token, owner, repo required' }, 400);
+    try {
+      let ghRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + encodeURIComponent(branch) + '?recursive=1', {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      if (!ghRes.ok && branch !== 'master') {
+        ghRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/master?recursive=1', {
+          headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+        });
+        branch = 'master';
+      }
+      const data = await ghRes.json();
+      if (!ghRes.ok) {
+        return jsonRes({ success: false, error: (data && data.message) || 'Repository tidak ditemukan', status: ghRes.status }, 500);
+      }
+      return jsonRes({ success: true, data: data, branch: branch });
+    } catch(e) {
+      return jsonRes({ success: false, error: 'Proxy error: ' + e.message }, 500);
+    }
+  }
+
+  if (path === '/github/file') {
+    const token = request.headers.get('X-GitHub-Token') || url.searchParams.get('token') || '';
+    const owner = url.searchParams.get('owner') || '';
+    const repo = url.searchParams.get('repo') || '';
+    const branch = url.searchParams.get('branch') || 'main';
+    const filePath = url.searchParams.get('path') || '';
+    if (!owner || !repo || !filePath) return jsonRes({ success: false, error: 'owner, repo, path required' }, 400);
+    try {
+      const rawUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/' + filePath;
+      const headers = {};
+      if (token) headers['Authorization'] = 'token ' + token;
+      const fileRes = await fetch(rawUrl, { headers });
+      if (!fileRes.ok) return jsonRes({ success: false, error: 'File not found: ' + fileRes.status }, 404);
+      const buf = await fileRes.arrayBuffer();
+      const contentType = fileRes.headers.get('content-type') || 'application/octet-stream';
+      return new Response(buf, {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, X-GitHub-Token',
+        }
+      });
+    } catch(e) {
+      return jsonRes({ success: false, error: 'Proxy error: ' + e.message }, 500);
+    }
+  }
+  // === END GITHUB API PROXY ===
+
 
   const cfAccountId = env.CF_ACCOUNT_ID;
   const cfApiToken = env.CF_API_TOKEN;
