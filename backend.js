@@ -191,14 +191,26 @@ async function _deleteProjectFromD1(projectId, projName) {
     var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     if (!projectSlug) projectSlug = 'clincoo-app';
 
+    // 1. Delete Cloudflare Pages project
     try {
-      var delRes = await fetch('https://clincoo-deploy.clincoo.workers.dev/project?projectName=' + encodeURIComponent(projectSlug), {
+      var pagesRes = await fetch('https://clincoo-deploy.clincoo.workers.dev?projectName=' + encodeURIComponent(projectSlug), {
         method: 'DELETE'
       });
-      var delData = await delRes.json().catch(function() { return {}; });
-      console.log('[Clincoo Sync] Cloudflare cleanup:', delData.message || 'done');
+      var pagesResult = await pagesRes.json().catch(function() { return {}; });
+      console.log('[Clincoo Sync] Pages delete:', pagesResult.success ? 'OK' : (pagesResult.error || 'unknown'));
     } catch(e2) {
-      console.warn('[Clincoo Sync] Error undeploying from Cloudflare:', e2.message);
+      console.warn('[Clincoo Sync] Error deleting Cloudflare Pages:', e2.message);
+    }
+
+    // 2. Delete Cloudflare Worker script
+    try {
+      var workerRes = await fetch('https://clincoo-deploy.clincoo.workers.dev/worker?projectName=' + encodeURIComponent(projectSlug), {
+        method: 'DELETE'
+      });
+      var workerResult = await workerRes.json().catch(function() { return {}; });
+      console.log('[Clincoo Sync] Worker delete:', workerResult.success ? 'OK' : (workerResult.error || 'unknown'));
+    } catch(e3) {
+      console.warn('[Clincoo Sync] Error deleting Cloudflare Worker:', e3.message);
     }
 
     // 2. Delete custom domain route if any
