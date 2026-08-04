@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Halaman Tidak Ditemukan | Clincoo</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Menggunakan font yang sama dengan aplikasi utama -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f7f9; /* Sesuai dengan background aplikasi utama */
+    }
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="text-gray-900 antialiased min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+
+  <!-- Dekorasi Latar Belakang (Opsional, sangat halus) -->
+  <div class="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+  <main class="w-full max-w-lg mx-auto text-center z-10 animate-fade-in">
+    
+    <!-- Ikon / Logo Elemen -->
+    <div class="mx-auto h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-200/80 mb-8">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+      </svg>
+    </div>
+
+    <!-- Angka 404 -->
+    <h1 class="text-[7rem] sm:text-[9rem] font-bold font-display leading-none tracking-tighter text-black mb-2">
+      404
+    </h1>
+
+    <!-- Sentuhan gaya kode/developer -->
+    <div class="inline-flex items-center justify-center px-3 py-1 bg-gray-100 border border-gray-200 rounded-md mb-6">
+      <span class="font-mono text-xs text-gray-500">Error: Route_Not_Found</span>
+    </div>
+
+    <!-- Pesan -->
+    <div class="space-y-3 mb-10 px-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-800 tracking-tight">Halaman tidak ditemukan</h2>
+      <p class="text-gray-500 text-sm sm:text-base max-w-sm mx-auto leading-relaxed">
+        Maaf, halaman proyek atau berkas yang Anda cari tidak ada atau telah dipindahkan.
+      </p>
+    </div>
+
+    <!-- Tombol Kembali (Sesuai dengan style tombol utama aplikasi) -->
+    <a href="/" class="inline-flex items-center gap-2 px-6 py-3 bg-[#273849] text-white rounded-full shadow-md hover:bg-[#1a2530] transition-all focus:outline-none active:scale-95">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-medium text-sm">Kembali ke Beranda</span>
+    </a>
+
+  </main>
+
+</body>
+</html>
