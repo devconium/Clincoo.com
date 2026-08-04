@@ -3236,7 +3236,14 @@ async function saveDeployDomain() {
     // === DEPLOY 404 PAGE ===
     async function deploy404Page(projectSlug) {
       if (!projectSlug) return;
-      var notFoundHtml = '<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>404 - Clincoo</title>\n<style>\n*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f1117;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}\n.logo{width:48px;height:48px;margin:0 auto 2rem}\n.logo svg{width:100%;height:100%}\nh1{font-size:5rem;font-weight:700;margin-bottom:0.5rem;letter-spacing:-0.05em}\nh2{font-size:1.25rem;font-weight:500;color:#9ca3af;margin-bottom:1.5rem}\np{color:#6b7280;max-width:400px;line-height:1.6}\n.btn{display:inline-block;margin-top:2rem;padding:0.75rem 1.5rem;background:#fff;color:#0f1117;border-radius:0.5rem;text-decoration:none;font-weight:600;font-size:0.875rem;transition:opacity 0.2s}\n.btn:hover{opacity:0.9}\n</style>\n</head>\n<body>\n<div>\n<div class="logo"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#fff"/><g fill="#000"><path d="M10 16C7 10 9 7 12 7C14 7 15 11 13 16Z"/><path d="M22 16C25 10 23 7 20 7C18 7 17 11 19 16Z"/><path d="M16 27C24 27 28 22.5 28 17C28 12.5 21 11.5 16 11.5C11 11.5 4 12.5 4 17C4 22.5 8 27 16 27Z"/></g></svg></div>\n<h1>404</h1>\n<h2>Halaman tidak ditemukan</h2>\n<p>Domain ini sudah terhubung ke Clincoo, tetapi belum ada proyek yang dipublikasikan.</p>\n<a href="https://clincoo.com" class="btn">Buat proyek di Clincoo</a>\n</div>\n</body>\n</html>';
+      // Inject redirect script if custom domain is set and DNS is verified
+      var _cd = localStorage.getItem(getDeployDomainKey());
+      var _dnsOk = localStorage.getItem(getDnsVerifiedKey()) === 'true';
+      var _redir = '';
+      if (_cd && _dnsOk) {
+        _redir = '<script>if(location.hostname.endsWith(".pages.dev")){location.replace(location.href.replace(location.hostname,"' + _cd + '"))}<\/script>';
+      }
+      var notFoundHtml = '<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>404 - Clincoo</title>\n' + _redir + '\n<style>\n*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f1117;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}\n.logo{width:48px;height:48px;margin:0 auto 2rem}\n.logo svg{width:100%;height:100%}\nh1{font-size:5rem;font-weight:700;margin-bottom:0.5rem;letter-spacing:-0.05em}\nh2{font-size:1.25rem;font-weight:500;color:#9ca3af;margin-bottom:1.5rem}\np{color:#6b7280;max-width:400px;line-height:1.6}\n.btn{display:inline-block;margin-top:2rem;padding:0.75rem 1.5rem;background:#fff;color:#0f1117;border-radius:0.5rem;text-decoration:none;font-weight:600;font-size:0.875rem;transition:opacity 0.2s}\n.btn:hover{opacity:0.9}\n</style>\n</head>\n<body>\n<div>\n<div class="logo"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#fff"/><g fill="#000"><path d="M10 16C7 10 9 7 12 7C14 7 15 11 13 16Z"/><path d="M22 16C25 10 23 7 20 7C18 7 17 11 19 16Z"/><path d="M16 27C24 27 28 22.5 28 17C28 12.5 21 11.5 16 11.5C11 11.5 4 12.5 4 17C4 22.5 8 27 16 27Z"/></g></svg></div>\n<h1>404</h1>\n<h2>Halaman tidak ditemukan</h2>\n<p>Domain ini sudah terhubung ke Clincoo, tetapi belum ada proyek yang dipublikasikan.</p>\n<a href="https://clincoo.com" class="btn">Buat proyek di Clincoo</a>\n</div>\n</body>\n</html>';
       try {
         var res = await fetch('https://clincoo-deploy.clincoo.workers.dev', {
           method: 'POST',
@@ -3299,6 +3306,15 @@ async function saveDeployDomain() {
                   localStorage.setItem(getDnsVerifiedKey(), 'true');
                   if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
                   renderDeployStatus();
+                  // Deploy/update 404 page with redirect if no real deployment exists
+                  var _existingSite = null;
+                  try { _existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+                  if (!_existingSite || !_existingSite.url) {
+                    var _proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+                    var _projName = _proj ? _proj.name : (currentProjectId || 'project');
+                    var _projectSlug = _projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+                    if (_projectSlug) deploy404Page(_projectSlug);
+                  }
                   found = true;
                   break;
                 } else if (cnameTarget.indexOf('pages.dev') !== -1) {
@@ -3326,6 +3342,14 @@ async function saveDeployDomain() {
               localStorage.setItem(getDnsVerifiedKey(), 'true');
               if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
               renderDeployStatus();
+              var _existingSite2 = null;
+              try { _existingSite2 = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+              if (!_existingSite2 || !_existingSite2.url) {
+                var _proj2 = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+                var _projName2 = _proj2 ? _proj2.name : (currentProjectId || 'project');
+                var _projectSlug2 = _projName2.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+                if (_projectSlug2) deploy404Page(_projectSlug2);
+              }
               found = true;
             }
           }
@@ -3447,10 +3471,11 @@ async function saveDeployDomain() {
         '})();\n' +
         '<\/script>';
 
-      // Redirect script: pages.dev -> custom domain
+      // Redirect script: pages.dev -> custom domain (only when DNS is verified)
       var _customDomain = localStorage.getItem(getDeployDomainKey());
+      var _dnsVerifiedDeploy = localStorage.getItem(getDnsVerifiedKey()) === 'true';
       var _redirectScript = '';
-      if (_customDomain) {
+      if (_customDomain && _dnsVerifiedDeploy) {
         _redirectScript = '<script>if(location.hostname.endsWith(".pages.dev")){location.replace(location.href.replace(location.hostname,"' + _customDomain + '"))}<\/script>';
       }
 
