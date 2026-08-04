@@ -183,7 +183,7 @@ async function _deleteProjectFromD1(projectId, projName) {
     await _api('DELETE', '/api/projects/' + pid);
     await _api('DELETE', '/api/kv/clincoo_' + pid + '_files');
 
-    // Undeploy from Cloudflare Pages
+    // Undeploy from Cloudflare Pages + Workers
     if (!projName) {
       var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return String(p.id) === pid; }) : null;
       projName = proj ? proj.name : pid;
@@ -191,11 +191,13 @@ async function _deleteProjectFromD1(projectId, projName) {
     var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     if (!projectSlug) projectSlug = 'clincoo-app';
     try {
-      await fetch('https://clincoo-deploy.clincoo.workers.dev?projectName=' + encodeURIComponent(projectSlug), {
+      var delRes = await fetch('https://clincoo-deploy.clincoo.workers.dev/project?projectName=' + encodeURIComponent(projectSlug), {
         method: 'DELETE'
       });
+      var delData = await delRes.json();
+      console.log('[Clincoo Sync] Cloudflare cleanup:', delData.message || 'done');
     } catch(e2) {
-      console.warn('[Clincoo Sync] Error undeploying from Pages:', e2.message);
+      console.warn('[Clincoo Sync] Error undeploying from Cloudflare:', e2.message);
     }
 
     // Clean up deploy-related localStorage keys
