@@ -1083,25 +1083,31 @@
       document.removeEventListener('click', closeChartInfo);
     }
 
+    var _domainInfoOpen = false;
     function showDomainInfo(e) {
       if (e) e.stopPropagation();
       var popup = document.getElementById('domain-info-popup');
       if (!popup) return;
+      // If already open, close it (toggle behavior)
+      if (_domainInfoOpen) { closeDomainInfo(); return; }
       popup.classList.remove('hidden');
+      _domainInfoOpen = true;
       if (e) {
-        popup.style.top = (e.clientY + 8) + 'px';
+        popup.style.top = (e.clientY + 12) + 'px';
         var leftPos = e.clientX - 256;
         if (leftPos < 10) leftPos = 10;
         popup.style.left = leftPos + 'px';
       }
+      // Delay adding close listener to avoid the same click closing it
       setTimeout(function() {
         document.addEventListener('click', closeDomainInfo);
-      }, 10);
+      }, 300);
     }
 
     function closeDomainInfo() {
       var popup = document.getElementById('domain-info-popup');
       if (popup) popup.classList.add('hidden');
+      _domainInfoOpen = false;
       document.removeEventListener('click', closeDomainInfo);
     }
 
