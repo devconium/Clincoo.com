@@ -26,14 +26,18 @@ function guessContentType(path) {
     'json': 'application/json', 'png': 'image/png', 'jpg': 'image/jpeg',
     'jpeg': 'image/jpeg', 'gif': 'image/gif', 'svg': 'image/svg+xml',
     'ico': 'image/x-icon', 'webp': 'image/webp', 'woff': 'font/woff',
-    'woff2': 'font/woff2', 'ttf': 'font/ttf', 'txt': 'text/plain'
+    'woff2': 'font/woff2', 'ttf': 'font/ttf', 'txt': 'text/plain',
+    'map': 'application/json', 'xml': 'application/xml', 'pdf': 'application/pdf',
+    'zip': 'application/zip', 'mp4': 'video/mp4', 'webm': 'video/webm',
+    'mp3': 'audio/mpeg', 'ogg': 'audio/ogg', 'wav': 'audio/wav'
   };
   return types[ext] || 'application/octet-stream';
 }
 
 function getExtension(path) {
   const parts = path.split('.');
-  return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
+  if (parts.length < 2) return '';
+  return '.' + parts[parts.length - 1].toLowerCase();
 }
 
 function base64Encode(text) {
@@ -60,6 +64,52 @@ function buildMultipartFormData(fields) {
   }
   body += '--' + boundary + '--\r\n';
   return { body, contentType: 'multipart/form-data; boundary=' + boundary };
+}
+
+function sanitizeName(name) {
+  return (name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+}
+
+async function deletePagesProject(cfBase, authHeaders, projectName) {
+  try {
+    await fetch(cfBase + '/' + projectName, { method: 'DELETE', headers: authHeaders });
+    return { ok: true, target: 'pages' };
+  } catch(e) {
+    return { ok: false, target: 'pages', error: e.message };
+  }
+}
+
+async function deleteWorkerScript(cfAccountId, authHeaders, workerName) {
+  try {
+    const workerUrl = 'https://api.cloudflare.com/client/v4/accounts/' + cfAccountId + '/workers/scripts/' + workerName;
+    const res = await fetch(workerUrl, { method: 'DELETE', headers: authHeaders });
+    const data = await res.json();
+    if (!data.success && !res.ok) {
+      return { ok: false, target: 'worker', error: JSON.stringify(data.errors || data) };
+    }
+    return { ok: true, target: 'worker' };
+  } catch(e) {
+    return { ok: false, target: 'worker', error: e.message };
+  }
+}
+
+async function uploadWithRetry(url, options, maxRetries = 3) {
+  let lastError = null;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      const data = await res.json();
+      if (data.success || res.ok) return { ok: true, data };
+      lastError = JSON.stringify(data.errors || data);
+    } catch(e) {
+      lastError = e.message;
+    }
+    // Wait before retry (exponential backoff)
+    if (attempt < maxRetries - 1) {
+      await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
+    }
+  }
+  return { ok: false, error: lastError };
 }
 
 async function handleRequest(request, env) {
@@ -93,7 +143,7 @@ async function handleRequest(request, env) {
       try { body = await request.json(); } catch(e) {
         return jsonRes({ success: false, error: 'Invalid JSON' }, 400);
       }
-      const projectName = (body.projectName || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      const projectName = sanitizeName(body.projectName || '');
       const domain = (body.domain || '').trim();
       if (!projectName || !domain) {
         return jsonRes({ success: false, error: 'projectName and domain required' }, 400);
@@ -118,12 +168,11 @@ async function handleRequest(request, env) {
     }
 
     if (request.method === 'DELETE') {
-      const projectName = (url.searchParams.get('projectName') || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      const projectName = sanitizeName(url.searchParams.get('projectName') || '');
       const domain = (url.searchParams.get('domain') || '').trim();
       if (!projectName) {
         return jsonRes({ success: false, error: 'projectName required' }, 400);
       }
-      // If domain specified, only remove the domain
       if (domain) {
         try {
           await fetch(cfBase + '/' + projectName + '/domains/' + domain, {
@@ -135,22 +184,26 @@ async function handleRequest(request, env) {
           return jsonRes({ success: false, error: 'Domain error: ' + e.message }, 500);
         }
       }
-      // No domain = delete entire Pages project
-      try {
-        const delRes = await fetch(cfBase + '/' + projectName, {
-          method: 'DELETE',
-          headers: authHeaders
-        });
-        return jsonRes({ success: true, message: 'Project deleted from Pages' });
-      } catch(e) {
-        return jsonRes({ success: false, error: 'Delete project error: ' + e.message }, 500);
-      }
+      // No domain = delete entire project (Pages + Worker)
+      const results = [];
+      const pagesResult = await deletePagesProject(cfBase, authHeaders, projectName);
+      results.push(pagesResult);
+      const workerResult = await deleteWorkerScript(cfAccountId, authHeaders, projectName);
+      results.push(workerResult);
+      const backendWorkerResult = await deleteWorkerScript(cfAccountId, authHeaders, projectName + '-backend');
+      if (!backendWorkerResult.ok) results.push(backendWorkerResult);
+      const allOk = results.every(r => r.ok);
+      return jsonRes({
+        success: allOk,
+        message: allOk ? 'Project fully deleted (Pages + Workers)' : 'Partial deletion',
+        details: results
+      });
     }
   }
 
   // === DELETE PAGES PROJECT (DELETE /) ===
   if (request.method === 'DELETE' && (path === '/' || path === '')) {
-    const projectName = (url.searchParams.get('projectName') || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    const projectName = sanitizeName(url.searchParams.get('projectName') || '');
     if (!projectName) {
       return jsonRes({ success: false, error: 'projectName required' }, 400);
     }
@@ -171,7 +224,7 @@ async function handleRequest(request, env) {
 
   // === DELETE WORKER SCRIPT (DELETE /worker) ===
   if (request.method === 'DELETE' && path === '/worker') {
-    const projectName = (url.searchParams.get('projectName') || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    const projectName = sanitizeName(url.searchParams.get('projectName') || '');
     if (!projectName) {
       return jsonRes({ success: false, error: 'projectName required' }, 400);
     }
@@ -182,7 +235,6 @@ async function handleRequest(request, env) {
         headers: authHeaders
       });
       const delData = await delRes.json();
-      // Worker might not exist (never created or already deleted)
       if (!delData.success && delRes.status !== 404 && !JSON.stringify(delData.errors || '').includes('not found')) {
         return jsonRes({ success: false, error: 'Worker delete failed: ' + JSON.stringify(delData.errors) }, 500);
       }
@@ -202,12 +254,18 @@ async function handleRequest(request, env) {
     return jsonRes({ success: false, error: 'Invalid JSON body' }, 400);
   }
 
-  const projectName = (body.projectName || 'clincoo-app').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  const projectName = sanitizeName(body.projectName || 'clincoo-app');
   const files = Array.isArray(body.files) ? body.files : [];
   const branch = body.branch || 'main';
 
   if (files.length === 0) {
     return jsonRes({ success: false, error: 'No files to deploy' }, 400);
+  }
+
+  // Validate all files have content
+  const emptyFiles = files.filter(f => !f.content || f.content.length === 0);
+  if (emptyFiles.length > 0) {
+    return jsonRes({ success: false, error: 'Empty file content: ' + emptyFiles.map(f => f.path).join(', ') }, 400);
   }
 
   // 1. Create project if not exists
@@ -249,9 +307,10 @@ async function handleRequest(request, env) {
   const fileData = [];
   for (const file of files) {
     const hash = hashFile(file.content, file.path);
-    manifest["/" + file.path.replace(/^\//, "")] = hash;
+    const cleanPath = file.path.replace(/^\//, '');
+    manifest['/' + cleanPath] = hash;
     fileData.push({
-      path: file.path,
+      path: cleanPath,
       hash: hash,
       content: file.content,
       contentType: guessContentType(file.path)
@@ -274,11 +333,16 @@ async function handleRequest(request, env) {
     if (checkData.success && Array.isArray(checkData.result)) {
       missingHashes = checkData.result;
     }
-  } catch(e) {}
+  } catch(e) {
+    // If check-missing fails, upload all files to be safe
+    missingHashes = allHashes;
+  }
 
-  // 5. Upload missing files in batches
+  // 5. Upload missing files in batches — with retry and error checking
   const toUpload = fileData.filter(f => missingHashes.includes(f.hash));
-  const batchSize = 20;
+  const batchSize = 5; // Smaller batches for reliability
+  const uploadErrors = [];
+
   for (let i = 0; i < toUpload.length; i += batchSize) {
     const batch = toUpload.slice(i, i + batchSize);
     const uploadBody = batch.map(f => ({
@@ -287,29 +351,52 @@ async function handleRequest(request, env) {
       metadata: { contentType: f.contentType },
       base64: true
     }));
-    try {
-      await fetch('https://api.cloudflare.com/client/v4/pages/assets/upload', {
+
+    const result = await uploadWithRetry(
+      'https://api.cloudflare.com/client/v4/pages/assets/upload',
+      {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + uploadJwt
         },
         body: JSON.stringify(uploadBody)
-      });
-    } catch(e) {}
+      },
+      3 // max retries
+    );
+
+    if (!result.ok) {
+      uploadErrors.push({ batch: i / batchSize, files: batch.map(f => f.path), error: result.error });
+    }
   }
 
-  // 6. Upsert hashes
-  try {
-    await fetch('https://api.cloudflare.com/client/v4/pages/assets/upsert-hashes', {
+  // If any uploads failed, return error — don't create broken deployment
+  if (uploadErrors.length > 0) {
+    return jsonRes({
+      success: false,
+      error: 'File upload failed for ' + uploadErrors.length + ' batch(es). Files: ' +
+        uploadErrors.flatMap(e => e.files).join(', ').substring(0, 200),
+      details: uploadErrors
+    }, 500);
+  }
+
+  // 6. Upsert hashes — with error checking
+  const upsertResult = await uploadWithRetry(
+    'https://api.cloudflare.com/client/v4/pages/assets/upsert-hashes',
+    {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + uploadJwt
       },
       body: JSON.stringify({ hashes: allHashes })
-    });
-  } catch(e) {}
+    },
+    3
+  );
+
+  if (!upsertResult.ok) {
+    return jsonRes({ success: false, error: 'Failed to register file hashes: ' + upsertResult.error }, 500);
+  }
 
   // 7. Create deployment with manifest (multipart form-data)
   try {
@@ -341,7 +428,8 @@ async function handleRequest(request, env) {
       url: productionUrl,
       productionUrl: productionUrl,
       deploymentId: deploymentId,
-      status: result.latest_stage ? result.latest_stage.name : 'idle'
+      status: result.latest_stage ? result.latest_stage.name : 'idle',
+      filesDeployed: files.length
     });
   } catch(e) {
     return jsonRes({ success: false, error: 'Deploy error: ' + e.message }, 500);
