@@ -454,6 +454,34 @@ async function handleRequest(request, env) {
     }
   }
 
+  // === SSL ENDPOINT ===
+  if (path === '/ssl' && request.method === 'POST') {
+    let body;
+    try { body = await request.json(); } catch(e) {
+      return jsonRes({ success: false, error: 'Invalid JSON' }, 400);
+    }
+    const projectName = sanitizeName(body.projectName || '');
+    const enabled = body.enabled !== false;
+    if (!projectName) {
+      return jsonRes({ success: false, error: 'projectName required' }, 400);
+    }
+    try {
+      // Cloudflare Pages: toggle "Always Use HTTPS" setting
+      const res = await fetch(cfBase + '/' + projectName + '/settings', {
+        method: 'PATCH',
+        headers: authHeaders,
+        body: JSON.stringify({ always_use_https: { enabled: enabled } })
+      });
+      const data = await res.json();
+      if (!data.success) {
+        return jsonRes({ success: false, error: 'SSL setting failed: ' + JSON.stringify(data.errors) }, 500);
+      }
+      return jsonRes({ success: true, message: 'SSL ' + (enabled ? 'enabled' : 'disabled') });
+    } catch(e) {
+      return jsonRes({ success: false, error: 'SSL error: ' + e.message }, 500);
+    }
+  }
+
   // === DELETE PAGES PROJECT (DELETE /) ===
   if (request.method === 'DELETE' && (path === '/' || path === '')) {
     const projectName = sanitizeName(url.searchParams.get('projectName') || '');
