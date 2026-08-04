@@ -90,3 +90,49 @@
     .analytics-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
     .analytics-scroll::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
     .analytics-scroll { scrollbar-width: thin; scrollbar-color: #e5e7eb transparent; }
+
+/* Database & Storage pages */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .custom-checkbox {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #e5e7eb;
+      border-radius: 6px;
+      background-color: white;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .custom-checkbox:checked {
+      background-color: #111827;
+      border-color: #111827;
+    }
+    .custom-checkbox:checked::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 5px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    
+    .db-modal-backdrop { transition: opacity 0.25s ease-in-out; }
+    .db-modal-content { transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease-in-out; }
+    
+    @keyframes fadeInStep {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-step { animation: fadeInStep 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    
+    .sql-modal-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    /* Sidebar dropdown */
+    .sidebar-dropdown-arrow { transition: transform 0.2s ease; }
+    .sidebar-dropdown-open .sidebar-dropdown-arrow { transform: rotate(180deg); }
