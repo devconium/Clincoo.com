@@ -377,6 +377,9 @@
                 </button>
               </div>
               <span id="deploy-prod-status" class="text-xs text-gray-400"></span>
+              <div id="deploy-error-box" class="hidden rounded-lg border border-red-200 bg-red-50 px-4 py-3 mt-2">
+                <p id="deploy-error-msg" class="text-sm text-red-700"></p>
+              </div>
             </div>
           </div>
 
@@ -387,7 +390,7 @@
             <div class="flex flex-col gap-2">
               <input type="text" id="deploy-domain" placeholder="namadomain.com" class="custom-input w-full px-4 py-3 rounded-xl border text-sm font-mono">
               <div class="flex items-center gap-2">
-                <button onclick="saveDeployDomain()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm">Menyimpan</button>
+                <button onclick="saveDeployDomain()" id="save-domain-btn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm">Simpan</button>
                 <button onclick="removeDeployDomain()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">Menghapus</button>
               </div>
             </div>
@@ -2201,15 +2204,23 @@
       if (urlEl) { urlEl.textContent = site.url; urlEl.href = site.url; }
       if (visitEl) visitEl.href = site.url;
       if (timeEl) timeEl.textContent = site.time || '';
+      // Load saved domain into input
+      const domainInput = document.getElementById('deploy-domain');
+      if (domainInput) {
+        const savedDomain = localStorage.getItem(getDeployDomainKey());
+        if (savedDomain) domainInput.value = savedDomain;
+      }
     }
 
 async function saveDeployDomain() {
       const domainInput = document.getElementById('deploy-domain');
+      const saveBtn = document.getElementById('save-domain-btn');
       if (!domainInput) return;
       const domain = domainInput.value.trim();
       if (!domain) {
         return;
       }
+      if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan...'; }
       localStorage.setItem(getDeployDomainKey(), domain);
       if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), domain);
 
@@ -2234,6 +2245,7 @@ async function saveDeployDomain() {
         console.warn('[Clincoo] Gagal menyimpan domain');
       }
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan'; }
     }
 
     async function removeDeployDomain() {
@@ -2266,10 +2278,12 @@ async function saveDeployDomain() {
     });
 
     var autoDeployTimer = null;
+    var _isDeploying = false;
     function triggerAutoDeploy() {
       if (autoDeployTimer) clearTimeout(autoDeployTimer);
       autoDeployTimer = setTimeout(function() {
         if (!currentProjectId) return;
+        if (_isDeploying) return;
         var site = null;
         try { site = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
         if (site && site.url) {
@@ -2292,9 +2306,11 @@ async function saveDeployDomain() {
     }
 
     async function deployToProduction(isAuto) {
+      if (_isDeploying) return;
+      _isDeploying = true;
       var btn = document.getElementById('deploy-prod-btn');
       var status = document.getElementById('deploy-prod-status');
-      if (!btn && !isAuto) return;
+      if (!btn && !isAuto) { _isDeploying = false; return; }
 
       var domainInput = document.getElementById('deploy-domain');
       var branchSelect = document.getElementById('deploy-branch');
@@ -2318,8 +2334,16 @@ async function saveDeployDomain() {
       }
       if (allFiles.length === 0) {
         if (btn) { btn.disabled = false; btn.innerHTML = '<span>Menyimpan</span>'; }
+        var errBox = document.getElementById('deploy-error-box');
+        var errMsg = document.getElementById('deploy-error-msg');
+        if (errBox) { errBox.classList.remove('hidden'); }
+        if (errMsg) { errMsg.textContent = 'Tidak ada file untuk dipublikasi. Buat file di tab Kode terlebih dahulu.'; }
+        _isDeploying = false;
         return;
       }
+      // Hide previous error
+      var errBox = document.getElementById('deploy-error-box');
+      if (errBox) errBox.classList.add('hidden');
 
       var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
       var projName = proj ? proj.name : (currentProjectId || 'project');
@@ -2406,11 +2430,24 @@ async function saveDeployDomain() {
           if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
           renderDeployStatus();
           if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+          _isDeploying = false;
+          var succErrBox = document.getElementById('deploy-error-box');
+          if (succErrBox) succErrBox.classList.add('hidden');
         } else {
-          throw new Error(result.error || 'Publikasi gagal');
+          var deployErr = result.error || 'Publikasi gagal';
+          var errBox2 = document.getElementById('deploy-error-box');
+          var errMsg2 = document.getElementById('deploy-error-msg');
+          if (errBox2) { errBox2.classList.remove('hidden'); }
+          if (errMsg2) { errMsg2.textContent = deployErr; }
+          throw new Error(deployErr);
         }
       } catch(err) {
         if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+        var errBox = document.getElementById('deploy-error-box');
+        var errMsg = document.getElementById('deploy-error-msg');
+        if (errBox) { errBox.classList.remove('hidden'); }
+        if (errMsg) { errMsg.textContent = 'Gagal mempublikasi: ' + (err.message || 'Kesalahan jaringan'); }
+        _isDeploying = false;
       }
     }
 
