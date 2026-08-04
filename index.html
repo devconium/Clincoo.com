@@ -508,7 +508,6 @@
                 </button>
                 <div id="analytics-project-dropdown" class="hidden absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all z-50">
                   <div class="p-1 max-h-60 overflow-y-auto hide-scrollbar" id="analytics-project-list">
-                    <p class="text-xs text-gray-400 px-3 py-2">Belum ada proyek dikunjungi</p>
                   </div>
                 </div>
               </div>
@@ -580,7 +579,7 @@
 
       <!-- Main Chart (Line - Full Width) -->
       <div class="p-5 mb-4">
-        <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 7 Hari Terakhir<button onclick="showChartInfo('lineChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+        <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 7 Hari Terakhir<button onclick="showChartInfo('lineChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
         <p class="text-xs text-gray-400 mb-4">Views harian dari seluruh situs</p>
         <div style="height: 260px;"><canvas id="lineChart"></canvas></div>
       </div>
@@ -588,47 +587,47 @@
       <!-- Charts Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik Bulanan<button onclick="showChartInfo('barChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik Bulanan<button onclick="showChartInfo('barChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Views per bulan</p>
           <div style="height: 220px;"><canvas id="barChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Sumber Trafik<button onclick="showChartInfo('pieChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Sumber Trafik<button onclick="showChartInfo('pieChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi sumber kunjungan</p>
           <div style="height: 220px;"><canvas id="pieChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Perangkat<button onclick="showChartInfo('doughnutChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Perangkat<button onclick="showChartInfo('doughnutChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Tipe perangkat pengunjung</p>
           <div style="height: 220px;"><canvas id="doughnutChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Bahasa<button onclick="showChartInfo('radarChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Bahasa<button onclick="showChartInfo('radarChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi bahasa pengguna</p>
           <div style="height: 220px;"><canvas id="radarChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Negara Asal<button onclick="showChartInfo('polarAreaChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Negara Asal<button onclick="showChartInfo('polarAreaChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi negara pengunjung</p>
           <div style="height: 220px;"><canvas id="polarAreaChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 24 Jam<button onclick="showChartInfo('scatterChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 24 Jam<button onclick="showChartInfo('scatterChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Views per jam</p>
           <div style="height: 220px;"><canvas id="scatterChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Visitors x Views<button onclick="showChartInfo('bubbleChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Visitors x Views<button onclick="showChartInfo('bubbleChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Korelasi pengunjung dan views</p>
           <div style="height: 220px;"><canvas id="bubbleChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Views vs Visitors<button onclick="showChartInfo('mixedChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Views vs Visitors<button onclick="showChartInfo('mixedChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Perbandingan harian (Mixed)</p>
           <div style="height: 220px;"><canvas id="mixedChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Top Halaman<button onclick="showChartInfo('horizontalBarChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Top Halaman<button onclick="showChartInfo('horizontalBarChart', event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Halaman paling banyak dilihat</p>
           <div style="height: 220px;"><canvas id="horizontalBarChart"></canvas></div>
         </div>
@@ -710,7 +709,7 @@
                     </svg>
                     Beranda
                   </button>
-                  <button onclick="sidebarNavigate('/proyek')" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-white text-gray-900 font-semibold transition-colors hover:bg-gray-50 text-sm focus:outline-none">
+                  <button onclick="sidebarNavigateToLastProject()" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-white text-gray-900 font-semibold transition-colors hover:bg-gray-50 text-sm focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                     </svg>
@@ -730,19 +729,12 @@
       </div>
     </div>
   <!-- Chart Info Modal -->
-  <div id="chart-info-modal" class="hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[100] flex items-center justify-center transition-opacity duration-300" onclick="if(event.target===this) closeChartInfo()">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-6 animate-fade-in">
-      <div class="flex items-center justify-between mb-4">
-        <h3 id="chart-info-title" class="text-base font-bold text-gray-900"></h3>
-        <button onclick="closeChartInfo()" class="rounded-full p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <p id="chart-info-desc" class="text-sm text-gray-600 leading-relaxed mb-4"></p>
-      <a id="chart-info-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-        <span id="chart-info-link-text">Selengkapnya</span>
-      </a>
+  <div id="chart-info-popup" class="hidden fixed w-56 bg-white rounded-xl shadow-xl overflow-hidden transition-all z-[100] py-1">
+    <div class="px-4 py-2.5 border-b border-gray-100">
+      <h3 id="chart-info-title" class="text-sm font-semibold text-gray-900"></h3>
+    </div>
+    <div class="px-4 py-2.5">
+      <p id="chart-info-desc" class="text-xs text-gray-600 leading-relaxed"></p>
     </div>
   </div>
 
@@ -917,6 +909,16 @@
       }
     }
 
+    function sidebarNavigateToLastProject() {
+      var recent = getRecentProjects();
+      toggleSidebar();
+      if (recent.length > 0) {
+        setTimeout(function() { navigateTo('/proyek/' + recent[0].id); }, 300);
+      } else {
+        setTimeout(function() { navigateTo('/'); }, 300);
+      }
+    }
+
     function sidebarNavigate(path) {
       toggleSidebar();
       setTimeout(() => navigateTo(path), 300);
@@ -997,17 +999,17 @@
     function renderAnalyticsProjectDropdown() {
       var list = document.getElementById('analytics-project-list');
       if (!list) return;
-      var recent = getRecentProjects();
-      if (!recent.length) {
-        list.innerHTML = '<p class="text-xs text-gray-400 px-3 py-2">Belum ada proyek dikunjungi</p>';
-        return;
-      }
-      list.innerHTML = recent.map(function(p) {
-        return '<button onclick="navigateToProjectFromDropdown(' + p.id + ')" class="flex items-center gap-2 w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 transition-colors text-left truncate" title="' + p.name + '">'
-          + '<svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>'
-          + '<span class="truncate">' + p.name + '</span>'
-          + '</button>';
-      }).join('');
+      list.innerHTML = '';
+      projects.forEach(function(p) {
+        var btn = document.createElement('button');
+        btn.className = 'w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors';
+        btn.textContent = p.name;
+        btn.onclick = function() {
+          navigateTo('/proyek/' + p.id);
+          closeAnalyticsProjectDropdown();
+        };
+        list.appendChild(btn);
+      });
     }
 
     function navigateToProjectFromDropdown(id) {
@@ -1029,17 +1031,30 @@
       horizontalBarChart: { title: 'Top Halaman', desc: 'Halaman paling banyak dilihat. Membantu mengidentifikasi konten paling populer di situs.', link: 'https://support.google.com/analytics/answer/1033961' }
     };
 
-    function showChartInfo(chartKey) {
+    function showChartInfo(chartKey, e) {
+      if (e) e.stopPropagation();
       var info = _chartInfoData[chartKey];
       if (!info) return;
+      var popup = document.getElementById('chart-info-popup');
+      if (!popup) return;
       document.getElementById('chart-info-title').textContent = info.title;
       document.getElementById('chart-info-desc').textContent = info.desc;
-      document.getElementById('chart-info-link').href = info.link;
-      document.getElementById('chart-info-modal').classList.remove('hidden');
+      popup.classList.remove('hidden');
+      if (e) {
+        popup.style.top = (e.clientY + 8) + 'px';
+        var leftPos = e.clientX - 224;
+        if (leftPos < 10) leftPos = 10;
+        popup.style.left = leftPos + 'px';
+      }
+      setTimeout(function() {
+        document.addEventListener('click', closeChartInfo);
+      }, 10);
     }
 
     function closeChartInfo() {
-      document.getElementById('chart-info-modal').classList.add('hidden');
+      var popup = document.getElementById('chart-info-popup');
+      if (popup) popup.classList.add('hidden');
+      document.removeEventListener('click', closeChartInfo);
     }
 
     function navigateTo(path) {
