@@ -3077,6 +3077,7 @@
 
 
     function getDeployDomainKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_domain'; }
+    function getDnsVerifiedKey() { return 'clincoo_' + (currentProjectId || 'default') + '_dns_verified'; }
     function getDeployBranchKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_branch'; }
     function getDeploySiteKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_site'; }
     function getDeployHttpsKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_https'; }
@@ -3123,7 +3124,8 @@
       const visitEl = document.getElementById('halaman-visit-btn');
       const timeEl = document.getElementById('halaman-status-time');
       var savedDomain = localStorage.getItem(getDeployDomainKey());
-      var displayUrl = savedDomain ? ('https://' + savedDomain) : site.url;
+      var dnsVerified = localStorage.getItem(getDnsVerifiedKey()) === 'true';
+      var displayUrl = (savedDomain && dnsVerified) ? ('https://' + savedDomain) : site.url;
       if (urlEl) { urlEl.textContent = displayUrl; urlEl.href = displayUrl; }
       if (visitEl) visitEl.href = displayUrl;
       if (timeEl) timeEl.textContent = site.time || '';
@@ -3147,6 +3149,9 @@ async function saveDeployDomain() {
       if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan...'; }
       localStorage.setItem(getDeployDomainKey(), domain);
       if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), domain);
+      localStorage.setItem(getDnsVerifiedKey(), 'false');
+      if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
+      renderDeployStatus();
 
       var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
       var projName = proj ? proj.name : (currentProjectId || 'project');
@@ -3197,6 +3202,9 @@ async function saveDeployDomain() {
       if (domainInput) domainInput.value = '';
       localStorage.removeItem(getDeployDomainKey());
       if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), '');
+      localStorage.setItem(getDnsVerifiedKey(), 'false');
+      if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
+      renderDeployStatus();
 
       if (domain) {
         var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
@@ -3288,11 +3296,17 @@ async function saveDeployDomain() {
                 if (cnameTarget === expectedTarget) {
                   statusEl.textContent = 'Domain terhubung!';
                   statusEl.className = 'text-xs font-medium mt-1 text-green-600';
+                  localStorage.setItem(getDnsVerifiedKey(), 'true');
+                  if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
+                  renderDeployStatus();
                   found = true;
                   break;
                 } else if (cnameTarget.indexOf('pages.dev') !== -1) {
                   statusEl.textContent = 'DNS belum terhubung!';
                   statusEl.className = 'text-xs font-medium mt-1 text-red-600';
+                  localStorage.setItem(getDnsVerifiedKey(), 'false');
+                  if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
+                  renderDeployStatus();
                   found = true;
                   break;
                 }
@@ -3309,6 +3323,9 @@ async function saveDeployDomain() {
             if (aTarget.indexOf('172.66') !== -1 || aTarget.indexOf('104.') !== -1) {
               statusEl.textContent = 'Domain terhubung!';
               statusEl.className = 'text-xs font-medium mt-1 text-green-600';
+              localStorage.setItem(getDnsVerifiedKey(), 'true');
+              if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
+              renderDeployStatus();
               found = true;
             }
           }
@@ -3316,6 +3333,9 @@ async function saveDeployDomain() {
         if (!found) {
           statusEl.textContent = 'DNS belum terhubung!';
           statusEl.className = 'text-xs font-medium mt-1 text-red-600';
+          localStorage.setItem(getDnsVerifiedKey(), 'false');
+          if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
+          renderDeployStatus();
         }
       } catch(err) {
         statusEl.textContent = 'Gagal mengecek DNS!';
