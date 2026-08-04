@@ -1932,6 +1932,13 @@
       var isProjectMode = (githubImportMode === 'project');
       showGithubProgressView();
       if (isProjectMode) {
+        // Cek nama duplikat
+        var repoNameExists = projects.some(function(p) { return p.name.toLowerCase() === repo.toLowerCase(); });
+        if (repoNameExists) {
+          if (errEl) { errEl.textContent = 'Proyek dengan nama "' + repo + '" sudah ada.'; errEl.classList.remove('hidden'); }
+          showGithubReposView();
+          return;
+        }
         if (progressEl) progressEl.textContent = 'Membuat proyek baru...';
         // Create the project first
         var newId = projects.length > 0 ? Math.max.apply(null, projects.map(function(p) { return p.id; })) + 1 : 1;
@@ -2296,6 +2303,21 @@
       
       const visibilityInput = document.querySelector('input[name="project-visibility"]:checked');
       const visibility = visibilityInput ? visibilityInput.value : 'public';
+      
+      // Cek nama duplikat untuk proyek baru
+      if (!id) {
+        var nameExists = projects.some(function(p) { return p.name.toLowerCase() === name.toLowerCase(); });
+        if (nameExists) {
+          isSaving = false;
+          var btn = document.getElementById('btn-submit-next');
+          if (btn) { btn.textContent = 'Lanjut'; btn.disabled = false; btn.classList.remove('opacity-70', 'cursor-not-allowed'); }
+          showToast('Nama proyek "' + name + '" sudah ada. Gunakan nama lain.', 'error');
+          nameInput.focus();
+          nameInput.classList.add('border-red-500');
+          setTimeout(function() { nameInput.classList.remove('border-red-500'); }, 3000);
+          return;
+        }
+      }
       
       if (id) {
         const index = projects.findIndex(p => p.id == parseInt(id));
