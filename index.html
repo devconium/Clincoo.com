@@ -429,7 +429,6 @@
               <div class="flex items-center gap-2">
                 <button onclick="saveDeployDomain()" id="save-domain-btn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm">Simpan</button>
                 <button onclick="removeDeployDomain()" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-all focus:outline-none shadow-sm">Menghapus</button>
-                <button onclick="checkDNS()" id="check-dns-btn" class="px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all focus:outline-none shadow-sm">Cek DNS</button>
               </div>
               <p id="dns-status-text" class="text-xs font-medium mt-1"></p>
             </div>
@@ -999,6 +998,32 @@
         });
         codeEditor.on('change', function() {
           if (typeof scheduleSecurityRescan === 'function') scheduleSecurityRescan();
+          // Auto-save dengan debounce 800ms → trigger auto-deploy
+          if (window._editorSaveTimer) clearTimeout(window._editorSaveTimer);
+          window._editorSaveTimer = setTimeout(function() {
+            if (!editingFileName || !codeEditor) return;
+            var codeContent = codeEditor.getValue();
+            var bytes = new Blob([codeContent]).size;
+            var sizeStr = '0,00 B';
+            if (bytes > 1024 * 1024) sizeStr = (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            else if (bytes > 1024) sizeStr = (bytes / 1024).toFixed(1) + ' KB';
+            else if (bytes > 0) sizeStr = bytes + ' B';
+            if (!projectFilesData[currentFolderPath]) projectFilesData[currentFolderPath] = [];
+            var itemIndex = projectFilesData[currentFolderPath].findIndex(function(i) { return i.type === 'file' && i.name === editingFileName; });
+            if (itemIndex === -1) {
+              for (var fp in projectFilesData) {
+                if (Array.isArray(projectFilesData[fp])) {
+                  var idx = projectFilesData[fp].findIndex(function(i) { return i.type === 'file' && i.name === editingFileName; });
+                  if (idx !== -1) { currentFolderPath = fp; itemIndex = idx; break; }
+                }
+              }
+            }
+            if (itemIndex !== -1) {
+              projectFilesData[currentFolderPath][itemIndex].content = codeContent;
+              projectFilesData[currentFolderPath][itemIndex].size = sizeStr;
+              saveData();
+            }
+          }, 800);
         });
       }
     }
@@ -2636,6 +2661,11 @@
         if(tabId === 'halaman') {
           contentHalaman.classList.remove('hidden');
           contentHalaman.classList.add('flex');
+          // Auto-check DNS jika domain sudah tersimpan
+          setTimeout(function() {
+            var di = document.getElementById('deploy-domain');
+            if (di && di.value.trim()) { checkDNS(); }
+          }, 500);
           loadDeployData();
         } else {
           contentHalaman.classList.add('hidden');
@@ -3125,7 +3155,6 @@ async function saveDeployDomain() {
     async function checkDNS() {
       var domainInput = document.getElementById('deploy-domain');
       var statusEl = document.getElementById('dns-status-text');
-      var checkBtn = document.getElementById('check-dns-btn');
       if (!domainInput || !statusEl) return;
       var domain = domainInput.value.trim();
       if (!domain) {
@@ -3165,7 +3194,6 @@ async function saveDeployDomain() {
         statusEl.textContent = 'Gagal mengecek DNS. Periksa koneksi internet Anda.';
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
       }
-      if (checkBtn) { checkBtn.disabled = false; checkBtn.textContent = 'Cek DNS'; }
     }
 
     var autoDeployTimer = null;
@@ -3175,24 +3203,20 @@ async function saveDeployDomain() {
       autoDeployTimer = setTimeout(function() {
         if (!currentProjectId) return;
         if (_isDeploying) return;
-        var site = null;
-        try { site = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
-        if (site && site.url) {
-          // Check if project actually has files to deploy
-          var storageKey = 'clincoo_' + currentProjectId + '_files';
-          var files = {};
-          try { files = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
-          var hasFiles = false;
-          for (var k in files) {
-            if (Array.isArray(files[k])) {
-              for (var i = 0; i < files[k].length; i++) {
-                if (files[k][i].type === 'file' && files[k][i].content) { hasFiles = true; break; }
-              }
+        // Check if project actually has files to deploy
+        var storageKey = 'clincoo_' + currentProjectId + '_files';
+        var files = {};
+        try { files = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+        var hasFiles = false;
+        for (var k in files) {
+          if (Array.isArray(files[k])) {
+            for (var i = 0; i < files[k].length; i++) {
+              if (files[k][i].type === 'file' && files[k][i].content) { hasFiles = true; break; }
             }
-            if (hasFiles) break;
           }
-          if (hasFiles) deployToProduction(true);
+          if (hasFiles) break;
         }
+        if (hasFiles) deployToProduction(true);
       }, 1000);
     }
 
