@@ -145,6 +145,9 @@
     const pageProjectDetail = document.getElementById('page-project-detail');
     const pageFileEditor = document.getElementById('page-file-editor');
     const pageAnalytics = document.getElementById('page-analytics');
+    const pageDatabase = document.getElementById('page-database');
+    const pageStorage = document.getElementById('page-storage');
+    const pageSqlConnection = document.getElementById('page-sql-connection');
     
     const listContainer = document.getElementById('project-list');
     const emptyState = document.getElementById('empty-state');
@@ -209,6 +212,15 @@
     function sidebarNavigate(path) {
       toggleSidebar();
       setTimeout(() => navigateTo(path), 300);
+    }
+
+    function toggleSidebarDropdown(e, btn) {
+      if (e) e.stopPropagation();
+      var dropdown = btn.parentElement.querySelector('.sidebar-dropdown-content');
+      if (dropdown) {
+        dropdown.classList.toggle('hidden');
+        btn.classList.toggle('sidebar-dropdown-open');
+      }
     }
 
     // === Recent Projects tracking ===
@@ -398,22 +410,31 @@
 
       if (path.startsWith('/tambah')) {
         setupFormPage(null);
-        showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor]);
+        showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else if (path.startsWith('/edit/')) {
         const id = parseInt(path.replace('/edit/', ''));
         setupFormPage(id);
-        showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor]);
+        showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else if (path.startsWith('/proyek/')) {
         const id = parseInt(path.replace('/proyek/', ''));
         setupDetailPage(id);
-        showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor]);
+        showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else if (path.startsWith('/analytics')) {
-        showPage(pageAnalytics, [pageMain, pageForm, pageProjectDetail, pageFileEditor]); updateAnalyticsProjectName();
+        showPage(pageAnalytics, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageDatabase, pageStorage, pageSqlConnection]); updateAnalyticsProjectName();
         initAnalyticsCharts();
+      } else if (path.startsWith('/database')) {
+        showPage(pageDatabase, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageStorage, pageSqlConnection]);
+        initDatabasePage();
+      } else if (path.startsWith('/storage')) {
+        showPage(pageStorage, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageSqlConnection]);
+        initStoragePage();
+      } else if (path.startsWith('/sql-connection')) {
+        showPage(pageSqlConnection, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage]);
+        initSqlConnectionPage();
       } else if (path.startsWith('/editor')) {
-        showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail]);
+        showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else {
-        showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor, pageAnalytics]);
+        showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
         applyFilters();
       }
     }
@@ -2243,3 +2264,542 @@
       window.location.href = url;
     }
 
+// ============================================================
+    // DATABASE & STORAGE PAGE FUNCTIONS
+    // ============================================================
+
+    // === Sidebar Dropdown State ===
+    var _dbStorageDropdownOpen = false;
+
+    // === DATABASE PAGE ===
+    var _dbInitialized = false;
+    var databaseItems = [
+      { id: '1', code: 'PRJ-9921A', name: 'Arsitektur UI/UX v2.0', category: 'Proyek Desain', status: 'Aktif', updated: '2 jam yang lalu' },
+      { id: '2', code: 'USR-1004X', name: 'Muzawwied Profile Data', category: 'Konfigurasi Pengguna', status: 'Aktif', updated: 'Kemarin, 14:30' },
+      { id: '3', code: 'SYS-4492B', name: 'Sistem Autentikasi API', category: 'Infrastruktur', status: 'Diarsipkan', updated: '22 Okt 2026' },
+      { id: '4', code: 'DB-7718C', name: 'Database Pelanggan Q3', category: 'Basis Data', status: 'Dalam Proses', updated: '18 Okt 2026' },
+      { id: '5', code: 'PRJ-8810M', name: 'Desain Komponen UI', category: 'Proyek Desain', status: 'Aktif', updated: '12 Okt 2026' },
+      { id: '6', code: 'SYS-1012C', name: 'Gateway Pembayaran', category: 'Infrastruktur', status: 'Dalam Proses', updated: '05 Okt 2026' },
+      { id: '7', code: 'USR-3301L', name: 'Manajemen Log Pengguna', category: 'Konfigurasi Pengguna', status: 'Diarsipkan', updated: '28 Sep 2026' },
+      { id: '8', code: 'DB-2209K', name: 'Backup Server Otomatis', category: 'Basis Data', status: 'Aktif', updated: '15 Sep 2026' }
+    ];
+    var dbCurrentPage = 1;
+    const dbPageSize = 4;
+    var dbSelectedIds = new Set();
+    var dbActiveDeleteId = null;
+    var dbIsBatchDelete = false;
+    var dbActiveContextMenuId = null;
+    var dbSearchQuery = '';
+    var dbFilterStatus = 'ALL';
+    var dbFilterCategory = 'ALL';
+
+    function initDatabasePage() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      if (!_dbInitialized) {
+        _dbInitialized = true;
+        setupDatabaseListeners();
+      }
+      renderDbTable();
+    }
+
+    function dbShowToast(message) {
+      var toast = document.getElementById('db-toast');
+      if (!toast) return;
+      var toastMsg = document.getElementById('db-toast-message');
+      if (toastMsg) toastMsg.innerText = message;
+      toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(function() {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    function dbOpenModal(modalId) {
+      var modal = document.getElementById(modalId);
+      if (!modal) return;
+      var backdrop = modal.querySelector('.db-modal-backdrop');
+      var contentEl = modal.querySelector('.db-modal-content');
+      modal.classList.remove('hidden');
+      setTimeout(function() {
+        if (backdrop) backdrop.classList.remove('opacity-0');
+        if (contentEl) {
+          contentEl.classList.remove('opacity-0', 'scale-95');
+          contentEl.classList.add('opacity-100', 'scale-100');
+        }
+      }, 10);
+    }
+
+    function dbCloseModal(modalId) {
+      var modal = document.getElementById(modalId);
+      if (!modal) return;
+      var backdrop = modal.querySelector('.db-modal-backdrop');
+      var contentEl = modal.querySelector('.db-modal-content');
+      if (backdrop) backdrop.classList.add('opacity-0');
+      if (contentEl) {
+        contentEl.classList.remove('opacity-100', 'scale-100');
+        contentEl.classList.add('opacity-0', 'scale-95');
+      }
+      setTimeout(function() { modal.classList.add('hidden'); }, 250);
+    }
+
+    function getFilteredDbData() {
+      return databaseItems.filter(function(item) {
+        var matchesSearch = item.name.toLowerCase().indexOf(dbSearchQuery.toLowerCase()) !== -1 ||
+                            item.code.toLowerCase().indexOf(dbSearchQuery.toLowerCase()) !== -1;
+        var matchesStatus = dbFilterStatus === 'ALL' || item.status === dbFilterStatus;
+        var matchesCategory = dbFilterCategory === 'ALL' || item.category === dbFilterCategory;
+        return matchesSearch && matchesStatus && matchesCategory;
+      });
+    }
+
+    function renderDbTable() {
+      var filteredData = getFilteredDbData();
+      var totalItems = filteredData.length;
+      var totalPages = Math.ceil(totalItems / dbPageSize) || 1;
+      if (dbCurrentPage > totalPages) dbCurrentPage = totalPages;
+      var startIdx = (dbCurrentPage - 1) * dbPageSize;
+      var pageData = filteredData.slice(startIdx, startIdx + dbPageSize);
+      var tbody = document.getElementById('db-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (pageData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-gray-400"><i data-lucide="folder-open" class="w-8 h-8 mx-auto mb-2 opacity-50"></i><p class="text-sm font-medium">Tidak ada data yang ditemukan.</p></td></tr>';
+      } else {
+        pageData.forEach(function(item) {
+          var isChecked = dbSelectedIds.has(item.id);
+          var tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50 transition-colors group cursor-pointer' + (isChecked ? ' bg-gray-50/80' : '');
+          var statusBadgeHtml = '';
+          if (item.status === 'Aktif') {
+            statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-100 text-gray-800 border border-gray-200">Aktif</span>';
+          } else if (item.status === 'Dalam Proses') {
+            statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-900 text-white border border-gray-900">Dalam Proses</span>';
+          } else {
+            statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 text-gray-400 border border-gray-200 line-through decoration-gray-400">Diarsipkan</span>';
+          }
+          tr.innerHTML = '<td class="py-4 pl-6 pr-3"><input type="checkbox" class="custom-checkbox db-row-checkbox" data-id="' + item.id + '"' + (isChecked ? ' checked' : '') + '></td>' +
+            '<td class="py-4 px-4"><div class="font-medium text-gray-900">' + item.name + '</div><div class="text-xs text-gray-500 mt-0.5">ID: ' + item.code + '</div></td>' +
+            '<td class="py-4 px-4 text-gray-600">' + item.category + '</td>' +
+            '<td class="py-4 px-4">' + statusBadgeHtml + '</td>' +
+            '<td class="py-4 px-4 text-gray-500">' + item.updated + '</td>' +
+            '<td class="py-4 pr-6 pl-4 text-right"><div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button class="db-btn-more p-1.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" data-id="' + item.id + '" title="Opsi Lainnya"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></div></td>';
+          tbody.appendChild(tr);
+        });
+      }
+      var ps = document.getElementById('db-page-start');
+      var pe = document.getElementById('db-page-end');
+      var tc = document.getElementById('db-total-count');
+      if (ps) ps.innerText = totalItems > 0 ? startIdx + 1 : 0;
+      if (pe) pe.innerText = Math.min(startIdx + dbPageSize, totalItems);
+      if (tc) tc.innerText = totalItems;
+      renderDbPagination(totalPages);
+      var selectAll = document.getElementById('db-select-all');
+      if (selectAll) {
+        var allCurrentChecked = pageData.length > 0 && pageData.every(function(item) { return dbSelectedIds.has(item.id); });
+        selectAll.checked = allCurrentChecked;
+      }
+      updateDbBatchBar();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      attachDbRowListeners();
+    }
+
+    function renderDbPagination(totalPages) {
+      var container = document.getElementById('db-pagination-buttons');
+      if (!container) return;
+      container.innerHTML = '';
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors';
+      prevBtn.innerText = 'Sebelumnya';
+      prevBtn.disabled = dbCurrentPage === 1;
+      prevBtn.addEventListener('click', function() { if (dbCurrentPage > 1) { dbCurrentPage--; renderDbTable(); } });
+      container.appendChild(prevBtn);
+      for (var i = 1; i <= totalPages; i++) {
+        (function(pageNum) {
+          var pageBtn = document.createElement('button');
+          if (pageNum === dbCurrentPage) {
+            pageBtn.className = 'w-8 h-8 flex items-center justify-center rounded-lg bg-gray-900 text-white text-sm font-medium transition-colors';
+          } else {
+            pageBtn.className = 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-700 text-sm font-medium transition-colors';
+          }
+          pageBtn.innerText = pageNum;
+          pageBtn.addEventListener('click', function() { dbCurrentPage = pageNum; renderDbTable(); });
+          container.appendChild(pageBtn);
+        })(i);
+      }
+      var nextBtn = document.createElement('button');
+      nextBtn.className = 'px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors';
+      nextBtn.innerText = 'Berikutnya';
+      nextBtn.disabled = dbCurrentPage === totalPages;
+      nextBtn.addEventListener('click', function() { if (dbCurrentPage < totalPages) { dbCurrentPage++; renderDbTable(); } });
+      container.appendChild(nextBtn);
+    }
+
+    function updateDbBatchBar() {
+      var bar = document.getElementById('db-batch-bar');
+      var countLabel = document.getElementById('db-selected-count');
+      if (!bar) return;
+      if (dbSelectedIds.size > 0) {
+        bar.classList.remove('hidden');
+        if (countLabel) countLabel.innerText = dbSelectedIds.size;
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    function attachDbRowListeners() {
+      document.querySelectorAll('.db-row-checkbox').forEach(function(cb) {
+        cb.addEventListener('change', function(e) {
+          var id = e.target.getAttribute('data-id');
+          if (e.target.checked) dbSelectedIds.add(id);
+          else dbSelectedIds.delete(id);
+          renderDbTable();
+        });
+      });
+      document.querySelectorAll('.db-btn-more').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dbActiveContextMenuId = btn.getAttribute('data-id');
+          var rect = btn.getBoundingClientRect();
+          var menu = document.getElementById('db-context-menu');
+          if (!menu) return;
+          menu.style.top = (rect.bottom + 4) + 'px';
+          menu.style.left = (rect.left - 130) + 'px';
+          menu.classList.remove('hidden');
+        });
+      });
+    }
+
+    function openDbAddModal() {
+      document.getElementById('db-modal-title').innerText = 'Tambah Entitas Baru';
+      document.getElementById('db-entity-id').value = '';
+      document.getElementById('db-entity-name').value = '';
+      document.getElementById('db-entity-code').value = 'PRJ-' + Math.floor(1000 + Math.random() * 9000) + 'A';
+      document.getElementById('db-entity-category').value = 'Proyek Desain';
+      document.getElementById('db-entity-status').value = 'Aktif';
+      dbOpenModal('db-data-modal');
+    }
+
+    function openDbEditModal(id) {
+      var item = databaseItems.find(function(i) { return i.id === id; });
+      if (!item) return;
+      document.getElementById('db-modal-title').innerText = 'Ubah Data Entitas';
+      document.getElementById('db-entity-id').value = item.id;
+      document.getElementById('db-entity-name').value = item.name;
+      document.getElementById('db-entity-code').value = item.code;
+      document.getElementById('db-entity-category').value = item.category;
+      document.getElementById('db-entity-status').value = item.status;
+      dbOpenModal('db-data-modal');
+    }
+
+    function setupDatabaseListeners() {
+      var searchInput = document.getElementById('db-search-input');
+      var clearBtn = document.getElementById('db-clear-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          dbSearchQuery = e.target.value;
+          if (clearBtn) {
+            if (dbSearchQuery.trim() !== '') clearBtn.classList.remove('hidden');
+            else clearBtn.classList.add('hidden');
+          }
+          dbCurrentPage = 1;
+          renderDbTable();
+        });
+      }
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          if (searchInput) searchInput.value = '';
+          dbSearchQuery = '';
+          clearBtn.classList.add('hidden');
+          dbCurrentPage = 1;
+          renderDbTable();
+        });
+      }
+      var filterBtn = document.getElementById('db-filter-btn');
+      var filterDropdown = document.getElementById('db-filter-dropdown');
+      if (filterBtn) {
+        filterBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (filterDropdown) filterDropdown.classList.toggle('hidden');
+        });
+      }
+      document.addEventListener('click', function(e) {
+        if (filterDropdown && !filterDropdown.contains(e.target) && e.target !== filterBtn) {
+          filterDropdown.classList.add('hidden');
+        }
+        var contextMenu = document.getElementById('db-context-menu');
+        if (contextMenu && !contextMenu.contains(e.target)) {
+          contextMenu.classList.add('hidden');
+        }
+      });
+      var filterStatusSelect = document.getElementById('db-filter-status');
+      var filterCategorySelect = document.getElementById('db-filter-category');
+      var filterBadge = document.getElementById('db-filter-badge');
+      function updateFilterBadge() {
+        var activeCount = 0;
+        if (dbFilterStatus !== 'ALL') activeCount++;
+        if (dbFilterCategory !== 'ALL') activeCount++;
+        if (filterBadge) {
+          if (activeCount > 0) { filterBadge.innerText = activeCount; filterBadge.classList.remove('hidden'); }
+          else filterBadge.classList.add('hidden');
+        }
+      }
+      if (filterStatusSelect) {
+        filterStatusSelect.addEventListener('change', function(e) {
+          dbFilterStatus = e.target.value; updateFilterBadge(); dbCurrentPage = 1; renderDbTable();
+        });
+      }
+      if (filterCategorySelect) {
+        filterCategorySelect.addEventListener('change', function(e) {
+          dbFilterCategory = e.target.value; updateFilterBadge(); dbCurrentPage = 1; renderDbTable();
+        });
+      }
+      var resetBtn = document.getElementById('db-reset-filter');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          dbFilterStatus = 'ALL'; dbFilterCategory = 'ALL';
+          if (filterStatusSelect) filterStatusSelect.value = 'ALL';
+          if (filterCategorySelect) filterCategorySelect.value = 'ALL';
+          updateFilterBadge(); dbCurrentPage = 1; renderDbTable();
+        });
+      }
+      var selectAllCb = document.getElementById('db-select-all');
+      if (selectAllCb) {
+        selectAllCb.addEventListener('change', function(e) {
+          var pageData = getFilteredDbData().slice((dbCurrentPage - 1) * dbPageSize, dbCurrentPage * dbPageSize);
+          if (e.target.checked) pageData.forEach(function(item) { dbSelectedIds.add(item.id); });
+          else pageData.forEach(function(item) { dbSelectedIds.delete(item.id); });
+          renderDbTable();
+        });
+      }
+      var deselectBtn = document.getElementById('db-deselect-all');
+      if (deselectBtn) {
+        deselectBtn.addEventListener('click', function() { dbSelectedIds.clear(); renderDbTable(); });
+      }
+      var batchDeleteBtn = document.getElementById('db-batch-delete');
+      if (batchDeleteBtn) {
+        batchDeleteBtn.addEventListener('click', function() {
+          dbIsBatchDelete = true;
+          var dt = document.getElementById('db-delete-text');
+          if (dt) dt.innerText = dbSelectedIds.size + ' data terpilih akan dihapus secara permanen.';
+          dbOpenModal('db-delete-modal');
+        });
+      }
+      var addBtn = document.getElementById('db-add-new');
+      if (addBtn) addBtn.addEventListener('click', openDbAddModal);
+      var closeModalBtn = document.getElementById('db-close-modal');
+      if (closeModalBtn) closeModalBtn.addEventListener('click', function() { dbCloseModal('db-data-modal'); });
+      var cancelModalBtn = document.getElementById('db-cancel-modal');
+      if (cancelModalBtn) cancelModalBtn.addEventListener('click', function() { dbCloseModal('db-data-modal'); });
+      var entityForm = document.getElementById('db-entity-form');
+      if (entityForm) {
+        entityForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var id = document.getElementById('db-entity-id').value;
+          var name = document.getElementById('db-entity-name').value;
+          var code = document.getElementById('db-entity-code').value;
+          var category = document.getElementById('db-entity-category').value;
+          var status = document.getElementById('db-entity-status').value;
+          if (id) {
+            var idx = databaseItems.findIndex(function(i) { return i.id === id; });
+            if (idx !== -1) {
+              databaseItems[idx] = Object.assign({}, databaseItems[idx], { name: name, code: code, category: category, status: status, updated: 'Baru saja' });
+              dbShowToast('Data berhasil diperbarui');
+            }
+          } else {
+            databaseItems.unshift({ id: Date.now().toString(), code: code, name: name, category: category, status: status, updated: 'Baru saja' });
+            dbShowToast('Data baru berhasil ditambahkan');
+          }
+          dbCloseModal('db-data-modal');
+          renderDbTable();
+        });
+      }
+      var cancelDeleteBtn = document.getElementById('db-cancel-delete');
+      if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', function() { dbCloseModal('db-delete-modal'); });
+      var confirmDeleteBtn = document.getElementById('db-confirm-delete');
+      if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+          if (dbIsBatchDelete) {
+            databaseItems = databaseItems.filter(function(item) { return !dbSelectedIds.has(item.id); });
+            dbShowToast(dbSelectedIds.size + ' data berhasil dihapus');
+            dbSelectedIds.clear();
+          } else if (dbActiveDeleteId) {
+            databaseItems = databaseItems.filter(function(item) { return item.id !== dbActiveDeleteId; });
+            dbSelectedIds.delete(dbActiveDeleteId);
+            dbShowToast('Data berhasil dihapus');
+            dbActiveDeleteId = null;
+          }
+          dbCloseModal('db-delete-modal');
+          renderDbTable();
+        });
+      }
+      var ctxEditBtn = document.getElementById('db-ctx-edit');
+      if (ctxEditBtn) {
+        ctxEditBtn.addEventListener('click', function() {
+          var cm = document.getElementById('db-context-menu');
+          if (cm) cm.classList.add('hidden');
+          openDbEditModal(dbActiveContextMenuId);
+        });
+      }
+      var ctxCopyBtn = document.getElementById('db-ctx-copy');
+      if (ctxCopyBtn) {
+        ctxCopyBtn.addEventListener('click', function() {
+          var item = databaseItems.find(function(i) { return i.id === dbActiveContextMenuId; });
+          if (item) {
+            var tempInput = document.createElement('input');
+            tempInput.value = item.code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            dbShowToast('ID ' + item.code + ' disalin ke papan klip');
+          }
+          var cm = document.getElementById('db-context-menu');
+          if (cm) cm.classList.add('hidden');
+        });
+      }
+      var ctxDupBtn = document.getElementById('db-ctx-duplicate');
+      if (ctxDupBtn) {
+        ctxDupBtn.addEventListener('click', function() {
+          var item = databaseItems.find(function(i) { return i.id === dbActiveContextMenuId; });
+          if (item) {
+            databaseItems.unshift(Object.assign({}, item, { id: Date.now().toString(), name: item.name + ' (Salinan)', code: item.code + '-COPY', updated: 'Baru saja' }));
+            dbShowToast('Data berhasil diduplikasi');
+            renderDbTable();
+          }
+          var cm = document.getElementById('db-context-menu');
+          if (cm) cm.classList.add('hidden');
+        });
+      }
+      var ctxDeleteBtn = document.getElementById('db-ctx-delete');
+      if (ctxDeleteBtn) {
+        ctxDeleteBtn.addEventListener('click', function() {
+          dbActiveDeleteId = dbActiveContextMenuId;
+          dbIsBatchDelete = false;
+          var dt = document.getElementById('db-delete-text');
+          if (dt) dt.innerText = 'Data ini akan dihapus secara permanen dari sistem.';
+          var cm = document.getElementById('db-context-menu');
+          if (cm) cm.classList.add('hidden');
+          dbOpenModal('db-delete-modal');
+        });
+      }
+    }
+
+    // === STORAGE PAGE ===
+    function initStoragePage() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // === SQL CONNECTION PAGE ===
+    var _sqlInitialized = false;
+    function initSqlConnectionPage() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      if (!_sqlInitialized) {
+        _sqlInitialized = true;
+        setupSqlListeners();
+      }
+      goToSqlStep(1);
+    }
+
+    function goToSqlStep(stepNumber) {
+      document.querySelectorAll('.step-container').forEach(function(el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      });
+      var targetStep = document.getElementById('sql-step-' + stepNumber);
+      if (targetStep) {
+        targetStep.classList.remove('hidden');
+        targetStep.classList.add('flex');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+    }
+
+    function nextFromSourceMethod() {
+      var selected = document.querySelector('input[name="source_method"]:checked');
+      if (selected && selected.value === 'new') goToSqlStep(4);
+      else goToSqlStep(5);
+    }
+
+    function showSqlModal(type, title, message) {
+      var modalOverlay = document.getElementById('sql-custom-modal');
+      var modalPanel = document.getElementById('sql-modal-panel');
+      var modalTitle = document.getElementById('sql-modal-title');
+      var modalMessage = document.getElementById('sql-modal-message');
+      var modalIconContainer = document.getElementById('sql-modal-icon-container');
+      if (!modalOverlay) return;
+      if (modalTitle) modalTitle.innerText = title;
+      if (modalMessage) modalMessage.innerText = message;
+      if (modalIconContainer) {
+        modalIconContainer.className = 'w-14 h-14 rounded-full flex items-center justify-center mb-4 transition-colors';
+        if (type === 'error') {
+          modalIconContainer.innerHTML = '<i data-lucide="triangle-alert" class="w-7 h-7 text-gray-900"></i>';
+          modalIconContainer.classList.add('bg-gray-100');
+        } else if (type === 'success') {
+          modalIconContainer.innerHTML = '<i data-lucide="check-circle-2" class="w-7 h-7 text-gray-900"></i>';
+          modalIconContainer.classList.add('bg-gray-100');
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+      modalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      modalOverlay.classList.add('opacity-100', 'pointer-events-auto');
+      if (modalPanel) {
+        modalPanel.classList.remove('scale-95');
+        modalPanel.classList.add('scale-100');
+      }
+    }
+
+    function closeSqlModal() {
+      var modalOverlay = document.getElementById('sql-custom-modal');
+      var modalPanel = document.getElementById('sql-modal-panel');
+      if (!modalOverlay) return;
+      modalOverlay.classList.remove('opacity-100', 'pointer-events-auto');
+      modalOverlay.classList.add('opacity-0', 'pointer-events-none');
+      if (modalPanel) {
+        modalPanel.classList.remove('scale-100');
+        modalPanel.classList.add('scale-95');
+      }
+    }
+
+    function testSqlConnection() {
+      var host = document.getElementById('sql-host');
+      var port = document.getElementById('sql-port');
+      var username = document.getElementById('sql-username');
+      var dbname = document.getElementById('sql-dbname');
+      if (!host || !port || !username || !dbname) return;
+      if (!host.value || !port.value || !username.value || !dbname.value) {
+        showSqlModal('error', 'Data Tidak Lengkap', 'Harap isi seluruh field pada form sebelum menyimpan & menguji koneksi.');
+        return;
+      }
+      var btnConnect = document.getElementById('sql-btn-connect');
+      var originalIcon = '<i data-lucide="plug" class="w-5 h-5 mr-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>';
+      var loadingIcon = '<i data-lucide="loader-2" class="w-5 h-5 mr-2.5 text-gray-900 animate-spin"></i>';
+      btnConnect.disabled = true;
+      btnConnect.innerHTML = loadingIcon + '<span class="text-[16px] font-semibold tracking-wide text-gray-900">Menghubungkan...</span>';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      setTimeout(function() {
+        btnConnect.disabled = false;
+        btnConnect.innerHTML = originalIcon + '<span class="text-[16px] font-semibold tracking-wide text-gray-900" id="sql-btn-text">Simpan & Uji Koneksi</span>';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        showSqlModal('success', 'Koneksi Berhasil', 'Berhasil mengautentikasi dan terhubung ke database "' + dbname.value + '".');
+      }, 1200);
+    }
+
+    function testSqlConnectionTemplate() {
+      var btnConnect = document.getElementById('sql-btn-connect-template');
+      if (!btnConnect) return;
+      var originalIcon = '<i data-lucide="plug" class="w-5 h-5 mr-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>';
+      var loadingIcon = '<i data-lucide="loader-2" class="w-5 h-5 mr-2.5 text-gray-900 animate-spin"></i>';
+      btnConnect.disabled = true;
+      btnConnect.innerHTML = loadingIcon + '<span class="text-[16px] font-semibold tracking-wide text-gray-900">Menghubungkan...</span>';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      setTimeout(function() {
+        btnConnect.disabled = false;
+        btnConnect.innerHTML = originalIcon + '<span class="text-[16px] font-semibold tracking-wide text-gray-900" id="sql-btn-text-template">Gunakan & Uji Koneksi</span>';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        showSqlModal('success', 'Koneksi Berhasil', 'Berhasil terhubung menggunakan template yang dipilih.');
+      }, 1200);
+    }
+
+    function setupSqlListeners() {
+      // Listeners are handled by onclick attributes in the HTML
+    }
