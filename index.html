@@ -786,6 +786,7 @@
           <p><span class="text-gray-400">Target:</span> <span id="cname-target-value">clincoo-app.pages.dev</span></p>
           <p><span class="text-gray-400">Tipe:</span> CNAME</p>
         </div>
+        <p class="text-xs text-gray-400 mt-1.5">Propagasi DNS 5-30 menit. SSL aktif otomatis setelah DNS terhubung.</p>
       </div>
     </div>
   </div>
@@ -3170,28 +3171,51 @@ async function saveDeployDomain() {
 
       statusEl.textContent = 'Sedang memeriksa DNS...';
       statusEl.className = 'text-xs font-medium mt-1 text-gray-500';
+
+      // Domain yang dicek: domain asli + www. variant
+      var domainsToCheck = [domain];
+      if (domain.indexOf('www.') !== 0) domainsToCheck.push('www.' + domain);
+
       try {
-        var res = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(domain) + '&type=CNAME');
-        var data = await res.json();
-        var cnameFound = false;
-        var cnameTarget = '';
-        if (data.Answer) {
-          for (var i = 0; i < data.Answer.length; i++) {
-            if (data.Answer[i].type === 5) {
-              cnameFound = true;
-              cnameTarget = data.Answer[i].data.replace(/\.$/, '');
-              break;
+        var found = false;
+        for (var di = 0; di < domainsToCheck.length && !found; di++) {
+          var checkDomain = domainsToCheck[di];
+          var res = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(checkDomain) + '&type=CNAME');
+          var data = await res.json();
+          if (data.Answer) {
+            for (var i = 0; i < data.Answer.length; i++) {
+              if (data.Answer[i].type === 5) {
+                var cnameTarget = data.Answer[i].data.replace(/\.$/, '');
+                if (cnameTarget === expectedTarget) {
+                  statusEl.textContent = 'DNS terhubung! ' + checkDomain + ' mengarah ke ' + cnameTarget + '. SSL aktif otomatis.';
+                  statusEl.className = 'text-xs font-medium mt-1 text-green-600';
+                  found = true;
+                  break;
+                } else if (cnameTarget.indexOf('pages.dev') !== -1) {
+                  statusEl.textContent = 'CNAME mengarah ke ' + cnameTarget + ', seharusnya ke ' + expectedTarget + '. Perbaiki target CNAME.';
+                  statusEl.className = 'text-xs font-medium mt-1 text-red-600';
+                  found = true;
+                  break;
+                }
+              }
             }
           }
         }
-        if (cnameFound && cnameTarget === expectedTarget) {
-          statusEl.textContent = 'DNS terhubung! ' + domain + ' mengarah ke ' + cnameTarget + '. SSL aktif otomatis.';
-          statusEl.className = 'text-xs font-medium mt-1 text-green-600';
-        } else if (cnameFound) {
-          statusEl.textContent = 'CNAME mengarah ke ' + cnameTarget + ', seharusnya ke ' + expectedTarget + '. Perbaiki target CNAME Anda.';
-          statusEl.className = 'text-xs font-medium mt-1 text-red-600';
-        } else {
-          statusEl.textContent = 'DNS belum terhubung. Pastikan CNAME sudah dibuat dengan target ' + expectedTarget + '.';
+        if (!found) {
+          // Cek juga A record di apex (Cloudflare bisa pakai A record untuk apex domain)
+          var aRes = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(domain) + '&type=A');
+          var aData = await aRes.json();
+          if (aData.Answer && aData.Answer.length > 0) {
+            var aTarget = aData.Answer[0].data;
+            if (aTarget.indexOf('172.66') !== -1 || aTarget.indexOf('104.') !== -1) {
+              statusEl.textContent = 'DNS terhubung via A record! SSL aktif otomatis.';
+              statusEl.className = 'text-xs font-medium mt-1 text-green-600';
+              found = true;
+            }
+          }
+        }
+        if (!found) {
+          statusEl.textContent = 'DNS belum terhubung. Buat CNAME dengan Name: @ atau www, Target: ' + expectedTarget + '.';
           statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         }
       } catch(err) {
