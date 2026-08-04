@@ -391,7 +391,7 @@
 
           <!-- Domain Khusus -->
           <div id="domain-khusus-section" class="hidden flex-col gap-4 pt-6 border-t border-gray-100">
-            <h3 class="text-base font-semibold text-gray-900">Domain Khusus</h3>
+            <h3 class="text-base font-semibold text-gray-900">Domain Khusus<button onclick="showDomainInfo(event)" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h3>
             <p class="text-xs text-gray-500 -mt-2">Domain kustom memungkinkan Anda menyajikan situs dari domain selain domain bawaan.</p>
             <div class="flex flex-col gap-2">
               <input type="text" id="deploy-domain" placeholder="namadomain.com" class="custom-input w-full px-4 py-3 rounded-xl border text-sm font-mono">
@@ -738,6 +738,32 @@
     </div>
   </div>
 
+  <!-- Domain Info Modal -->
+  <div id="domain-info-popup" class="hidden fixed w-72 bg-white rounded-xl shadow-xl overflow-hidden transition-all z-[100]">
+    <div class="px-4 py-2.5 border-b border-gray-100">
+      <h3 class="text-sm font-semibold text-gray-900">Cara Menerapkan DNS</h3>
+    </div>
+    <div class="px-4 py-3 space-y-2.5">
+      <div>
+        <p class="text-xs font-semibold text-gray-700 mb-0.5">1. Tambahkan CNAME Record</p>
+        <p class="text-xs text-gray-500 leading-relaxed">Masuk ke pengelola DNS domain Anda, buat record CNAME dengan:</p>
+        <div class="mt-1.5 bg-gray-50 rounded-lg px-3 py-2 text-xs font-mono text-gray-700 space-y-0.5">
+          <p><span class="text-gray-400">Name:</span> @ atau www</p>
+          <p><span class="text-gray-400">Target:</span> testbugfix.pages.dev</p>
+          <p><span class="text-gray-400">Tipe:</span> CNAME</p>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-700 mb-0.5">2. Tunggu Propagasi DNS</p>
+        <p class="text-xs text-gray-500 leading-relaxed">Proses propagasi biasanya 5-30 menit. Cek status di dashboard Cloudflare Anda.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold text-gray-700 mb-0.5">3. HTTPS Otomatis</p>
+        <p class="text-xs text-gray-500 leading-relaxed">Sertifikat SSL akan diterbitkan otomatis setelah DNS terhubung. Pastikan opsi "Terapkan HTTPS" aktif.</p>
+      </div>
+    </div>
+  </div>
+
   </div>
 
   <div id="input-modal-overlay" onclick="if(event.target===this) closeInputModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
@@ -1055,6 +1081,28 @@
       var popup = document.getElementById('chart-info-popup');
       if (popup) popup.classList.add('hidden');
       document.removeEventListener('click', closeChartInfo);
+    }
+
+    function showDomainInfo(e) {
+      if (e) e.stopPropagation();
+      var popup = document.getElementById('domain-info-popup');
+      if (!popup) return;
+      popup.classList.remove('hidden');
+      if (e) {
+        popup.style.top = (e.clientY + 8) + 'px';
+        var leftPos = e.clientX - 256;
+        if (leftPos < 10) leftPos = 10;
+        popup.style.left = leftPos + 'px';
+      }
+      setTimeout(function() {
+        document.addEventListener('click', closeDomainInfo);
+      }, 10);
+    }
+
+    function closeDomainInfo() {
+      var popup = document.getElementById('domain-info-popup');
+      if (popup) popup.classList.add('hidden');
+      document.removeEventListener('click', closeDomainInfo);
     }
 
     function navigateTo(path) {
