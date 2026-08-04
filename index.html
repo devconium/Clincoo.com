@@ -518,7 +518,7 @@
 
       <!-- Summary Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-gray-500">Views Hari Ini</span>
             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-5.13a4 4 0 11-8 0 4 4 0 018 0zm6 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -526,7 +526,7 @@
           <p id="analytics-total-today" class="text-2xl font-bold text-gray-900">0</p>
           <p class="text-xs text-gray-400 mt-1">Real-time</p>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-gray-500">Unique Visitors</span>
             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -534,7 +534,7 @@
           <p id="analytics-total-visitors" class="text-2xl font-bold text-gray-900">0</p>
           <p class="text-xs text-gray-400 mt-1">30 hari terakhir</p>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-gray-500">Total Events</span>
             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -542,7 +542,7 @@
           <p id="analytics-total-events" class="text-2xl font-bold text-gray-900">0</p>
           <p class="text-xs text-gray-400 mt-1">All time</p>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
+        <div class="p-4">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-medium text-gray-500">Avg. Durasi</span>
             <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -561,7 +561,7 @@
       </div>
 
       <!-- Main Chart (Line - Full Width) -->
-      <div class="bg-white rounded-xl border border-gray-200 p-5 mb-4">
+      <div class="p-5 mb-4">
         <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 7 Hari Terakhir</h2>
         <p class="text-xs text-gray-400 mb-4">Views harian dari seluruh situs</p>
         <div style="height: 260px;"><canvas id="lineChart"></canvas></div>
@@ -569,47 +569,47 @@
 
       <!-- Charts Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik Bulanan</h2>
           <p class="text-xs text-gray-400 mb-4">Views per bulan</p>
           <div style="height: 220px;"><canvas id="barChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Sumber Trafik</h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi sumber kunjungan</p>
           <div style="height: 220px;"><canvas id="pieChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Perangkat</h2>
           <p class="text-xs text-gray-400 mb-4">Tipe perangkat pengunjung</p>
           <div style="height: 220px;"><canvas id="doughnutChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Bahasa</h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi bahasa pengguna</p>
           <div style="height: 220px;"><canvas id="radarChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Negara Asal</h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi negara pengunjung</p>
           <div style="height: 220px;"><canvas id="polarAreaChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 24 Jam</h2>
           <p class="text-xs text-gray-400 mb-4">Views per jam</p>
           <div style="height: 220px;"><canvas id="scatterChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Visitors x Views</h2>
           <p class="text-xs text-gray-400 mb-4">Korelasi pengunjung dan views</p>
           <div style="height: 220px;"><canvas id="bubbleChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Views vs Visitors</h2>
           <p class="text-xs text-gray-400 mb-4">Perbandingan harian (Mixed)</p>
           <div style="height: 220px;"><canvas id="mixedChart"></canvas></div>
         </div>
-        <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="p-5">
           <h2 class="text-sm font-semibold text-gray-900 mb-1">Top Halaman</h2>
           <p class="text-xs text-gray-400 mb-4">Halaman paling banyak dilihat</p>
           <div style="height: 220px;"><canvas id="horizontalBarChart"></canvas></div>
@@ -2480,10 +2480,9 @@ async function saveDeployDomain() {
     }
 
     // === ANALYTICS DASHBOARD ===
-    // Grayscale palette (Google Analytics style)
-    var _gaGray = ['#1f2937', '#374151', '#6b7280', '#9ca3af', '#d1d5db', '#e5e7eb', '#f3f4f6', '#4b5563'];
-    var _gaGrayAlpha = ['rgba(31,41,55,0.65)','rgba(55,65,81,0.65)','rgba(107,114,128,0.65)','rgba(156,163,175,0.65)','rgba(209,213,219,0.65)','rgba(229,231,235,0.65)','rgba(243,244,246,0.65)','rgba(75,85,99,0.65)'];
-    var _gaGrayFill = ['rgba(31,41,55,0.15)','rgba(55,65,81,0.15)','rgba(107,114,128,0.15)','rgba(156,163,175,0.15)','rgba(209,213,219,0.15)','rgba(229,231,235,0.15)','rgba(243,244,246,0.15)','rgba(75,85,99,0.15)'];
+    // Muted color palette for multi-series charts
+    var _gaColors = ['#4F6BED', '#34A853', '#FBBC04', '#EA4335', '#A142F4', '#FF6D01', '#00ACC1', '#9AA0A6'];
+    var _gaColorsAlpha = ['rgba(79,107,237,0.75)','rgba(52,168,83,0.75)','rgba(251,188,4,0.75)','rgba(234,67,53,0.75)','rgba(161,66,244,0.75)','rgba(255,109,1,0.75)','rgba(0,172,193,0.75)','rgba(154,160,166,0.75)'];
 
     function initAnalyticsCharts() {
       if (typeof Chart === 'undefined') return;
@@ -2493,98 +2492,99 @@ async function saveDeployDomain() {
       Chart.defaults.font.family = "'Inter', sans-serif";
       Chart.defaults.font.size = 11;
       Chart.defaults.color = '#9ca3af';
-      Chart.defaults.borderColor = '#f0f0f0';
+      Chart.defaults.borderColor = 'transparent';
       Chart.defaults.plugins.legend.labels.boxWidth = 10;
       Chart.defaults.plugins.legend.labels.boxHeight = 10;
       Chart.defaults.plugins.legend.labels.padding = 12;
 
-      var _gaGridOpt = {
+      // Base options: NO grid lines, clean flat look
+      var _gaOpt = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: true, position: 'bottom', labels: { color: '#6b7280', font: { size: 11 } } },
-          tooltip: { backgroundColor: '#1f2937', titleColor: '#fff', bodyColor: '#d1d5db', borderColor: '#374151', borderWidth: 1, padding: 10, cornerRadius: 8, titleFont: { size: 12 }, bodyFont: { size: 11 } }
+          legend: { display: true, position: 'bottom', labels: { color: '#6b7280', font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' } },
+          tooltip: { backgroundColor: '#1f2937', titleColor: '#fff', bodyColor: '#d1d5db', borderColor: '#374151', borderWidth: 1, padding: 10, cornerRadius: 8, titleFont: { size: 12 }, bodyFont: { size: 11 }, usePointStyle: true }
         },
         scales: {
-          x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } },
-          y: { grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true }
+          x: { grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } },
+          y: { grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true }
         }
       };
 
-      // 1. Line chart (main - full width)
+      // 1. Line chart (main - full width) — monochrome
       _analyticsCharts.line = new Chart(document.getElementById('lineChart'), {
         type: 'line',
-        data: { labels: [], datasets: [{ label: 'Views Harian', data: [], fill: true, backgroundColor: 'rgba(31,41,55,0.08)', borderColor: '#1f2937', borderWidth: 2, tension: 0.35, pointRadius: 3, pointHoverRadius: 5, pointBackgroundColor: '#1f2937', pointBorderColor: '#fff', pointBorderWidth: 1.5 }] },
-        options: Object.assign({}, _gaGridOpt, { plugins: Object.assign({}, _gaGridOpt.plugins, { legend: { display: false } }) })
+        data: { labels: [], datasets: [{ label: 'Views Harian', data: [], fill: true, backgroundColor: 'rgba(31,41,55,0.06)', borderColor: '#1f2937', borderWidth: 2, tension: 0.35, pointRadius: 3, pointHoverRadius: 5, pointBackgroundColor: '#1f2937', pointBorderColor: '#fff', pointBorderWidth: 1.5 }] },
+        options: Object.assign({}, _gaOpt, { plugins: Object.assign({}, _gaOpt.plugins, { legend: { display: false } }) })
       });
 
-      // 2. Bar: monthly
+      // 2. Bar: monthly — monochrome
       _analyticsCharts.bar = new Chart(document.getElementById('barChart'), {
         type: 'bar',
         data: { labels: [], datasets: [{ label: 'Views', data: [], backgroundColor: '#374151', borderColor: '#1f2937', borderWidth: 0, borderRadius: 4, barThickness: 'flex' }] },
-        options: Object.assign({}, _gaGridOpt, { plugins: Object.assign({}, _gaGridOpt.plugins, { legend: { display: false } }) })
+        options: Object.assign({}, _gaOpt, { plugins: Object.assign({}, _gaOpt.plugins, { legend: { display: false } }) })
       });
 
-      // 3. Pie: sources
+      // 3. Pie: sources — muted colors
       _analyticsCharts.pie = new Chart(document.getElementById('pieChart'), {
         type: 'pie',
-        data: { labels: [], datasets: [{ label: 'Sumber', data: [], backgroundColor: _gaGrayAlpha, borderColor: '#fff', borderWidth: 2, hoverOffset: 6 }] },
-        options: Object.assign({}, _gaGridOpt, { scales: {} })
+        data: { labels: [], datasets: [{ label: 'Sumber', data: [], backgroundColor: _gaColorsAlpha, borderColor: '#fff', borderWidth: 2, hoverOffset: 6 }] },
+        options: Object.assign({}, _gaOpt, { scales: {} })
       });
 
-      // 4. Doughnut: devices
+      // 4. Doughnut: devices — muted colors
       _analyticsCharts.doughnut = new Chart(document.getElementById('doughnutChart'), {
         type: 'doughnut',
-        data: { labels: [], datasets: [{ label: 'Perangkat', data: [], backgroundColor: _gaGrayAlpha, borderColor: '#fff', borderWidth: 2, hoverOffset: 6 }] },
-        options: Object.assign({}, _gaGridOpt, { scales: {}, cutout: '60%' })
+        data: { labels: [], datasets: [{ label: 'Perangkat', data: [], backgroundColor: _gaColorsAlpha, borderColor: '#fff', borderWidth: 2, hoverOffset: 6 }] },
+        options: Object.assign({}, _gaOpt, { scales: {}, cutout: '62%' })
       });
 
-      // 5. Radar: languages
+      // 5. Radar: languages — monochrome
       _analyticsCharts.radar = new Chart(document.getElementById('radarChart'), {
         type: 'radar',
-        data: { labels: [], datasets: [{ label: 'Bahasa', data: [], fill: true, backgroundColor: 'rgba(31,41,55,0.1)', borderColor: '#374151', borderWidth: 2, pointBackgroundColor: '#1f2937', pointBorderColor: '#fff', pointBorderWidth: 1, pointRadius: 3 }] },
-        options: Object.assign({}, _gaGridOpt, { scales: { r: { grid: { color: '#f0f0f0' }, angleLines: { color: '#f0f0f0' }, ticks: { color: '#d1d5db', backdropColor: 'transparent', font: { size: 10 } }, pointLabels: { color: '#6b7280', font: { size: 11 } } } } })
+        data: { labels: [], datasets: [{ label: 'Bahasa', data: [], fill: true, backgroundColor: 'rgba(31,41,55,0.08)', borderColor: '#374151', borderWidth: 2, pointBackgroundColor: '#1f2937', pointBorderColor: '#fff', pointBorderWidth: 1, pointRadius: 3 }] },
+        options: Object.assign({}, _gaOpt, { scales: { r: { grid: { display: false }, angleLines: { color: '#f3f4f6' }, ticks: { display: false, backdropColor: 'transparent' }, pointLabels: { color: '#6b7280', font: { size: 11 } } } } })
       });
 
-      // 6. Polar Area: countries
+      // 6. Polar Area: countries — muted colors
       _analyticsCharts.polarArea = new Chart(document.getElementById('polarAreaChart'), {
         type: 'polarArea',
-        data: { labels: [], datasets: [{ label: 'Negara', data: [], backgroundColor: _gaGrayAlpha, borderColor: '#fff', borderWidth: 1.5, hoverOffset: 4 }] },
-        options: Object.assign({}, _gaGridOpt, { scales: { r: { grid: { color: '#f0f0f0' }, ticks: { color: '#d1d5db', backdropColor: 'transparent', font: { size: 10 } } } } })
+        data: { labels: [], datasets: [{ label: 'Negara', data: [], backgroundColor: _gaColorsAlpha, borderColor: '#fff', borderWidth: 1.5, hoverOffset: 4 }] },
+        options: Object.assign({}, _gaOpt, { scales: { r: { grid: { display: false }, ticks: { display: false, backdropColor: 'transparent' } } } })
       });
 
-      // 7. Scatter: hourly
+      // 7. Scatter: hourly — monochrome
       _analyticsCharts.scatter = new Chart(document.getElementById('scatterChart'), {
         type: 'scatter',
-        data: { datasets: [{ label: 'Views', data: [], backgroundColor: 'rgba(31,41,55,0.6)', borderColor: '#1f2937', pointRadius: 5, pointHoverRadius: 7 }] },
-        options: Object.assign({}, _gaGridOpt, { scales: { x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jam', color: '#9ca3af', font: { size: 10 } }, grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } }, y: { title: { display: true, text: 'Views', color: '#9ca3af', font: { size: 10 } }, grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true } } })
+        data: { datasets: [{ label: 'Views', data: [], backgroundColor: 'rgba(31,41,55,0.55)', borderColor: '#1f2937', pointRadius: 5, pointHoverRadius: 7 }] },
+        options: Object.assign({}, _gaOpt, { scales: { x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Jam', color: '#9ca3af', font: { size: 10 } }, grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } }, y: { title: { display: true, text: 'Views', color: '#9ca3af', font: { size: 10 } }, grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true } } })
       });
 
-      // 8. Bubble: visitors x views
+      // 8. Bubble: visitors x views — muted blue
       _analyticsCharts.bubble = new Chart(document.getElementById('bubbleChart'), {
         type: 'bubble',
-        data: { datasets: [{ label: 'Trafik', data: [], backgroundColor: 'rgba(55,65,81,0.35)', borderColor: '#374151', borderWidth: 1 }] },
-        options: Object.assign({}, _gaGridOpt, { scales: { x: { title: { display: true, text: 'Jam', color: '#9ca3af', font: { size: 10 } }, grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } }, y: { title: { display: true, text: 'Views', color: '#9ca3af', font: { size: 10 } }, grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true } } })
+        data: { datasets: [{ label: 'Trafik', data: [], backgroundColor: 'rgba(79,107,237,0.3)', borderColor: '#4F6BED', borderWidth: 1 }] },
+        options: Object.assign({}, _gaOpt, { scales: { x: { title: { display: true, text: 'Jam', color: '#9ca3af', font: { size: 10 } }, grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } }, y: { title: { display: true, text: 'Views', color: '#9ca3af', font: { size: 10 } }, grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true } } })
       });
 
-      // 9. Mixed: daily views vs visitors
+      // 9. Mixed: daily views vs visitors — blue line + gray bars
       _analyticsCharts.mixed = new Chart(document.getElementById('mixedChart'), {
         type: 'bar',
         data: { labels: [], datasets: [
-          { type: 'line', label: 'Unique Visitors', data: [], borderColor: '#1f2937', borderWidth: 2, fill: false, tension: 0.3, pointRadius: 2, pointBackgroundColor: '#1f2937' },
-          { type: 'bar', label: 'Page Views', data: [], backgroundColor: 'rgba(156,163,175,0.5)', borderColor: '#9ca3af', borderWidth: 0, borderRadius: 3 }
+          { type: 'line', label: 'Unique Visitors', data: [], borderColor: '#4F6BED', borderWidth: 2, fill: false, tension: 0.3, pointRadius: 2, pointBackgroundColor: '#4F6BED' },
+          { type: 'bar', label: 'Page Views', data: [], backgroundColor: 'rgba(156,163,175,0.45)', borderColor: '#9ca3af', borderWidth: 0, borderRadius: 3 }
         ] },
-        options: Object.assign({}, _gaGridOpt)
+        options: Object.assign({}, _gaOpt)
       });
 
-      // 10. Horizontal Bar: top pages
+      // 10. Horizontal Bar: top pages — muted colors
       _analyticsCharts.horizontalBar = new Chart(document.getElementById('horizontalBarChart'), {
         type: 'bar',
-        data: { labels: [], datasets: [{ label: 'Views', data: [], backgroundColor: _gaGrayAlpha, borderColor: '#fff', borderWidth: 1, borderRadius: 3 }] },
-        options: Object.assign({}, _gaGridOpt, { indexAxis: 'y', scales: { x: { grid: { color: '#f3f4f6' }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true }, y: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } } }, plugins: Object.assign({}, _gaGridOpt.plugins, { legend: { display: false } }) })
+        data: { labels: [], datasets: [{ label: 'Views', data: [], backgroundColor: _gaColorsAlpha, borderColor: '#fff', borderWidth: 1, borderRadius: 3 }] },
+        options: Object.assign({}, _gaOpt, { indexAxis: 'y', scales: { x: { grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } }, beginAtZero: true }, y: { grid: { display: false }, border: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } } }, plugins: Object.assign({}, _gaOpt.plugins, { legend: { display: false } }) })
       });
 
-      // Fetch real data
+            // Fetch real data
       fetchAnalyticsData();
 
       // Auto-refresh every 5 seconds for real-time data
