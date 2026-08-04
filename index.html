@@ -322,9 +322,9 @@
                     Buat File
                   </button>
                   <div class="h-px bg-gray-100 my-1"></div>
-                  <button onclick="triggerImport('folder')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                    Import Folder
+                  <button onclick="triggerImport('github')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    Import dari GitHub
                   </button>
                   <button onclick="triggerImport('file')" class="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
                     <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
@@ -666,7 +666,6 @@
   </div>
 
   <input type="file" id="import-file-input" class="hidden" multiple onchange="handleImportFiles(event)">
-  <input type="file" id="import-folder-input" class="hidden" webkitdirectory directory multiple onchange="handleImportFolder(event)">
   <input type="file" id="import-zip-input" class="hidden" accept=".zip" onchange="handleImportZip(event)">
 
   <div id="item-action-menu" class="hidden fixed w-44 bg-white rounded-xl shadow-xl overflow-hidden transition-all z-[100] py-1">
@@ -816,6 +815,36 @@
       <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 rounded-b-2xl">
         <button onclick="closeInputModal()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">Batal</button>
         <button id="modal-btn-submit" onclick="submitInputModal()" class="px-4 py-2 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] shadow-sm transition-colors focus:outline-none">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GitHub Import Modal -->
+  <div id="github-modal-overlay" onclick="if(event.target===this) closeGithubModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+    <div id="github-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
+      <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          Import dari GitHub
+        </h3>
+        <button onclick="closeGithubModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="p-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">URL Repository GitHub</label>
+          <input type="text" id="github-url-input" onkeydown="if(event.key==='Enter') startGithubImport()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#273849] focus:border-transparent transition-all" placeholder="https://github.com/user/repo" autocomplete="off">
+          <p id="github-modal-error" class="text-xs text-red-500 mt-2 hidden">URL tidak valid. Contoh: https://github.com/user/repo</p>
+          <div id="github-import-status" class="hidden mt-3 text-xs text-gray-500 flex items-center gap-2">
+            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+            <span id="github-import-progress">Mengambil data...</span>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 rounded-b-2xl">
+        <button onclick="closeGithubModal()" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none shadow-sm">Batal</button>
+        <button id="github-btn-import" onclick="startGithubImport()" class="px-4 py-2 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] shadow-sm transition-colors focus:outline-none">Import</button>
       </div>
     </div>
   </div>
@@ -1604,9 +1633,8 @@
       if (type === 'file') {
         const input = document.getElementById('import-file-input');
         if (input) input.click();
-      } else if (type === 'folder') {
-        const input = document.getElementById('import-folder-input');
-        if (input) input.click();
+      } else if (type === 'github') {
+        openGithubModal();
       } else if (type === 'zip') {
         const input = document.getElementById('import-zip-input');
         if (input) input.click();
@@ -1647,51 +1675,139 @@
       else reader.readAsDataURL(file);
     }
 
-    function handleImportFolder(e) {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
+    function openGithubModal() {
+      var overlay = document.getElementById('github-modal-overlay');
+      var modal = document.getElementById('github-modal');
+      var status = document.getElementById('github-import-status');
+      var errEl = document.getElementById('github-modal-error');
+      if (!overlay) return;
+      overlay.classList.remove('hidden');
+      overlay.classList.add('opacity-100');
+      overlay.classList.remove('opacity-0');
+      modal.classList.remove('scale-95', 'opacity-0');
+      modal.classList.add('scale-100', 'opacity-100');
+      if (status) status.classList.add('hidden');
+      if (errEl) errEl.classList.add('hidden');
+      var input = document.getElementById('github-url-input');
+      if (input) { input.value = ''; setTimeout(function() { input.focus(); }, 100); }
+    }
 
-      let fallbackFolderName = "Folder_Import";
-      let fallbackFolderCreated = false;
-      let fallbackPath = currentFolderPath === 'root' ? fallbackFolderName : currentFolderPath + '/' + fallbackFolderName;
+    function closeGithubModal() {
+      var overlay = document.getElementById('github-modal-overlay');
+      var modal = document.getElementById('github-modal');
+      if (overlay) {
+        overlay.classList.add('opacity-0');
+        overlay.classList.remove('opacity-100');
+        modal.classList.add('scale-95', 'opacity-0');
+        modal.classList.remove('scale-100', 'opacity-100');
+        setTimeout(function() { overlay.classList.add('hidden'); }, 300);
+      }
+    }
 
-      Array.from(files).forEach(file => {
-        let pathParts = file.webkitRelativePath ? file.webkitRelativePath.split('/') : [];
+    async function startGithubImport() {
+      var urlInput = document.getElementById('github-url-input');
+      var errEl = document.getElementById('github-modal-error');
+      var status = document.getElementById('github-import-status');
+      var progressEl = document.getElementById('github-import-progress');
+      var btnImport = document.getElementById('github-btn-import');
+      if (!urlInput) return;
+      var url = urlInput.value.trim();
+      if (errEl) errEl.classList.add('hidden');
 
-        if (pathParts.length <= 1) {
-          if (!fallbackFolderCreated) {
-            if (!projectFilesData[currentFolderPath]) projectFilesData[currentFolderPath] = [];
-            let counter = 1;
-            let finalFolderName = fallbackFolderName;
-            while(projectFilesData[currentFolderPath].find(i => i.type === 'folder' && i.name === finalFolderName)) {
-              finalFolderName = fallbackFolderName + '_' + counter;
-              counter++;
+      var match = url.match(/github\.com[\/:]([^\/:]+)[\/:]([^\/:\s?#]+)/);
+      if (!match) {
+        if (errEl) { errEl.textContent = 'URL tidak valid. Contoh: https://github.com/user/repo'; errEl.classList.remove('hidden'); }
+        return;
+      }
+      var owner = match[1];
+      var repo = match[2].replace(/\.git$/, '');
+      var branch = 'main';
+
+      if (status) status.classList.remove('hidden');
+      if (progressEl) progressEl.textContent = 'Mengambil struktur repository...';
+      if (btnImport) btnImport.disabled = true;
+
+      try {
+        var treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1');
+        if (!treeRes.ok) {
+          if (treeRes.status === 404) {
+            branch = 'master';
+            treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1');
+          }
+        }
+        if (!treeRes.ok) throw new Error('Repository tidak ditemukan atau private');
+        var treeData = await treeRes.json();
+        var files = (treeData.tree || []).filter(function(item) { return item.type === 'blob'; });
+
+        if (files.length === 0) throw new Error('Tidak ada file di repository');
+        if (progressEl) progressEl.textContent = '0/' + files.length + ' file...';
+
+        var importedCount = 0;
+        var batchSize = 5;
+        for (var i = 0; i < files.length; i++) {
+          var filePath = files[i].path;
+          var parts = filePath.split('/');
+          var fileName = parts.pop();
+          var currentPathIter = currentFolderPath;
+
+          for (var j = 0; j < parts.length; j++) {
+            var part = parts[j];
+            if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
+            var existingFolder = projectFilesData[currentPathIter].find(function(item) { return item.type === 'folder' && item.name === part; });
+            var newPath = currentPathIter === 'root' ? part : currentPathIter + '/' + part;
+            if (!existingFolder) {
+              projectFilesData[currentPathIter].push({ type: 'folder', name: part, path: newPath, fileCount: 0, previewText: 'Folder' });
             }
-            fallbackPath = currentFolderPath === 'root' ? finalFolderName : currentFolderPath + '/' + finalFolderName;
-            projectFilesData[currentFolderPath].push({
-              type: 'folder', name: finalFolderName, path: fallbackPath, fileCount: 0, previewText: 'Folder'
-            });
-            fallbackFolderCreated = true;
+            currentPathIter = newPath;
           }
-          importSingleFile(file, fallbackPath);
-          return;
-        }
 
-        const fileName = pathParts.pop();
-        let currentPathIter = currentFolderPath;
-        for (const part of pathParts) {
-          if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
-          const existingFolder = projectFilesData[currentPathIter].find(i => i.type === 'folder' && i.name === part);
-          const newPath = currentPathIter === 'root' ? part : currentPathIter + '/' + part;
-          if (!existingFolder) {
-            projectFilesData[currentPathIter].push({ type: 'folder', name: part, path: newPath, fileCount: 0, previewText: 'Folder' });
+          var rawUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/' + filePath;
+          var fileRes = await fetch(rawUrl);
+          if (!fileRes.ok) continue;
+          var fileType = getFileType(fileName);
+          var content;
+          if (fileType === 'code') {
+            content = await fileRes.text();
+          } else {
+            var blob = await fileRes.blob();
+            content = await new Promise(function(resolve) {
+              var r = new FileReader();
+              r.onload = function(ev) { resolve(ev.target.result); };
+              r.readAsDataURL(blob);
+            });
           }
-          currentPathIter = newPath;
+
+          if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
+          var sizeStr = '0,00 B';
+          var rawSize = content.length;
+          if (rawSize > 1024 * 1024) sizeStr = (rawSize / (1024 * 1024)).toFixed(2) + ' MB';
+          else if (rawSize > 1024) sizeStr = (rawSize / 1024).toFixed(1) + ' KB';
+          else if (rawSize > 0) sizeStr = rawSize + ' B';
+          var fullPath = currentPathIter === 'root' ? fileName : currentPathIter + '/' + fileName;
+          var existingIndex = projectFilesData[currentPathIter].findIndex(function(item) { return item.name === fileName && item.type === 'file'; });
+          if (existingIndex !== -1) {
+            projectFilesData[currentPathIter][existingIndex].content = content;
+            projectFilesData[currentPathIter][existingIndex].size = sizeStr;
+          } else {
+            projectFilesData[currentPathIter].push({ type: 'file', name: fileName, size: sizeStr, path: fullPath, content: content });
+          }
+          importedCount++;
+          if (progressEl) progressEl.textContent = importedCount + '/' + files.length + ' file...';
+          if (importedCount % batchSize === 0) {
+            saveData();
+            renderFileList();
+          }
         }
-        importSingleFile(file, currentPathIter);
-      });
-      e.target.value = '';
-      renderFileList();
+        saveData();
+        renderFileList();
+        if (progressEl) progressEl.textContent = 'Selesai! ' + importedCount + ' file diimport.';
+        setTimeout(function() { closeGithubModal(); }, 1200);
+      } catch(err) {
+        console.error('[Clincoo GitHub] Error:', err.message);
+        if (errEl) { errEl.textContent = 'Error: ' + err.message; errEl.classList.remove('hidden'); }
+        if (status) status.classList.add('hidden');
+      }
+      if (btnImport) btnImport.disabled = false;
     }
 
     async function handleImportZip(e) {
