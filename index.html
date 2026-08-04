@@ -2453,14 +2453,43 @@ async function saveDeployDomain() {
           var siteUrl = result.productionUrl || result.url || '';
           var nowStr = new Date().toLocaleString('id-ID');
 
-          var siteInfo = { url: siteUrl, time: nowStr };
-          localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
-          if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
-          renderDeployStatus();
-          if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
-          _isDeploying = false;
-          var succErrBox = document.getElementById('deploy-error-box');
-          if (succErrBox) succErrBox.classList.add('hidden');
+          // Show "waiting for live" status
+          if (btn) { btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menunggu live...</span>'; }
+          var statusEl = document.getElementById('deploy-prod-status');
+          if (statusEl) { statusEl.textContent = 'Menunggu situs aktif...'; statusEl.className = 'text-xs text-blue-500'; }
+
+          // Poll URL until it returns 200 (max 30 seconds)
+          var pollAttempts = 0;
+          var maxPolls = 15;
+          var pollUrl = function() {
+            pollAttempts++;
+            fetch(siteUrl, { method: 'GET', mode: 'no-cors', cache: 'no-store' }).then(function() {
+              // URL is responding (even in no-cors mode, no rejection means it loaded)
+              var siteInfo = { url: siteUrl, time: nowStr };
+              localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
+              if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
+              renderDeployStatus();
+              if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+              if (statusEl) { statusEl.textContent = 'Situs aktif!'; statusEl.className = 'text-xs text-green-500'; setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 3000); }
+              _isDeploying = false;
+              var succErrBox = document.getElementById('deploy-error-box');
+              if (succErrBox) succErrBox.classList.add('hidden');
+            }).catch(function() {
+              if (pollAttempts < maxPolls) {
+                setTimeout(pollUrl, 2000);
+              } else {
+                // Timeout - still save URL, site might be live shortly
+                var siteInfo = { url: siteUrl, time: nowStr };
+                localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
+                if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
+                renderDeployStatus();
+                if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+                if (statusEl) { statusEl.textContent = ''; statusEl.className = 'text-xs text-gray-400'; }
+                _isDeploying = false;
+              }
+            });
+          };
+          setTimeout(pollUrl, 3000); // Wait 3s before first poll
         } else {
           var deployErr = result.error || 'Publikasi gagal';
           var errBox2 = document.getElementById('deploy-error-box');
