@@ -246,6 +246,137 @@ async function handleRequest(request, env) {
       return jsonRes({ success: false, error: 'Proxy error: ' + e.message }, 500);
     }
   }
+  // === GITHUB CREATE REPO ===
+  if (path === '/github/create-repo') {
+    const token = request.headers.get('X-GitHub-Token') || url.searchParams.get('token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) {
+      return jsonRes({ success: false, error: 'Invalid JSON' }, 400);
+    }
+    const repoName = sanitizeName(body.name || '');
+    const isPrivate = body.private === true;
+    if (!repoName) return jsonRes({ success: false, error: 'Repo name required' }, 400);
+    try {
+      const ghRes = await fetch('https://api.github.com/user/repos', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'token ' + token,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+          'User-Agent': 'Clincoo-App'
+        },
+        body: JSON.stringify({
+          name: repoName,
+          private: isPrivate,
+          auto_init: true,
+          description: body.description || 'Created with Clincoo'
+        })
+      });
+      const data = await ghRes.json();
+      if (!ghRes.ok) {
+        return jsonRes({ success: false, error: (data && data.message) || 'Failed to create repo', status: ghRes.status }, 500);
+      }
+      return jsonRes({ success: true, data: { full_name: data.full_name, name: data.name, html_url: data.html_url, default_branch: data.default_branch || 'main' } });
+    } catch(e) {
+      return jsonRes({ success: false, error: 'Create repo error: ' + e.message }, 500);
+    }
+  }
+
+  // === GITHUB PUSH FILES ===
+  if (path === '/github/push') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) {
+      return jsonRes({ success: false, error: 'Invalid JSON' }, 400);
+    }
+    const owner = body.owner || '';
+    const repo = body.repo || '';
+    const branch = body.branch || 'main';
+    const files = Array.isArray(body.files) ? body.files : [];
+    if (!owner || !repo || files.length === 0) {
+      return jsonRes({ success: false, error: 'owner, repo, files required' }, 400);
+    }
+    try {
+      // Get latest commit SHA
+      const refRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/refs/heads/' + branch, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      let latestSha = '';
+      if (refRes.ok) {
+        const refData = await refRes.json();
+        latestSha = refData.object.sha;
+      }
+      if (!latestSha) {
+        // Create initial commit with auto_init
+        return jsonRes({ success: false, error: 'Branch not found: ' + branch }, 400);
+      }
+
+      // Get base tree
+      const commitRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/commits/' + latestSha, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      const commitData = await commitRes.json();
+      const baseTreeSha = commitData.tree ? commitData.tree.sha : '';
+
+      // Create blobs for all files
+      const treeItems = [];
+      for (const file of files) {
+        const cleanPath = file.path.replace(/^\//, '');
+        const isBinary = file.content && file.content.startsWith('data:');
+        let blobSha = '';
+        if (isBinary) {
+          // For binary (base64 data URL), use content API directly
+          const blobRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/blobs', {
+            method: 'POST',
+            headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+            body: JSON.stringify({ content: file.content.split(',')[1] || file.content, encoding: 'base64' })
+          });
+          const blobData = await blobRes.json();
+          blobSha = blobData.sha;
+        } else {
+          const blobRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/blobs', {
+            method: 'POST',
+            headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+            body: JSON.stringify({ content: file.content || '', encoding: 'utf-8' })
+          });
+          const blobData = await blobRes.json();
+          blobSha = blobData.sha;
+        }
+        treeItems.push({ path: cleanPath, mode: '100644', type: 'blob', sha: blobSha });
+      }
+
+      // Create new tree
+      const treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ base_tree: baseTreeSha, tree: treeItems })
+      });
+      const treeData = await treeRes.json();
+      const newTreeSha = treeData.sha;
+
+      // Create commit
+      const newCommitRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/commits', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ message: body.message || 'Update from Clincoo', tree: newTreeSha, parents: [latestSha] })
+      });
+      const newCommitData = await newCommitRes.json();
+      const newCommitSha = newCommitData.sha;
+
+      // Update ref
+      await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/refs/heads/' + branch, {
+        method: 'PATCH',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ sha: newCommitSha })
+      });
+
+      return jsonRes({ success: true, message: 'Pushed ' + files.length + ' files', commit: newCommitSha });
+    } catch(e) {
+      return jsonRes({ success: false, error: 'Push error: ' + e.message }, 500);
+    }
+  }
   // === END GITHUB API PROXY ===
 
 

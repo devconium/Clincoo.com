@@ -911,9 +911,38 @@
     }
 
     function saveData() {
-      localStorage.setItem('clincoo_projects', JSON.stringify(projects));
+      try {
+        localStorage.setItem('clincoo_projects', JSON.stringify(projects));
+      } catch(e) {
+        console.warn('[Clincoo] Failed to save projects:', e.message);
+      }
       if (currentProjectId) {
-        localStorage.setItem('clincoo_' + currentProjectId + '_files', JSON.stringify(projectFilesData));
+        try {
+          localStorage.setItem('clincoo_' + currentProjectId + '_files', JSON.stringify(projectFilesData));
+        } catch(e) {
+          console.warn('[Clincoo] Failed to save files (quota?):', e.message);
+          // Try to save without large content as fallback
+          try {
+            var stripped = {};
+            for (var key in projectFilesData) {
+              stripped[key] = projectFilesData[key].map(function(item) {
+                var copy = {};
+                for (var k in item) {
+                  if (k === 'content' && typeof item[k] === 'string' && item[k].length > 50000) {
+                    copy[k] = item[k].substring(0, 50000) + '...[truncated]';
+                  } else {
+                    copy[k] = item[k];
+                  }
+                }
+                return copy;
+              });
+            }
+            localStorage.setItem('clincoo_' + currentProjectId + '_files', JSON.stringify(stripped));
+            console.warn('[Clincoo] Saved with truncated content due to quota');
+          } catch(e2) {
+            console.error('[Clincoo] Save completely failed:', e2.message);
+          }
+        }
       }
       if (typeof triggerAutoDeploy === 'function') triggerAutoDeploy();
     }
@@ -1714,6 +1743,77 @@
       return localStorage.getItem('clincoo_github_token') || '';
     }
 
+    async function autoCreateGithubRepo(projName, projId, isPrivate) {
+      var token = getGithubToken();
+      if (!token) return;
+      var slug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!slug) slug = 'clincoo-project';
+      try {
+        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/create-repo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+          body: JSON.stringify({ name: slug, private: isPrivate, description: 'Created with Clincoo' })
+        });
+        var result = await res.json();
+        if (result.success) {
+          var repoInfo = result.data;
+          // Save repo info for this project
+          localStorage.setItem('clincoo_' + projId + '_github_repo', JSON.stringify({
+            full_name: repoInfo.full_name,
+            name: repoInfo.name,
+            branch: repoInfo.default_branch || 'main',
+            html_url: repoInfo.html_url
+          }));
+          if (typeof FB !== 'undefined') FB.set('clincoo_' + projId + '_github_repo', repoInfo);
+          showToast('Repo GitHub dibuat: ' + repoInfo.full_name, 'success');
+        } else {
+          console.warn('[Clincoo] Auto-create repo failed:', result.error);
+        }
+      } catch(e) {
+        console.warn('[Clincoo] Auto-create repo error:', e.message);
+      }
+    }
+
+    async function pushFilesToGithub(projId) {
+      var token = getGithubToken();
+      if (!token) return { success: false, error: 'Not connected to GitHub' };
+      var repoInfoStr = localStorage.getItem('clincoo_' + projId + '_github_repo');
+      if (!repoInfoStr) return { success: false, error: 'No GitHub repo linked' };
+      var repoInfo = JSON.parse(repoInfoStr);
+      var parts = repoInfo.full_name.split('/');
+      var owner = parts[0];
+      var repo = parts[1];
+      var branch = repoInfo.branch || 'main';
+
+      var storageKey = 'clincoo_' + projId + '_files';
+      var localFiles = {};
+      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+      var allFiles = [];
+      for (var folderPath in localFiles) {
+        if (!Array.isArray(localFiles[folderPath])) continue;
+        for (var i = 0; i < localFiles[folderPath].length; i++) {
+          var fItem = localFiles[folderPath][i];
+          if (fItem.type === 'file' && fItem.content) {
+            var fp = folderPath === 'root' ? fItem.name : folderPath + '/' + fItem.name;
+            allFiles.push({ path: fp, content: fItem.content });
+          }
+        }
+      }
+      if (allFiles.length === 0) return { success: false, error: 'No files to push' };
+
+      try {
+        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/push', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+          body: JSON.stringify({ owner: owner, repo: repo, branch: branch, files: allFiles, message: 'Update from Clincoo' })
+        });
+        var result = await res.json();
+        return result;
+      } catch(e) {
+        return { success: false, error: e.message };
+      }
+    }
+
     function connectGithub() {
       var currentUrl = window.location.origin + window.location.pathname + window.location.search;
       window.location.href = 'https://clincoo-deploy.clincoo.workers.dev/github/auth?redirect=' + encodeURIComponent(currentUrl);
@@ -1854,7 +1954,7 @@
           var filePath = files[i].path;
           var pathParts = filePath.split('/');
           var fileName = pathParts.pop();
-          var currentPathIter = currentFolderPath;
+          var currentPathIter = 'root';
           for (var j = 0; j < pathParts.length; j++) {
             var part = pathParts[j];
             if (!projectFilesData[currentPathIter]) projectFilesData[currentPathIter] = [];
@@ -1904,6 +2004,11 @@
         saveData();
         renderFileList();
         if (progressEl) progressEl.textContent = 'Selesai! ' + importedCount + ' file diimport.';
+        // Force a second save to ensure localStorage persistence
+        setTimeout(function() {
+          localStorage.setItem('clincoo_' + currentProjectId + '_files', JSON.stringify(projectFilesData));
+          renderFileList();
+        }, 100);
         setTimeout(function() {
           closeGithubModal();
           if (isProjectMode) {
@@ -2205,6 +2310,10 @@
         currentProjectId = newId;
         projectFilesData = { 'root': [] };
         localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
+        // Auto-create GitHub repo if connected
+        if (getGithubToken()) {
+          autoCreateGithubRepo(name, newId, visibility === 'private');
+        }
       }
       saveData();
       navigateTo('/');
@@ -3134,6 +3243,16 @@ async function saveDeployDomain() {
               renderDeployStatus();
               if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
               if (statusEl) { statusEl.textContent = 'Situs aktif!'; statusEl.className = 'text-xs text-green-500'; setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 3000); }
+              // Push to GitHub if connected
+              if (getGithubToken()) {
+                pushFilesToGithub(currentProjectId).then(function(pushResult) {
+                  if (pushResult.success) {
+                    showToast('Sinkron ke GitHub berhasil', 'success');
+                  }
+                }).catch(function() {});
+                // Also save CF Pages project name mapping
+                localStorage.setItem('clincoo_' + currentProjectId + '_cf_project', projectSlug);
+              }
               _isDeploying = false;
               var succErrBox = document.getElementById('deploy-error-box');
               if (succErrBox) succErrBox.classList.add('hidden');
