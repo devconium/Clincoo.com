@@ -1,0 +1,92 @@
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+    }
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+    .page-view {
+      transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+    }
+    .page-enter {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .page-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+    
+    .dark-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+    .dark-scrollbar::-webkit-scrollbar-track { background: #1e1e1e; }
+    .dark-scrollbar::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+    .dark-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
+
+    .custom-input {
+      background-color: #f3f4f6;
+      border-color: #e5e7eb;
+      color: #111827;
+    }
+    .custom-input:focus {
+      background-color: #ffffff;
+      border-color: #d1d5db;
+      box-shadow: none;
+      outline: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateY(1rem) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes toastSlideOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(1rem) scale(0.95); }
+    }
+    .toast-enter { animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .toast-exit { animation: toastSlideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    .CodeMirror {
+      width: 100% !important;
+      height: 100% !important;
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      background-color: transparent !important;
+    }
+    .cm-s-dracula.CodeMirror {
+      background-color: #12151c !important;
+      color: #f8f8f2 !important;
+    }
+    .cm-s-dracula .CodeMirror-gutters {
+      background-color: #151821 !important;
+      border-right: 1px solid #212733 !important;
+    }
+    .cm-s-dracula .CodeMirror-linenumber {
+      color: #4d5668 !important;
+    }
+
+    .analytics-scroll::-webkit-scrollbar { height: 5px; }
+    .analytics-scroll::-webkit-scrollbar-track { background: transparent; }
+    .analytics-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
+    .analytics-scroll::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+    .analytics-scroll { scrollbar-width: thin; scrollbar-color: #e5e7eb transparent; }
