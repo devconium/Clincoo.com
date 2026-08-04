@@ -497,6 +497,12 @@
           <span id="editor-filename-label" class="text-sm font-semibold text-gray-100 truncate">index.html</span>
         </div>
       </div>
+      <div class="flex items-center gap-2">
+        <button id="editor-preview-toggle" onclick="toggleEditorPreview()" class="hidden items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-300 hover:text-white bg-[#273849] hover:bg-[#1a2530] rounded-lg transition-colors focus:outline-none" title="Preview / Code">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <span id="editor-preview-label">Preview</span>
+        </button>
+      </div>
     </div>
 
     <div class="relative flex-1 flex overflow-hidden bg-[#12151c]">
@@ -525,6 +531,9 @@
           </div>
         </div>
       </div>
+      <div id="editor-preview-container" class="hidden w-full h-full flex flex-col bg-white">
+        <iframe id="editor-preview-iframe" class="w-full h-full border-0" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Preview"></iframe>
+      </div>
     </div>
   </div>
 
@@ -532,21 +541,20 @@
   <div id="page-analytics" class="page-view hidden w-full min-h-screen flex flex-col bg-[#f7f7f9]">
     <!-- Header -->
     <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
-      <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
+      <div class="w-full max-w-5xl px-4 sm:px-6 mx-auto">
         <div class="flex items-center justify-between h-14">
-          <!-- Left: Hamburger + Analytics title + Project dropdown -->
           <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-            <button onclick="toggleSidebar()" class="flex-shrink-0 p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none -ml-1" aria-label="Menu">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
             <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
-              <h2 class="text-base sm:text-lg font-bold text-gray-800 tracking-tight whitespace-nowrap">Analytics</h2>
-              <span class="text-gray-300 font-medium text-base sm:text-lg flex-shrink-0">/</span>
-              <div class="min-w-0 relative">
-                <button onclick="toggleAnalyticsProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-base sm:text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
-                  <span id="analytics-project-name" class="truncate block max-w-[80px] sm:max-w-[150px]">Proyek</span>
+              <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Analytics</h2>
+              <span class="text-gray-300 font-medium text-lg flex-shrink-0">/</span>
+              <div class="min-w-0">
+                <button onclick="toggleAnalyticsProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
+                  <span id="analytics-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
                   <span class="flex-shrink-0 w-5 h-5 bg-gray-100 rounded flex items-center justify-center text-gray-400">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                   </span>
@@ -558,21 +566,23 @@
               </div>
             </div>
           </div>
-          <!-- Right: App Logo + Notification -->
-          <div class="flex items-center gap-2 sm:gap-3">
+          
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2">
             <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </button>
-            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+            <a href="profile.html" class="flex items-center justify-center">
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+            </a>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Analytics Content -->
-    <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto py-4 sm:py-6">
+    <div class="w-full max-w-5xl px-4 sm:px-6 mx-auto py-4 sm:py-6">
       <!-- Subtitle -->
       <div class="flex items-center justify-between mb-5">
         <p class="text-xs text-gray-400">Ringkasan lalu lintas situs</p>
@@ -2152,8 +2162,39 @@
       e.target.value = '';
     }
 
+    var _editorPreviewMode = false; // false = code, true = preview
+
+    function toggleEditorPreview() {
+      _editorPreviewMode = !_editorPreviewMode;
+      var codeContainer = document.getElementById('editor-code-container');
+      var previewContainer = document.getElementById('editor-preview-container');
+      var label = document.getElementById('editor-preview-label');
+      if (_editorPreviewMode) {
+        // Show preview
+        if (codeContainer) codeContainer.classList.add('hidden');
+        if (previewContainer) previewContainer.classList.remove('hidden');
+        if (label) label.textContent = 'Code';
+        updateEditorPreview();
+      } else {
+        // Show code
+        if (codeContainer) codeContainer.classList.remove('hidden');
+        if (previewContainer) previewContainer.classList.add('hidden');
+        if (label) label.textContent = 'Preview';
+      }
+    }
+
+    function updateEditorPreview() {
+      var iframe = document.getElementById('editor-preview-iframe');
+      if (!iframe) return;
+      var items = projectFilesData[currentFolderPath] || [];
+      var fileObj = items.find(i => i.type === 'file' && i.name === editingFileName);
+      var htmlContent = fileObj ? (fileObj.content || '') : '';
+      iframe.srcdoc = htmlContent;
+    }
+
     function openFileInEditor(filename) {
       editingFileName = filename;
+      _editorPreviewMode = false;
       const items = projectFilesData[currentFolderPath] || [];
       const fileObj = items.find(i => i.type === 'file' && i.name === filename);
       const fileType = getFileType(filename);
@@ -2168,15 +2209,19 @@
       const audioContainer = document.getElementById('editor-audio-container');
       const videoContainer = document.getElementById('editor-video-container');
       const imageContainer = document.getElementById('editor-image-container');
+      const previewContainer = document.getElementById('editor-preview-container');
+      const previewToggleBtn = document.getElementById('editor-preview-toggle');
 
       codeContainer.classList.add('hidden'); audioContainer.classList.add('hidden');
       videoContainer.classList.add('hidden'); imageContainer.classList.add('hidden');
+      if (previewContainer) previewContainer.classList.add('hidden');
 
       const audioPlayer = document.getElementById('audio-player');
       const videoPlayer = document.getElementById('video-player');
       if (audioPlayer) audioPlayer.pause();
       if (videoPlayer) videoPlayer.pause();
 
+      if (previewToggleBtn) { previewToggleBtn.classList.add('hidden'); previewToggleBtn.classList.remove('flex'); }
       if (fileType === 'audio') {
         audioContainer.classList.remove('hidden');
         if (audioPlayer) { audioPlayer.src = fileObj && fileObj.content ? fileObj.content : ''; audioPlayer.load(); }
@@ -2191,6 +2236,16 @@
         codeContainer.classList.remove('hidden');
         initCodeEditor();
         let mode = 'htmlmixed';
+        // Show preview toggle only for HTML files
+        if (previewToggleBtn) {
+          if (filename.match(/\.html?$/i)) {
+            previewToggleBtn.classList.remove('hidden');
+            previewToggleBtn.classList.add('flex');
+          } else {
+            previewToggleBtn.classList.add('hidden');
+            previewToggleBtn.classList.remove('flex');
+          }
+        }
         if (ext === 'js' || ext === 'json' || ext === 'ts' || ext === 'jsx') mode = 'javascript';
         else if (ext === 'css') mode = 'css';
         else if (ext === 'py' || ext === 'python') mode = 'python';
@@ -2202,6 +2257,17 @@
       }
       navigateTo('/editor');
     }
+
+    // Auto-update preview on code change (debounced)
+    var _previewUpdateTimer = null;
+    document.addEventListener('input', function(e) {
+      if (_editorPreviewMode && e.target && e.target.closest && e.target.closest('.CodeMirror')) {
+        clearTimeout(_previewUpdateTimer);
+        _previewUpdateTimer = setTimeout(function() {
+          updateEditorPreview();
+        }, 800);
+      }
+    });
 
     function navigateBackFromEditor() {
       if (editingFileName) {
@@ -3212,11 +3278,12 @@ async function saveDeployDomain() {
       if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
       renderDeployStatus();
 
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+      var projName = proj ? proj.name : (currentProjectId || 'project');
+      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!projectSlug) projectSlug = 'clincoo-app';
+
       if (domain) {
-        var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
-        var projName = proj ? proj.name : (currentProjectId || 'project');
-        var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-        if (!projectSlug) projectSlug = 'clincoo-app';
         try {
           await fetch('https://clincoo-deploy.clincoo.workers.dev/domain?projectName=' + encodeURIComponent(projectSlug) + '&domain=' + encodeURIComponent(domain), {
             method: 'DELETE',
@@ -3224,6 +3291,32 @@ async function saveDeployDomain() {
           });
         } catch(err) {}
       }
+
+      // Re-deploy current files WITHOUT redirect script (so pages.dev works again without redirecting to deleted domain)
+      var existingSite = null;
+      try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+      if (existingSite && existingSite.url) {
+        // Re-deploy existing files without redirect
+        try {
+          var allFiles = [];
+          var projectData = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+          if (projectData && projectData.files) {
+            allFiles = projectData.files.map(function(f) { return { path: f.path, content: f.content }; });
+          }
+          if (allFiles.length > 0) {
+            await fetch('https://clincoo-deploy.clincoo.workers.dev', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ projectName: projectSlug, files: allFiles, branch: 'main' })
+            });
+            console.log('[Clincoo] Re-deployed without redirect after domain removal');
+          }
+        } catch(e) { console.warn('[Clincoo] Re-deploy failed:', e.message); }
+      } else {
+        // Deploy 404 page without redirect
+        deploy404Page(projectSlug);
+      }
+
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
@@ -3236,8 +3329,27 @@ async function saveDeployDomain() {
       if (e.target && e.target.id === 'deploy-https') {
         localStorage.setItem(getDeployHttpsKey(), String(e.target.checked));
         if (typeof FB !== 'undefined') FB.set(getDeployHttpsKey(), e.target.checked);
+        // Apply HTTPS setting to Cloudflare Pages
+        applyHttpsSetting(e.target.checked);
       }
     });
+
+    async function applyHttpsSetting(enabled) {
+      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
+      var projName = proj ? proj.name : (currentProjectId || 'project');
+      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      if (!projectSlug) projectSlug = 'clincoo-app';
+      try {
+        await fetch('https://clincoo-deploy.clincoo.workers.dev/ssl?projectName=' + encodeURIComponent(projectSlug), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enabled: enabled })
+        });
+        console.log('[Clincoo] SSL setting applied:', enabled);
+      } catch(err) {
+        console.warn('[Clincoo] SSL setting failed:', err.message);
+      }
+    }
 
     // === DEPLOY 404 PAGE ===
     async function deploy404Page(projectSlug) {
