@@ -257,3 +257,4 @@
       loadData();
     renderSidebarProjects();
       handleRoute();
+    });
