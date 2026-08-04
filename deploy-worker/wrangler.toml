@@ -3,5 +3,5 @@ main = "worker.js"
 compatibility_date = "2024-09-23"
 
 # Secrets (set via `wrangler secret put`):
-# CLOUDFLARE_API_TOKEN — Cloudflare API token with Pages + Workers permissions
-# CLOUDFLARE_ACCOUNT_ID — Cloudflare account ID
+# CF_API_TOKEN — Cloudflare API token with Pages + Workers permissions
+# CF_ACCOUNT_ID — Cloudflare account ID
