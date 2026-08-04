@@ -190,14 +190,27 @@ async function _deleteProjectFromD1(projectId, projName) {
     }
     var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     if (!projectSlug) projectSlug = 'clincoo-app';
+
     try {
       var delRes = await fetch('https://clincoo-deploy.clincoo.workers.dev/project?projectName=' + encodeURIComponent(projectSlug), {
         method: 'DELETE'
       });
-      var delData = await delRes.json();
+      var delData = await delRes.json().catch(function() { return {}; });
       console.log('[Clincoo Sync] Cloudflare cleanup:', delData.message || 'done');
     } catch(e2) {
       console.warn('[Clincoo Sync] Error undeploying from Cloudflare:', e2.message);
+    }
+
+    // 2. Delete custom domain route if any
+    var savedDomain = localStorage.getItem('clincoo_' + pid + '_deploy_domain');
+    if (savedDomain) {
+      try {
+        await fetch('https://clincoo-deploy.clincoo.workers.dev/domain?projectName=' + encodeURIComponent(projectSlug) + '&domain=' + encodeURIComponent(savedDomain), {
+          method: 'DELETE'
+        });
+      } catch(e4) {
+        console.warn('[Clincoo Sync] Error deleting custom domain:', e4.message);
+      }
     }
 
     // Clean up deploy-related localStorage keys
