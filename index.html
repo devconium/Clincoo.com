@@ -664,7 +664,7 @@
       Kompres ZIP
     </button>
     <div class="h-px bg-gray-100 my-1"></div>
-    <button onclick="confirmItemDelete()" class="flex items-center w-full px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 transition-colors">
+    <button onclick="showConfirmDeleteItem()" class="flex items-center w-full px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 transition-colors">
       Hapus
     </button>
   </div>
@@ -1496,21 +1496,69 @@
       if (fileSearchInput) fileSearchInput.value = '';
       renderFileList();
       closeInputModal();
+      if (modalAction === 'create_file') showToast('File berhasil dibuat', 'success');
+      else if (modalAction === 'create_folder') showToast('Folder berhasil dibuat', 'success');
+      else if (modalAction === 'rename') showToast('Nama berhasil diubah', 'success');
     }
 
-    function confirmItemDelete() {
+    function showToast(message, type) {
+      var existing = document.getElementById('clincoo-toast');
+      if (existing) existing.remove();
+      var toast = document.createElement('div');
+      toast.id = 'clincoo-toast';
+      toast.className = 'fixed bottom-6 right-6 z-[300] px-4 py-3 rounded-xl shadow-2xl text-sm font-medium text-white transition-all duration-300 flex items-center gap-2';
+      toast.style.transform = 'translateY(1rem)';
+      toast.style.opacity = '0';
+      if (type === 'error') toast.style.backgroundColor = '#ef4444';
+      else if (type === 'warning') toast.style.backgroundColor = '#f59e0b';
+      else if (type === 'info') toast.style.backgroundColor = '#3b82f6';
+      else toast.style.backgroundColor = '#10b981';
+      var icon = type === 'error' ? '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' : type === 'warning' ? '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M12 3l9 16H3l9-16z"/></svg>' : '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+      toast.innerHTML = icon + '<span>' + message + '</span>';
+      document.body.appendChild(toast);
+      requestAnimationFrame(function() {
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
+      });
+      setTimeout(function() {
+        toast.style.transform = 'translateY(1rem)';
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 2500);
+    }
+
+    function showConfirmDeleteItem() {
       const menu = document.getElementById('item-action-menu');
       if (menu) menu.classList.add('hidden');
       if(!activeItemName) return;
+      var itemName = activeItemName;
+      var isFolder = (projectFilesData[currentFolderPath] || []).find(function(i) { return i.name === itemName && i.type === 'folder'; });
+      var safeName = itemName.replace(/'/g, "\\'");
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-[200] flex items-center justify-center p-4';
+      modal.innerHTML = '<div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" onclick="this.parentElement.remove()"></div>' +
+        '<div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-fade-in">' +
+        '<div class="flex items-center justify-center w-12 h-12 bg-red-50 rounded-full mx-auto mb-4">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>' +
+        '</div>' +
+        '<h3 class="text-lg font-bold text-gray-900 text-center mb-2">Hapus ' + (isFolder ? 'Folder' : 'File') + '</h3>' +
+        '<p class="text-sm text-gray-500 text-center mb-6">Yakin ingin menghapus <span class="font-semibold text-gray-700">"' + itemName + '"</span>? ' + (isFolder ? 'Semua file di dalam folder ini akan dihapus.' : 'File ini akan dihapus permanen.') + '</p>' +
+        '<div class="flex gap-3">' +
+        '<button onclick="this.closest(\'.fixed\').remove()" class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all">Batal</button>' +
+        '<button onclick="executeDeleteItem(\'' + safeName + '\', this)" class="flex-1 px-4 py-2.5 rounded-lg bg-red-500 text-sm font-semibold text-white hover:bg-red-600 transition-all">Hapus</button>' +
+        '</div></div>';
+      document.body.appendChild(modal);
+    }
 
-      const items = projectFilesData[currentFolderPath] || [];
-      const itemIndex = items.findIndex(i => i.name === activeItemName);
-      
+    function executeDeleteItem(itemName, btn) {
+      btn.closest('.fixed').remove();
+      var items = projectFilesData[currentFolderPath] || [];
+      var itemIndex = items.findIndex(function(i) { return i.name === itemName; });
       if(itemIndex !== -1) {
-        const item = items[itemIndex];
+        var item = items[itemIndex];
         if(item.type === 'folder') {
-          const prefix = item.path;
-          Object.keys(projectFilesData).forEach(key => {
+          var prefix = item.path;
+          Object.keys(projectFilesData).forEach(function(key) {
             if (key === prefix || key.startsWith(prefix + '/')) {
               delete projectFilesData[key];
             }
@@ -1520,6 +1568,7 @@
       }
       saveData();
       renderFileList();
+      showToast((itemName.split('.').length > 1 ? 'File' : 'Folder') + ' berhasil dihapus', 'success');
     }
 
     function triggerImport(type) {
@@ -1924,11 +1973,17 @@
     }
 
     document.addEventListener('click', function(e) {
-      const menu = document.getElementById('project-action-menu');
-      if (menu && !menu.classList.contains('hidden')) {
-        if (!menu.contains(e.target) && !e.target.closest('[onclick*="toggleProjectActionMenu"]')) {
-          menu.classList.add('hidden');
+      var pMenu = document.getElementById('project-action-menu');
+      if (pMenu && !pMenu.classList.contains('hidden')) {
+        if (!pMenu.contains(e.target) && !e.target.closest('[onclick*="toggleProjectActionMenu"]')) {
+          pMenu.classList.add('hidden');
           projectActionMenuTargetId = null;
+        }
+      }
+      var iMenu = document.getElementById('item-action-menu');
+      if (iMenu && !iMenu.classList.contains('hidden')) {
+        if (!iMenu.contains(e.target) && !e.target.closest('[onclick*="openItemActionMenu"]') && !e.target.closest('[onclick*="triggerRename"]') && !e.target.closest('[onclick*="triggerDownload"]') && !e.target.closest('[onclick*="triggerZip"]') && !e.target.closest('[onclick*="showConfirmDeleteItem"]')) {
+          iMenu.classList.add('hidden');
         }
       }
     });
@@ -2391,12 +2446,16 @@
         if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         renderEnvList();
         if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
+        showToast('Variabel berhasil dihapus', 'success');
         }
 
     function saveEnv() {
         const keyInput = document.getElementById('env-key');
         const valInput = document.getElementById('env-value');
-        if(!keyInput.value.trim() || !valInput.value) { return; }
+        if(!keyInput.value.trim() || !valInput.value) {
+          showToast('Kunci dan nilai tidak boleh kosong', 'error');
+          return;
+        }
         envVariables.push({ key: keyInput.value.trim(), value: valInput.value });
         localStorage.setItem(getEnvKey(), JSON.stringify(envVariables));
         if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
@@ -2404,6 +2463,7 @@
         valInput.value = '';
         renderEnvList();
         if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
+        showToast('Variabel berhasil disimpan', 'success');
     }
 
     function safeNavigate(url) {
@@ -2474,6 +2534,7 @@ async function saveDeployDomain() {
       if (!domainInput) return;
       const domain = domainInput.value.trim();
       if (!domain) {
+        showToast('Domain tidak boleh kosong', 'error');
         return;
       }
       if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan...'; }
@@ -2485,6 +2546,7 @@ async function saveDeployDomain() {
       var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
       if (!projectSlug) projectSlug = 'clincoo-app';
 
+      var success = false;
       try {
         var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/domain', {
           method: 'POST',
@@ -2492,6 +2554,7 @@ async function saveDeployDomain() {
           body: JSON.stringify({ projectName: projectSlug, domain: domain })
         });
         var result = await res.json();
+        success = result.success;
         if (result.success) {
           console.log('[Clincoo] Domain berhasil disimpan');
         } else {
@@ -2502,6 +2565,7 @@ async function saveDeployDomain() {
       }
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan'; }
+      showToast(success ? 'Domain berhasil disimpan' : 'Gagal menyimpan domain', success ? 'success' : 'error');
     }
 
     async function removeDeployDomain() {
@@ -2524,6 +2588,7 @@ async function saveDeployDomain() {
         } catch(err) {}
       }
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
+      showToast('Domain berhasil dihapus', 'success');
     }
 
     document.addEventListener('change', function(e) {
