@@ -489,12 +489,31 @@
     <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
       <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
         <div class="flex items-center justify-between h-14">
-          <!-- Left: Hamburger Menu -->
-          <button onclick="toggleSidebar()" class="p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none" aria-label="Menu">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          <!-- Left: Hamburger + Analytics title + Project dropdown -->
+          <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+            <button onclick="toggleSidebar()" class="flex-shrink-0 p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none -ml-1" aria-label="Menu">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
+              <h2 class="text-base sm:text-lg font-bold text-gray-800 tracking-tight whitespace-nowrap">Analytics</h2>
+              <span class="text-gray-300 font-medium text-base sm:text-lg flex-shrink-0">/</span>
+              <div class="min-w-0 relative">
+                <button onclick="toggleAnalyticsProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-base sm:text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pintasan Proyek">
+                  <span class="truncate block max-w-[80px] sm:max-w-[150px]">Pintasan Proyek</span>
+                  <span class="flex-shrink-0 w-5 h-5 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                  </span>
+                </button>
+                <div id="analytics-project-dropdown" class="hidden absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all z-50">
+                  <div class="p-1 max-h-60 overflow-y-auto hide-scrollbar" id="analytics-project-list">
+                    <p class="text-xs text-gray-400 px-3 py-2">Belum ada proyek dikunjungi</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Right: App Logo + Notification -->
           <div class="flex items-center gap-2 sm:gap-3">
             <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
@@ -510,18 +529,8 @@
 
     <!-- Analytics Content -->
     <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto py-4 sm:py-6">
-      <!-- Title + Project Shortcut Dropdown -->
+      <!-- Subtitle -->
       <div class="flex items-center justify-between mb-5">
-        <div class="flex items-center gap-3">
-          <h1 class="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">Analytics</h1>
-          <div class="relative">
-            <button onclick="toggleProjectShortcutDropdown(event)" class="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-gray-800 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
-              Pintasan Proyek
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </button>
-            <div id="project-shortcut-dropdown" class="hidden absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg py-1.5 min-w-[200px] max-h-[280px] overflow-y-auto z-50 border border-gray-100"></div>
-          </div>
-        </div>
         <p class="text-xs text-gray-400">Ringkasan lalu lintas situs</p>
       </div>
 
@@ -571,7 +580,7 @@
 
       <!-- Main Chart (Line - Full Width) -->
       <div class="p-5 mb-4">
-        <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 7 Hari Terakhir<button onclick="showChartInfo('lineChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+        <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 7 Hari Terakhir<button onclick="showChartInfo('lineChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
         <p class="text-xs text-gray-400 mb-4">Views harian dari seluruh situs</p>
         <div style="height: 260px;"><canvas id="lineChart"></canvas></div>
       </div>
@@ -579,47 +588,47 @@
       <!-- Charts Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik Bulanan<button onclick="showChartInfo('barChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik Bulanan<button onclick="showChartInfo('barChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Views per bulan</p>
           <div style="height: 220px;"><canvas id="barChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Sumber Trafik<button onclick="showChartInfo('pieChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Sumber Trafik<button onclick="showChartInfo('pieChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi sumber kunjungan</p>
           <div style="height: 220px;"><canvas id="pieChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Perangkat<button onclick="showChartInfo('doughnutChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Perangkat<button onclick="showChartInfo('doughnutChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Tipe perangkat pengunjung</p>
           <div style="height: 220px;"><canvas id="doughnutChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Bahasa<button onclick="showChartInfo('radarChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Bahasa<button onclick="showChartInfo('radarChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi bahasa pengguna</p>
           <div style="height: 220px;"><canvas id="radarChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Negara Asal<button onclick="showChartInfo('polarAreaChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Negara Asal<button onclick="showChartInfo('polarAreaChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Distribusi negara pengunjung</p>
           <div style="height: 220px;"><canvas id="polarAreaChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 24 Jam<button onclick="showChartInfo('scatterChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Trafik 24 Jam<button onclick="showChartInfo('scatterChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Views per jam</p>
           <div style="height: 220px;"><canvas id="scatterChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Visitors x Views<button onclick="showChartInfo('bubbleChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Visitors x Views<button onclick="showChartInfo('bubbleChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Korelasi pengunjung dan views</p>
           <div style="height: 220px;"><canvas id="bubbleChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Views vs Visitors<button onclick="showChartInfo('mixedChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Views vs Visitors<button onclick="showChartInfo('mixedChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Perbandingan harian (Mixed)</p>
           <div style="height: 220px;"><canvas id="mixedChart"></canvas></div>
         </div>
         <div class="p-5">
-          <h2 class="text-sm font-semibold text-gray-900 mb-1">Top Halaman<button onclick="showChartInfo('horizontalBarChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200/70 text-gray-500 hover:bg-gray-300 hover:text-gray-700 transition-colors ml-1.5 align-middle" title="Info"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-12a1 1 0 011 1v4a1 1 0 01-2 0V7a1 1 0 011-1zm0 8a1 1 0 100-2 1 1 0 000 2z"/></svg></button></h2>
+          <h2 class="text-sm font-semibold text-gray-900 mb-1">Top Halaman<button onclick="showChartInfo('horizontalBarChart')" class="inline-flex items-center justify-center w-4 h-4 rounded-full border border-gray-300 bg-transparent text-gray-400 hover:border-gray-400 hover:text-gray-600 transition-colors ml-1.5 align-middle text-[10px] font-bold leading-none" title="Info">!</button></h2>
           <p class="text-xs text-gray-400 mb-4">Halaman paling banyak dilihat</p>
           <div style="height: 220px;"><canvas id="horizontalBarChart"></canvas></div>
         </div>
@@ -953,35 +962,37 @@
     }
 
     // === Project shortcut dropdown (analytics header) ===
-    function toggleProjectShortcutDropdown(e) {
+    function toggleAnalyticsProjectDropdown(e) {
       if (e) e.stopPropagation();
-      var dd = document.getElementById('project-shortcut-dropdown');
+      var dd = document.getElementById('analytics-project-dropdown');
+      if (!dd) return;
       if (dd.classList.contains('hidden')) {
-        renderProjectShortcutDropdown();
+        renderAnalyticsProjectDropdown();
         dd.classList.remove('hidden');
         setTimeout(function() {
-          document.addEventListener('click', closeProjectShortcutDropdown);
+          document.addEventListener('click', closeAnalyticsProjectDropdown);
         }, 10);
       } else {
         dd.classList.add('hidden');
-        document.removeEventListener('click', closeProjectShortcutDropdown);
+        document.removeEventListener('click', closeAnalyticsProjectDropdown);
       }
     }
 
-    function closeProjectShortcutDropdown() {
-      document.getElementById('project-shortcut-dropdown').classList.add('hidden');
-      document.removeEventListener('click', closeProjectShortcutDropdown);
+    function closeAnalyticsProjectDropdown() {
+      var dd = document.getElementById('analytics-project-dropdown');
+      if (dd) dd.classList.add('hidden');
+      document.removeEventListener('click', closeAnalyticsProjectDropdown);
     }
 
-    function renderProjectShortcutDropdown() {
-      var dd = document.getElementById('project-shortcut-dropdown');
-      if (!dd) return;
+    function renderAnalyticsProjectDropdown() {
+      var list = document.getElementById('analytics-project-list');
+      if (!list) return;
       var recent = getRecentProjects();
       if (!recent.length) {
-        dd.innerHTML = '<p class="text-xs text-gray-400 px-3 py-2">Belum ada proyek dikunjungi</p>';
+        list.innerHTML = '<p class="text-xs text-gray-400 px-3 py-2">Belum ada proyek dikunjungi</p>';
         return;
       }
-      dd.innerHTML = recent.map(function(p) {
+      list.innerHTML = recent.map(function(p) {
         return '<button onclick="navigateToProjectFromDropdown(' + p.id + ')" class="flex items-center gap-2 w-full px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 transition-colors text-left truncate" title="' + p.name + '">'
           + '<svg class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>'
           + '<span class="truncate">' + p.name + '</span>'
@@ -990,7 +1001,7 @@
     }
 
     function navigateToProjectFromDropdown(id) {
-      closeProjectShortcutDropdown();
+      closeAnalyticsProjectDropdown();
       navigateTo('/proyek/' + id);
     }
 
