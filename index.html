@@ -3077,8 +3077,9 @@ async function saveDeployDomain() {
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
         if (success) {
-          dnsStatus.textContent = 'Domain berhasil disimpan. Tekan "Cek DNS" untuk verifikasi.';
-          dnsStatus.className = 'text-xs font-medium mt-1 text-green-600';
+          dnsStatus.textContent = 'Domain disimpan. Mengecek DNS otomatis...';
+          dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
+          setTimeout(function() { checkDNS(); }, 600);
         } else {
           dnsStatus.textContent = 'Gagal menyimpan domain. Coba lagi.';
           dnsStatus.className = 'text-xs font-medium mt-1 text-red-600';
