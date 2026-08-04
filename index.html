@@ -25,6 +25,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -683,6 +684,43 @@
                     </svg>
                     Analytics
                   </button>
+                  <!-- Database & Storage Dropdown -->
+                  <div class="flex flex-col">
+                    <button onclick="toggleSidebarDropdown(event, this)" class="sidebar-nav-item flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-gray-800 font-semibold transition-colors hover:bg-gray-100 text-[15px] focus:outline-none w-full text-left">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                        <ellipse cx="12" cy="5" rx="9" ry="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/>
+                      </svg>
+                      Database & Storage
+                      <svg class="sidebar-dropdown-arrow h-4 w-4 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
+                    <div class="sidebar-dropdown-content hidden flex flex-col gap-1 mt-1 pl-12">
+                      <button onclick="sidebarNavigate('/database')" data-sidebar-path="/database" class="sidebar-nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl text-gray-600 font-medium transition-colors hover:bg-gray-100 text-sm focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/>
+                        </svg>
+                        Database
+                      </button>
+                      <button onclick="sidebarNavigate('/storage')" data-sidebar-path="/storage" class="sidebar-nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl text-gray-600 font-medium transition-colors hover:bg-gray-100 text-sm focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                        </svg>
+                        Storage
+                      </button>
+                      <button onclick="sidebarNavigate('/sql-connection')" data-sidebar-path="/sql-connection" class="sidebar-nav-item flex items-center gap-3 px-4 py-2.5 rounded-xl text-gray-600 font-medium transition-colors hover:bg-gray-100 text-sm focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        Koneksi SQL
+                      </button>
+                    </div>
+                  </div>
+                
                 </nav>
               </div>
             </div>
@@ -690,6 +728,636 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="page-database" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
+    <div class="w-full max-w-5xl">
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Database</h2>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
+          <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          <a href="profile.html" class="flex items-center justify-center">
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+          </a>
+        </div>
+      </div>
+      <div class="w-full max-w-6xl mx-auto">
+        
+        
+        <!-- Bagian Atas: Judul dan Toolbar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Basis Data</h1>
+                <p class="text-sm text-gray-500 mt-1">Kelola semua data entitas, pengguna, dan proyek.</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-3 relative">
+                <!-- Search Bar -->
+                <div class="relative w-full sm:w-64 group">
+                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-gray-900 transition-colors"></i>
+                    <input type="text" id="db-search-input" placeholder="Cari data..." class="w-full bg-white border border-gray-200 rounded-full py-2.5 pl-10 pr-8 text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all placeholder:text-gray-400">
+                    <button id="db-clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+                
+                <!-- Filter Button & Menu Dropdown -->
+                <div class="relative w-full sm:w-auto">
+                    <button id="db-filter-btn" class="w-full sm:w-auto flex items-center justify-center px-4 py-2.5 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                        <i data-lucide="list-filter" class="w-4 h-4 mr-2"></i>
+                        <span>Filter</span>
+                        <span id="db-filter-badge" class="hidden ml-2 bg-gray-900 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- Popup Dropdown Filter -->
+                    <div id="db-filter-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-200 p-4 z-30 transition-all">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
+                            <span class="text-xs font-bold text-gray-900 uppercase tracking-wider">Filter Data</span>
+                            <button id="db-reset-filter" class="text-xs text-gray-500 hover:text-gray-900 underline">Reset</button>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
+                                <select id="db-filter-status" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 focus:outline-none focus:border-gray-900">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Dalam Proses">Dalam Proses</option>
+                                    <option value="Diarsipkan">Diarsipkan</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Kategori</label>
+                                <select id="db-filter-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 focus:outline-none focus:border-gray-900">
+                                    <option value="ALL">Semua Kategori</option>
+                                    <option value="Proyek Desain">Proyek Desain</option>
+                                    <option value="Konfigurasi Pengguna">Konfigurasi Pengguna</option>
+                                    <option value="Infrastruktur">Infrastruktur</option>
+                                    <option value="Basis Data">Basis Data</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Button -->
+                <button id="db-add-new" class="w-full sm:w-auto flex items-center justify-center px-4 py-2.5 bg-gray-900 border border-gray-900 rounded-full text-sm font-medium text-white hover:bg-gray-800 active:bg-gray-950 transition-colors shadow-sm">
+                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                    Tambah Baru
+                </button>
+            </div>
+        </div>
+
+        <!-- Batch Action Bar (Muncul saat ada checkbox terpilih) -->
+        <div id="db-batch-bar" class="hidden mb-4 p-3 bg-gray-900 text-white rounded-2xl flex items-center justify-between shadow-lg animate-fade-in">
+            <div class="flex items-center pl-3 gap-2 text-sm font-medium">
+                <span id="db-selected-count">0</span> data terpilih
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="db-batch-delete" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-xl transition-colors flex items-center gap-1.5">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    Hapus Terpilih
+                </button>
+                <button id="db-deselect-all" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium rounded-xl transition-colors">
+                    Batal
+                </button>
+            </div>
+        </div>
+
+        <!-- Card Tabel Data -->
+        <div class="bg-white rounded-[24px] border border-gray-200 shadow-sm overflow-hidden flex-1 flex flex-col">
+            
+            <div class="overflow-x-auto flex-1">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                    <!-- Header Tabel -->
+                    <thead>
+                        <tr class="bg-gray-50/50 border-b border-gray-200">
+                            <th class="py-4 pl-6 pr-3 w-[50px]">
+                                <input type="checkbox" id="db-select-all" class="custom-checkbox">
+                            </th>
+                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Nama Entitas</th>
+                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Kategori</th>
+                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Pembaruan Terakhir</th>
+                            <th class="py-4 pr-6 pl-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="db-table-body" class="divide-y divide-gray-100 text-sm">
+                        <!-- Baris tabel akan di-render secara dinamis melalui JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination (Bagian Bawah Tabel) -->
+            <div class="px-6 py-4 border-t border-gray-200 bg-white flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span class="text-sm text-gray-500" id="pagination-info">
+                    Menampilkan <span class="font-medium text-gray-900" id="db-page-start">0</span> sampai <span class="font-medium text-gray-900" id="db-page-end">0</span> dari <span class="font-medium text-gray-900" id="db-total-count">0</span> data
+                </span>
+                
+                <div class="flex items-center gap-1" id="db-pagination-buttons">
+                    <!-- Tombol-tombol pagination di-render dinamis -->
+                </div>
+            </div>
+            
+        </div>
+    
+      </div>
+      <div id="db-data-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="modal-backdrop fixed inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0"></div>
+        
+        <div class="modal-content relative bg-white w-full max-w-md rounded-[24px] shadow-2xl border border-gray-100 p-6 opacity-0 scale-95 z-10">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                <h3 id="db-modal-title" class="text-lg font-bold text-gray-900">Tambah Entitas Baru</h3>
+                <button id="db-close-modal" class="p-1 text-gray-400 hover:text-gray-900 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="db-entity-form" class="mt-4 space-y-4">
+                <input type="hidden" id="db-entity-id">
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Nama Entitas</label>
+                    <input type="text" id="db-entity-name" placeholder="Masukkan nama entitas..." required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Kode / ID Entitas</label>
+                    <input type="text" id="db-entity-code" placeholder="Contoh: PRJ-9921A" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Kategori</label>
+                    <select id="db-entity-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
+                        <option value="Proyek Desain">Proyek Desain</option>
+                        <option value="Konfigurasi Pengguna">Konfigurasi Pengguna</option>
+                        <option value="Infrastruktur">Infrastruktur</option>
+                        <option value="Basis Data">Basis Data</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Status</label>
+                    <select id="db-entity-status" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Dalam Proses">Dalam Proses</option>
+                        <option value="Diarsipkan">Diarsipkan</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                    <button type="button" id="db-cancel-modal" class="px-4 py-2.5 border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm">
+                        Simpan Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Hapus -->
+    <div id="db-delete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="modal-backdrop fixed inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0"></div>
+        
+        <div class="modal-content relative bg-white w-full max-w-sm rounded-[24px] shadow-2xl border border-gray-100 p-6 opacity-0 scale-95 z-10 text-center">
+            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-bold text-gray-900">Hapus Data?</h3>
+            <p id="db-delete-text" class="text-xs text-gray-500 mt-1 mb-6">Tindakan ini tidak dapat dibatalkan. Data akan dihapus secara permanen dari sistem.</p>
+
+            <div class="flex items-center justify-center gap-3">
+                <button id="db-cancel-delete" class="w-full py-2.5 border border-gray-200 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Batal
+                </button>
+                <button id="db-confirm-delete" class="w-full py-2.5 bg-red-600 text-white rounded-full text-xs font-medium hover:bg-red-700 transition-colors shadow-sm">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+<div id="db-context-menu" class="hidden fixed w-44 bg-white rounded-2xl shadow-xl border border-gray-200 py-1.5 z-40 text-xs">
+        <button id="db-ctx-edit" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-gray-700">
+            <i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Ubah Data
+        </button>
+        <button id="db-ctx-copy" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-gray-700">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin ID
+        </button>
+        <button id="db-ctx-duplicate" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-gray-700">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Duplikat Data
+        </button>
+        <div class="h-[1px] bg-gray-100 my-1"></div>
+    </div>
+  </div>
+
+  <div id="page-storage" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
+    <div class="w-full max-w-2xl">
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Storage</h2>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
+          <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          <a href="profile.html" class="flex items-center justify-center">
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+          </a>
+        </div>
+      </div>
+      
+        
+        <!-- HALAMAN: PENYIMPANAN -->
+        <div class="page-content flex h-full flex-col overflow-y-auto bg-white w-full no-scrollbar">
+            <div class="max-w-2xl mx-auto w-full pb-12 relative pt-6 px-4">
+
+                <!-- Header tanpa tombol kembali -->
+                <div class="pt-2 pb-6 flex items-center">
+                    <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Penyimpanan</h2>
+                </div>
+
+                <!-- Ringkasan Penyimpanan (Bg rata tanpa card) -->
+                <div class="mb-8 px-2">
+                    <div class="flex justify-between items-start mb-5">
+                        <div>
+                            <h3 class="text-[32px] font-bold text-gray-900 leading-tight tracking-tight">45.5 GB</h3>
+                            <p class="text-[14px] text-gray-500 mt-1 font-medium">digunakan dari 100 GB</p>
+                        </div>
+                        <i data-lucide="cloud" class="w-8 h-8 text-gray-400 mt-1"></i>
+                    </div>
+                    
+                    <!-- Progress Bar Berwarna -->
+                    <div class="w-full bg-gray-100 rounded-full h-3 mb-4 overflow-hidden flex">
+                        <div class="bg-blue-500 h-full" style="width: 20%"></div>
+                        <div class="bg-purple-500 h-full" style="width: 15%"></div>
+                        <div class="bg-amber-400 h-full" style="width: 10.5%"></div>
+                    </div>
+                    
+                    <div class="flex items-center text-[13px] text-gray-500">
+                        <i data-lucide="info" class="w-4 h-4 text-gray-400 mr-1.5"></i>
+                        <span>54.5 GB tersisa di penyimpanan Anda.</span>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    
+                    <!-- Group 1: Rincian (Tanpa Card) -->
+                    <div>
+                        <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-3 uppercase tracking-wider">Rincian Kategori</h3>
+                        <div class="w-full flex items-center justify-between px-2 py-3">
+                            <div class="flex items-center">
+                                <div class="w-2.5 h-2.5 rounded-full bg-blue-500 mr-3.5"></div>
+                                <i data-lucide="image" class="w-[22px] h-[22px] text-gray-500 mr-3.5"></i>
+                                <span class="text-[16px] font-medium text-gray-900">Gambar</span>
+                            </div>
+                            <span class="text-[15px] font-medium text-gray-900">20.0 GB</span>
+                        </div>
+                        <div class="h-[1px] bg-gray-100 ml-14"></div>
+                        
+                        <!-- Item Video -->
+                        <div class="w-full flex items-center justify-between px-2 py-3">
+                            <div class="flex items-center">
+                                <div class="w-2.5 h-2.5 rounded-full bg-purple-500 mr-3.5"></div>
+                                <i data-lucide="video" class="w-[22px] h-[22px] text-gray-500 mr-3.5"></i>
+                                <span class="text-[16px] font-medium text-gray-900">Video</span>
+                            </div>
+                            <span class="text-[15px] font-medium text-gray-900">15.0 GB</span>
+                        </div>
+                        <div class="h-[1px] bg-gray-100 ml-14"></div>
+                        
+                        <!-- Item Dokumen -->
+                        <div class="w-full flex items-center justify-between px-2 py-3">
+                            <div class="flex items-center">
+                                <div class="w-2.5 h-2.5 rounded-full bg-amber-400 mr-3.5"></div>
+                                <i data-lucide="file-text" class="w-[22px] h-[22px] text-gray-500 mr-3.5"></i>
+                                <span class="text-[16px] font-medium text-gray-900">Dokumen & Lainnya</span>
+                            </div>
+                            <span class="text-[15px] font-medium text-gray-900">10.5 GB</span>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: Kelola (CTA Button Style) -->
+                    <div>
+                        <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-3 uppercase tracking-wider">Kelola Penyimpanan</h3>
+                        <div class="space-y-3 px-2">
+                            
+                            <button onclick="openModal('upgrade')" class="w-full bg-white border border-gray-200 rounded-[20px] p-4 flex items-center justify-between hover:bg-gray-50 transition-colors active:bg-gray-100">
+                                <div class="flex items-center">
+                                    <i data-lucide="arrow-up-circle" class="w-[24px] h-[24px] text-gray-500 mr-4"></i>
+                                    <div class="flex flex-col items-start">
+                                        <span class="text-[16px] font-semibold text-gray-900">Tingkatkan Kapasitas</span>
+                                        <span class="text-[13px] text-gray-500 mt-0.5">Dapatkan ruang tambahan</span>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
+                            </button>
+                            
+                            <button onclick="openModal('cleanup')" class="w-full bg-white border border-gray-200 rounded-[20px] p-4 flex items-center justify-between hover:bg-gray-50 transition-colors active:bg-gray-100">
+                                <div class="flex items-center">
+                                    <i data-lucide="trash-2" class="w-[24px] h-[24px] text-gray-500 mr-4"></i>
+                                    <div class="flex flex-col items-start">
+                                        <span class="text-[16px] font-semibold text-gray-900">Kosongkan Ruang</span>
+                                        <span class="text-[13px] text-gray-500 mt-0.5">Pindai & bersihkan file</span>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    
+    </div>
+  </div>
+
+  <div id="page-sql-connection" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
+    <div class="w-full max-w-2xl">
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Sql Connection</h2>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
+          <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          <a href="profile.html" class="flex items-center justify-center">
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+          </a>
+        </div>
+      </div>
+      
+        
+        <!-- Wrapper Scrollable -->
+        <div class="flex h-full flex-col overflow-y-auto w-full no-scrollbar">
+            <div class="max-w-2xl mx-auto w-full pb-12 relative pt-6 px-4">
+
+                <!-- STEP 1: INTRO -->
+                <div id="sql-step-1" class="step-container flex flex-col h-full animate-fade-step py-8">
+                    <div class="flex flex-col items-center pt-8 pb-12 text-center">
+                        <div class="w-[84px] h-[84px] bg-gray-50 rounded-full flex items-center justify-center text-gray-900 mb-6">
+                            <i data-lucide="database-zap" class="w-10 h-10"></i>
+                        </div>
+                        <h2 class="text-[24px] font-bold text-gray-900 tracking-tight">Koneksi SQL</h2>
+                        <p class="text-[15px] text-gray-500 mt-3 max-w-sm leading-relaxed">
+                            Hubungkan dan sinkronkan database Anda secara aman untuk memulai analisis mendalam. 
+                            <a href="#" class="text-blue-500 hover:text-blue-600 hover:underline font-medium transition-colors">Pelajari cara kerjanya</a>.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-auto pt-8">
+                        <button onclick="goToSqlStep(2)" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
+                            <span class="text-[16px] font-semibold tracking-wide">Mulai</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5 ml-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: SCHEMA -->
+                <div id="sql-step-2" class="step-container hidden flex-col h-full animate-fade-step">
+                    <div class="flex flex-col pt-4 pb-8">
+                        <button onclick="goToSqlStep(1)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Pengaturan Skema</h2>
+                        <p class="text-[14px] text-gray-500 mt-1.5 max-w-sm leading-relaxed">Tentukan nama skema default yang akan digunakan untuk membaca struktur tabel Anda.</p>
+                    </div>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Detail Skema</h3>
+                            <!-- Form input tanpa border -->
+                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
+                                <div class="w-full flex items-center px-4 py-4">
+                                    <i data-lucide="layers" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
+                                    <input type="text" id="schema_name" value="public" placeholder="Nama Skema (contoh: public)" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-10">
+                        <button onclick="goToSqlStep(3)" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
+                            <span class="text-[16px] font-semibold tracking-wide">Lanjutkan</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SOURCE METHOD -->
+                <div id="sql-step-3" class="step-container hidden flex-col h-full animate-fade-step">
+                    <div class="flex flex-col pt-4 pb-6">
+                        <button onclick="goToSqlStep(2)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Hubungkan Sumber Data</h2>
+                        <p class="text-[14px] text-gray-500 mt-1.5 leading-relaxed">Pilih bagaimana Anda ingin mengonfigurasi pengaturan sumber data ini.</p>
+                    </div>
+                    
+                    <div class="space-y-3.5 mt-2">
+                        <!-- Opsi 1 -->
+                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
+                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
+                                <i data-lucide="plus" class="w-5 h-5 text-gray-900"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-[16px] font-semibold text-gray-900">Buat Baru</h4>
+                                <p class="text-[13px] text-gray-500 mt-0.5">Konfigurasi manual dari awal</p>
+                            </div>
+                            <input type="radio" name="source_method" value="new" checked class="w-5 h-5 ml-4 cursor-pointer">
+                        </label>
+                        
+                        <!-- Opsi 2 -->
+                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
+                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
+                                <i data-lucide="copy" class="w-5 h-5 text-gray-900"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-[16px] font-semibold text-gray-900">Gunakan Template</h4>
+                                <p class="text-[13px] text-gray-500 mt-0.5">Terapkan dari pengaturan sebelumnya</p>
+                            </div>
+                            <input type="radio" name="source_method" value="template" class="w-5 h-5 ml-4 cursor-pointer">
+                    </label>
+                </div>
+                
+                <div class="pt-10">
+                    <button onclick="nextFromSourceMethod()" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
+                        <span class="text-[16px] font-semibold tracking-wide">Lanjutkan</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: DETAILS FORM -->
+                <div id="sql-step-4" class="step-container hidden flex-col h-full animate-fade-step pb-6">
+                    <div class="flex flex-col pt-4 pb-6">
+                        <button onclick="goToSqlStep(3)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Rincian Sumber Data</h2>
+                        <p class="text-[14px] text-gray-500 mt-1.5 leading-relaxed">Masukkan kredensial server database Anda dengan teliti.</p>
+                    </div>
+
+                    <div class="space-y-5">
+                        
+                        <!-- Group 1: Server -->
+                        <div>
+                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Kredensial Server</h3>
+                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
+                                <div class="w-full flex items-center px-4 py-3.5">
+                                    <i data-lucide="server" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
+                                    <input type="text" id="sql-host" placeholder="Host (contoh: localhost)" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
+                                </div>
+                                <div class="h-[1px] bg-gray-200 ml-14"></div>
+                                <div class="w-full flex items-center px-4 py-3.5">
+                                    <i data-lucide="network" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
+                                    <input type="number" id="sql-port" placeholder="Port (contoh: 3306)" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group 2: Autentikasi -->
+                        <div>
+                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Autentikasi</h3>
+                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
+                                <div class="w-full flex items-center px-4 py-3.5">
+                                    <i data-lucide="user" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
+                                    <input type="text" id="sql-username" placeholder="Username" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
+                                </div>
+                                <div class="h-[1px] bg-gray-200 ml-14"></div>
+                                <div class="w-full flex items-center px-4 py-3.5 group relative">
+                                    <i data-lucide="key-round" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
+                                    <input type="password" id="password" placeholder="Password" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full pr-10">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group 3: Database -->
+                        <div>
+                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Database</h3>
+                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
+                                <div class="w-full flex items-center px-4 py-3.5">
+                                    <i data-lucide="hard-drive" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
+                                    <input type="text" id="sql-dbname" placeholder="Nama Database" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="pt-6">
+                            <!-- Tombol disamakan stylenya: bg-putih dengan border abu -->
+                            <button id="sql-btn-connect" onclick="testSqlConnection()" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
+                                <i data-lucide="plug" class="w-5 h-5 mr-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>
+                                <span class="text-[16px] font-semibold tracking-wide" id="sql-btn-text">Simpan & Uji Koneksi</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <!-- STEP 5: PILIH TEMPLATE -->
+                <div id="sql-step-5" class="step-container hidden flex-col h-full animate-fade-step pb-6">
+                    <div class="flex flex-col pt-4 pb-6">
+                        <button onclick="goToSqlStep(3)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Pilih Template</h2>
+                        <p class="text-[14px] text-gray-500 mt-1.5 leading-relaxed">Pilih konfigurasi koneksi database yang sudah Anda simpan sebelumnya.</p>
+                    </div>
+
+                    <div class="space-y-3.5 mt-2">
+                        <!-- Template 1 -->
+                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
+                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
+                                <i data-lucide="database" class="w-5 h-5 text-gray-900"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-[16px] font-semibold text-gray-900">Database Produksi Utama</h4>
+                                <p class="text-[13px] text-gray-500 mt-0.5">PostgreSQL • 192.168.1.10</p>
+                            </div>
+                            <input type="radio" name="template_choice" value="prod" checked class="w-5 h-5 ml-4 cursor-pointer">
+                        </label>
+                        
+                        <!-- Template 2 -->
+                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
+                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
+                                <i data-lucide="database" class="w-5 h-5 text-gray-900"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-[16px] font-semibold text-gray-900">Database Staging (Uji Coba)</h4>
+                                <p class="text-[13px] text-gray-500 mt-0.5">MySQL • 10.0.0.5</p>
+                            </div>
+                            <input type="radio" name="template_choice" value="staging" class="w-5 h-5 ml-4 cursor-pointer">
+                        </label>
+                    </div>
+                    
+                    <div class="pt-10">
+                        <button id="sql-btn-connect-template" onclick="testSqlConnectionTemplate()" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
+                            <i data-lucide="plug" class="w-5 h-5 mr-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>
+                            <span class="text-[16px] font-semibold tracking-wide" id="sql-btn-text-template">Gunakan & Uji Koneksi</span>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    
+    </div>
+  </div>
+  <div id="sql-custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm opacity-0 pointer-events-none modal-transition">
+        <!-- Modal Content -->
+        <div id="sql-modal-panel" class="bg-white w-full max-w-sm rounded-[32px] p-6 shadow-2xl transform scale-95 modal-transition flex flex-col items-center text-center mx-4 border border-gray-200">
+            <div id="sql-modal-icon-container" class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <i id="sql-modal-icon" data-lucide="info" class="w-7 h-7 text-gray-900"></i>
+            </div>
+            <h3 id="sql-modal-title" class="text-[20px] font-bold text-gray-900 tracking-tight mb-2">Informasi</h3>
+            <p id="sql-modal-message" class="text-[15px] text-gray-500 mb-6 leading-relaxed">Pesan akan tampil di sini.</p>
+            <!-- Tombol Modal disamakan stylenya: bg-putih dengan border abu -->
+            <button onclick="closeSqlModal()" class="w-full py-3.5 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[20px] font-semibold text-[16px] transition-colors shadow-sm">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+  <!-- Database Toast -->
+  <div id="db-toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs md:text-sm px-4 py-2.5 rounded-full shadow-xl z-[110] transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none flex items-center gap-2">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+    <span id="db-toast-message">Pesan notifikasi</span>
   </div>
 
   <!-- Chart Info Modal -->
