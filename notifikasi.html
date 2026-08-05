@@ -4,94 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notifikasi - Clincoo</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+  <style>body{font-family:'Inter',sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}</style>
 </head>
 <body class="bg-[#f7f7f9] text-gray-900 min-h-screen flex flex-col">
   <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
     <div class="w-full max-w-5xl px-4 sm:px-6 mx-auto">
       <div class="flex items-center justify-between h-14">
         <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-          <button onclick="goBack()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Kembali">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          <button onclick="history.back()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
           </button>
-          <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Notifikasi</h2>
+          <h2 class="text-xl font-bold text-gray-800 tracking-tight">Notifikasi</h2>
         </div>
-        <a href="index.html" class="flex items-center justify-center">
-          <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-        </a>
+        <a href="index.html"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white shadow-sm"></a>
       </div>
     </div>
   </div>
   <main class="flex-1 overflow-y-auto no-scrollbar">
     <div class="max-w-2xl mx-auto w-full pb-12 pt-6 px-4">
-      <div class="space-y-4">
-        <div class="bg-white rounded-[24px] border border-gray-200 overflow-hidden">
-          <div class="px-5 py-4 border-b border-gray-100"><p class="text-base font-bold text-gray-900">Notifikasi</p></div>
-          <div class="px-5 py-2">
-            <div class="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p class="text-sm font-medium text-gray-900">Status deploy</p>
-                <p class="text-xs text-gray-500 mt-0.5">Notifikasi saat deploy selesai atau gagal</p>
-              </div>
-              <button onclick="toggleNotif('deploy')" id="notif-deploy" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors">
-                <span class="inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-1"></span>
-              </button>
-            </div>
-            <div class="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p class="text-sm font-medium text-gray-900">Peringatan DNS</p>
-                <p class="text-xs text-gray-500 mt-0.5">Notifikasi saat DNS bermasalah</p>
-              </div>
-              <button onclick="toggleNotif('dns')" id="notif-dns" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors">
-                <span class="inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-1"></span>
-              </button>
-            </div>
-            <div class="flex items-center justify-between py-3">
-              <div>
-                <p class="text-sm font-medium text-gray-900">Pembaruan proyek</p>
-                <p class="text-xs text-gray-500 mt-0.5">Notifikasi saat proyek diperbarui</p>
-              </div>
-              <button onclick="toggleNotif('project')" id="notif-project" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors">
-                <span class="inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-1"></span>
-              </button>
-            </div>
-          </div>
+      <div class="bg-white rounded-[24px] border border-gray-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100"><p class="text-base font-bold text-gray-900">Notifikasi</p></div>
+        <div class="px-5 py-2">
+          <div class="flex items-center justify-between py-3 border-b border-gray-100"><div><p class="text-sm font-medium text-gray-900">Status deploy</p><p class="text-xs text-gray-500 mt-0.5">Notifikasi saat deploy selesai atau gagal</p></div><button onclick="toggleNotif('deploy')" id="notif-deploy" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors"><span class="inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-1"></span></button></div>
+          <div class="flex items-center justify-between py-3 border-b border-gray-100"><div><p class="text-sm font-medium text-gray-900">Peringatan DNS</p><p class="text-xs text-gray-500 mt-0.5">Notifikasi saat DNS bermasalah</p></div><button onclick="toggleNotif('dns')" id="notif-dns" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors"><span class="inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-1"></span></button></div>
+          <div class="flex items-center justify-between py-3"><div><p class="text-sm font-medium text-gray-900">Pembaruan proyek</p><p class="text-xs text-gray-500 mt-0.5">Notifikasi saat proyek diperbarui</p></div><button onclick="toggleNotif('project')" id="notif-project" class="relative inline-flex h-7 w-12 items-center rounded-full transition-colors"><span class="inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-1"></span></button></div>
         </div>
-        <p class="text-xs text-gray-500 px-2 leading-relaxed">Notifikasi muncul di dalam aplikasi Clincoo.</p>
       </div>
+      <p class="text-xs text-gray-500 px-2 mt-3">Notifikasi muncul di dalam aplikasi Clincoo.</p>
     </div>
   </main>
   <script>
-    function goBack() {
-      if (document.referrer && document.referrer.toLowerCase().indexOf('clincoo') !== -1) { history.back(); } else { window.location.href = 'profile.html'; }
-    }
-    function getNotifKey(type) { return 'clincoo_notif_' + type; }
-    function loadNotifikasiData() {
-      ['deploy','dns','project'].forEach(function(type) {
-        var enabled = localStorage.getItem(getNotifKey(type)) !== 'false';
-        updateNotifToggle(type, enabled);
-      });
-    }
-    function updateNotifToggle(type, enabled) {
-      var btn = document.getElementById('notif-'+type);
-      var dot = btn.querySelector('span');
-      if (enabled) { btn.style.backgroundColor = '#111827'; dot.style.transform = 'translateX(1.375rem)'; }
-      else { btn.style.backgroundColor = '#d1d5db'; dot.style.transform = 'translateX(0.25rem)'; }
-    }
-    function toggleNotif(type) {
-      var current = localStorage.getItem(getNotifKey(type)) !== 'false';
-      var newVal = !current;
-      localStorage.setItem(getNotifKey(type), newVal ? 'true' : 'false');
-      updateNotifToggle(type, newVal);
-    }
-    loadNotifikasiData();
+    function getKey(t){return'clincoo_notif_'+t}
+    function updateToggle(t,e){var b=document.getElementById('notif-'+t),d=b.querySelector('span');if(e){b.style.backgroundColor='#111827';d.style.transform='translateX(1.375rem)'}else{b.style.backgroundColor='#d1d5db';d.style.transform='translateX(0.25rem)'}}
+    function init(){['deploy','dns','project'].forEach(function(t){var e=localStorage.getItem(getKey(t))!=='false';updateToggle(t,e)})}
+    function toggleNotif(t){var c=localStorage.getItem(getKey(t))!=='false',n=!c;localStorage.setItem(getKey(t),n?'true':'false');updateToggle(t,n)}
+    init();
   </script>
 </body>
 </html>

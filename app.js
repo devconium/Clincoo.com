@@ -2316,20 +2316,6 @@
     // === DATABASE PAGE ===
     var _dbInitialized = false;
     var databaseItems = [];
-
-    function loadDatabaseItems() {
-      loadData();
-      databaseItems = projects.map(function(p, i) {
-        return {
-          id: p.id,
-          code: 'PRJ-' + p.id.substring(0, 6).toUpperCase(),
-          name: p.name || ('Proyek ' + (i + 1)),
-          category: 'Proyek Web',
-          status: 'Aktif',
-          updated: p.desc ? 'Baru saja' : 'Baru saja'
-        };
-      });
-    }
     var dbCurrentPage = 1;
     const dbPageSize = 4;
     var dbSelectedIds = new Set();
@@ -2366,8 +2352,8 @@
     function dbOpenModal(modalId) {
       var modal = document.getElementById(modalId);
       if (!modal) return;
-      var backdrop = modal.querySelector('.modal-backdrop');
-      var contentEl = modal.querySelector('.modal-content');
+      var backdrop = modal.querySelector('.db-modal-backdrop');
+      var contentEl = modal.querySelector('.db-modal-content');
       modal.classList.remove('hidden');
       setTimeout(function() {
         if (backdrop) backdrop.classList.remove('opacity-0');
@@ -2381,8 +2367,8 @@
     function dbCloseModal(modalId) {
       var modal = document.getElementById(modalId);
       if (!modal) return;
-      var backdrop = modal.querySelector('.modal-backdrop');
-      var contentEl = modal.querySelector('.modal-content');
+      var backdrop = modal.querySelector('.db-modal-backdrop');
+      var contentEl = modal.querySelector('.db-modal-content');
       if (backdrop) backdrop.classList.add('opacity-0');
       if (contentEl) {
         contentEl.classList.remove('opacity-100', 'scale-100');

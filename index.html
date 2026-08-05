@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https: blob:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https: blob:;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar Proyek</title>
   
@@ -19,7 +19,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   
@@ -256,7 +256,7 @@
             <div class="min-w-0">
               <button onclick="toggleProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
                 <span id="current-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
-                <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-400">
+                <span class="flex-shrink-0 w-5 h-5 bg-white border border-gray-200 rounded flex items-center justify-center text-gray-600">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
               </button>
@@ -275,7 +275,7 @@
                 </svg>
             </button>
             <a href="profile.html" class="flex items-center justify-center">
-              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
             </a>
         </div>
       </div>
@@ -528,12 +528,12 @@
               </svg>
             </button>
             <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
-              <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Analytics</h2>
-              <span class="text-gray-300 font-medium text-lg flex-shrink-0">/</span>
-              <div class="min-w-0">
-                <button onclick="toggleAnalyticsProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
-                  <span id="analytics-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
-                  <span class="flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-400">
+              <h2 class="text-base sm:text-lg font-bold text-gray-800 tracking-tight whitespace-nowrap">Analytics</h2>
+              <span class="text-gray-300 font-medium text-base sm:text-lg flex-shrink-0">/</span>
+              <div class="min-w-0 relative">
+                <button onclick="toggleAnalyticsProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-base sm:text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
+                  <span id="analytics-project-name" class="truncate block max-w-[80px] sm:max-w-[150px]">Proyek</span>
+                  <span class="flex-shrink-0 w-5 h-5 bg-white border border-gray-200 rounded flex items-center justify-center text-gray-600">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                   </span>
                 </button>
@@ -551,9 +551,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </button>
-            <a href="profile.html" class="flex items-center justify-center">
-              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-            </a>
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
           </div>
         </div>
       </div>
@@ -683,6 +681,277 @@
     </div>
   </div>
 
+
+  <!-- ===== PAGE: DATABASE ===== -->
+  <div id="page-database" class="page-view hidden w-full min-h-screen flex flex-col bg-[#f7f7f9]">
+    <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
+      <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
+        <div class="flex items-center justify-between h-14">
+          <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+            <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap" style="font-family: 'Space Grotesk', sans-serif;">Database</h2>
+          </div>
+          <div class="flex items-center justify-center gap-1.5 sm:gap-2">
+            <a href="index.html" class="flex items-center justify-center">
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-lg shadow-sm hover:scale-105 transition-transform cursor-pointer">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto py-6 flex-1">
+      <!-- Toolbar -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-5">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
+          <input type="text" id="db-search-input" placeholder="Cari entitas..." class="w-full pl-10 pr-9 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-300 transition-colors bg-white">
+          <button id="db-clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 p-0.5" aria-label="Hapus pencarian">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <button id="db-filter-btn" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors bg-white">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+              Filter
+              <span id="db-filter-badge" class="hidden bg-gray-900 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">0</span>
+            </button>
+            <div id="db-filter-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-[80] animate-fade-in">
+              <div class="px-3 py-1.5">
+                <label class="text-xs font-semibold text-gray-400 uppercase">Status</label>
+                <select id="db-filter-status" class="w-full mt-1 px-2.5 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none">
+                  <option value="ALL">Semua Status</option>
+                  <option value="Aktif">Aktif</option>
+                  <option value="Dalam Proses">Dalam Proses</option>
+                  <option value="Diarsipkan">Diarsipkan</option>
+                </select>
+              </div>
+              <div class="px-3 py-1.5">
+                <label class="text-xs font-semibold text-gray-400 uppercase">Kategori</label>
+                <select id="db-filter-category" class="w-full mt-1 px-2.5 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 bg-white focus:outline-none">
+                  <option value="ALL">Semua Kategori</option>
+                  <option value="Proyek Web">Proyek Web</option>
+                  <option value="Proyek Desain">Proyek Desain</option>
+                  <option value="Konfigurasi Pengguna">Konfigurasi Pengguna</option>
+                  <option value="Infrastruktur">Infrastruktur</option>
+                  <option value="Basis Data">Basis Data</option>
+                </select>
+              </div>
+              <div class="px-3 pt-1">
+                <button id="db-reset-filter" class="w-full text-center py-2 text-sm text-gray-500 hover:text-gray-900 font-medium">Reset Filter</button>
+              </div>
+            </div>
+          </div>
+          <button id="db-add-new" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Tambah
+          </button>
+        </div>
+      </div>
+
+      <!-- Batch bar -->
+      <div id="db-batch-bar" class="hidden mb-3 flex items-center justify-between px-4 py-2.5 rounded-xl bg-gray-900 text-white animate-fade-in">
+        <span class="text-sm font-medium"><span id="db-selected-count">0</span> data terpilih</span>
+        <div class="flex items-center gap-2">
+          <button id="db-deselect-all" class="px-3 py-1.5 text-xs text-gray-300 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Batal</button>
+          <button id="db-batch-delete" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Hapus Terpilih
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50/50">
+                <th class="py-3 pl-6 pr-3 text-left"><input type="checkbox" id="db-select-all" class="custom-checkbox"></th>
+                <th class="py-3 px-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Nama</th>
+                <th class="py-3 px-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Kategori</th>
+                <th class="py-3 px-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                <th class="py-3 px-4 text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider">Diperbarui</th>
+                <th class="py-3 pr-6 pl-4 text-right text-[11px] font-bold text-gray-400 uppercase tracking-wider">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="db-table-body"></tbody>
+          </table>
+        </div>
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-6 py-3 border-t border-gray-200">
+          <div class="text-xs text-gray-500"><span id="db-page-start">0</span>–<span id="db-page-end">0</span> dari <span id="db-total-count">0</span></div>
+          <div id="db-pagination-buttons" class="flex items-center gap-1.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Context menu -->
+    <div id="db-context-menu" class="hidden fixed w-44 bg-white rounded-xl shadow-xl overflow-hidden z-[100] py-1 animate-fade-in">
+      <button id="db-ctx-edit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Edit
+      </button>
+      <button id="db-ctx-copy" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Salin ID
+      </button>
+      <button id="db-ctx-duplicate" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-1M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+        Duplikasi
+      </button>
+      <div class="h-px bg-gray-100 my-1"></div>
+      <button id="db-ctx-delete" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 transition-colors">
+        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        Hapus
+      </button>
+    </div>
+
+    <!-- Data modal -->
+    <div id="db-data-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+      <div class="db-modal-backdrop absolute inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-200"></div>
+      <div class="db-modal-content relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 opacity-0 scale-95 transition-all duration-200">
+        <h3 id="db-modal-title" class="text-lg font-bold text-gray-900 mb-4">Tambah Entitas Baru</h3>
+        <form id="db-entity-form" class="space-y-3">
+          <input type="hidden" id="db-entity-id">
+          <div>
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Nama</label>
+            <input type="text" id="db-entity-name" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300 transition-colors" placeholder="Nama entitas" required>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Kode ID</label>
+            <input type="text" id="db-entity-code" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" placeholder="Otomatis" readonly>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Kategori</label>
+              <select id="db-entity-category" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300 bg-white">
+                <option value="Proyek Web">Proyek Web</option>
+                <option value="Proyek Desain">Proyek Desain</option>
+                <option value="Konfigurasi Pengguna">Konfigurasi Pengguna</option>
+                <option value="Infrastruktur">Infrastruktur</option>
+                <option value="Basis Data">Basis Data</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</label>
+              <select id="db-entity-status" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300 bg-white">
+                <option value="Aktif">Aktif</option>
+                <option value="Dalam Proses">Dalam Proses</option>
+                <option value="Diarsipkan">Diarsipkan</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 pt-2">
+            <button type="button" id="db-cancel-modal" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-xl hover:bg-gray-100 transition-colors">Batal</button>
+            <button type="submit" class="px-4 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition-colors">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete modal -->
+    <div id="db-delete-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
+      <div class="db-modal-backdrop absolute inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-200"></div>
+      <div class="db-modal-content relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center opacity-0 scale-95 transition-all duration-200">
+        <div class="w-12 h-12 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-3">
+          <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </div>
+        <p id="db-delete-text" class="text-sm text-gray-600 mb-4">Data ini akan dihapus secara permanen dari sistem.</p>
+        <div class="flex justify-center gap-2">
+          <button id="db-cancel-delete" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-xl hover:bg-gray-100 transition-colors">Batal</button>
+          <button id="db-confirm-delete" class="px-4 py-2.5 text-sm font-medium text-white bg-red-500 rounded-xl hover:bg-red-600 transition-colors">Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="db-toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-[300] px-5 py-3 rounded-xl shadow-lg bg-gray-900 text-white text-sm font-medium transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none">
+      <span id="db-toast-message"></span>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: STORAGE ===== -->
+  <div id="page-storage" class="page-view hidden w-full min-h-screen flex flex-col bg-[#f7f7f9]">
+    <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
+      <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
+        <div class="flex items-center justify-between h-14">
+          <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+            <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap" style="font-family: 'Space Grotesk', sans-serif;">Storage</h2>
+          </div>
+          <a href="index.html" class="flex items-center justify-center">
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-lg shadow-sm hover:scale-105 transition-transform cursor-pointer">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="w-full max-w-5xl px-4 sm:px-6 md:px-8 mx-auto py-6 flex-1">
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden mb-5">
+        <div class="px-5 py-4 border-b border-gray-100"><p class="text-base font-bold text-gray-900">Penggunaan Storage</p></div>
+        <div class="px-5 py-4 space-y-3">
+          <div class="flex items-center justify-between"><span class="text-sm text-gray-500">Total storage</span><span class="text-sm font-semibold text-gray-900" id="st-total-size">0 B</span></div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div id="st-total-bar" class="h-full bg-gray-900 rounded-full transition-all duration-500" style="width: 0%"></div></div>
+          <div class="flex items-center justify-between text-xs text-gray-400"><span>Limit: 5 MB (localStorage)</span><span id="st-percent">0%</span></div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100"><p class="text-base font-bold text-gray-900">Rincian per Kategori</p></div>
+        <div class="px-5 py-4 space-y-3" id="st-breakdown">
+          <div class="flex items-center justify-between"><span class="text-sm text-gray-500">File proyek</span><span class="text-sm font-semibold text-gray-900" id="st-files-size">0 B</span></div>
+          <div class="h-[1px] bg-gray-100"></div>
+          <div class="flex items-center justify-between"><span class="text-sm text-gray-500">Environment variables</span><span class="text-sm font-semibold text-gray-900" id="st-env-size">0 B</span></div>
+          <div class="h-[1px] bg-gray-100"></div>
+          <div class="flex items-center justify-between"><span class="text-sm text-gray-500">Konfigurasi proyek</span><span class="text-sm font-semibold text-gray-900" id="st-config-size">0 B</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: SQL CONNECTION ===== -->
+  <div id="page-sql-connection" class="page-view hidden w-full min-h-screen flex flex-col bg-[#f7f7f9]">
+    <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
+      <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
+        <div class="flex items-center justify-between h-14">
+          <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+            <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap" style="font-family: 'Space Grotesk', sans-serif;">Koneksi SQL</h2>
+          </div>
+          <a href="index.html" class="flex items-center justify-center">
+            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-lg shadow-sm hover:scale-105 transition-transform cursor-pointer">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="w-full max-w-2xl px-4 sm:px-6 mx-auto py-6 flex-1">
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden mb-5">
+        <div class="px-5 py-4 border-b border-gray-100"><p class="text-base font-bold text-gray-900">Hubungkan Database</p></div>
+        <div class="px-5 py-4 space-y-3">
+          <div><label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Tipe Database</label><select id="sql-type" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:outline-none focus:border-gray-300"><option value="postgresql">PostgreSQL</option><option value="mysql">MySQL</option><option value="sqlite">SQLite</option><option value="mongodb">MongoDB</option></select></div>
+          <div><label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Host</label><input id="sql-host" type="text" placeholder="localhost" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300"></div>
+          <div class="grid grid-cols-2 gap-3"><div><label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Port</label><input id="sql-port" type="text" placeholder="5432" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300"></div><div><label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Database</label><input id="sql-database" type="text" placeholder="mydb" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300"></div></div>
+          <div><label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Username</label><input id="sql-username" type="text" placeholder="user" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300"></div>
+          <div><label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Password</label><input id="sql-password" type="password" placeholder="****" class="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-gray-300"></div>
+          <button onclick="saveSqlConnection()" class="w-full px-4 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-colors">Simpan Koneksi</button>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100"><p class="text-base font-bold text-gray-900">Koneksi Tersimpan</p></div>
+        <div class="px-5 py-4" id="sql-saved-list"><p class="text-sm text-gray-500">Belum ada koneksi tersimpan.</p></div>
+      </div>
+    </div>
+  </div>
+
+
   <input type="file" id="import-file-input" class="hidden" multiple onchange="handleImportFiles(event)">
   <input type="file" id="import-zip-input" class="hidden" accept=".zip" onchange="handleImportZip(event)">
 
@@ -736,50 +1005,42 @@
               </div>
               <div class="mt-6 flex-1 px-3">
                 <nav id="sidebar-nav" class="flex flex-col gap-1.5">
-                  <button onclick="sidebarNavigate('/')" data-sidebar-path="/" class="sidebar-nav-item flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-gray-800 font-semibold transition-colors hover:bg-gray-100 text-[15px] focus:outline-none">
+                  <button onclick="sidebarNavigate('/')" data-sidebar-path="/" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Beranda
                   </button>
-                  <button onclick="sidebarNavigateToLastProject()" data-sidebar-path="/proyek" class="sidebar-nav-item flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-gray-800 font-semibold transition-colors hover:bg-gray-100 text-[15px] focus:outline-none">
+                  <button onclick="sidebarNavigateToLastProject()" data-sidebar-path="/proyek" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                     </svg>
                     Proyek
                   </button>
-                  <button onclick="sidebarNavigate('/analytics')" data-sidebar-path="/analytics" class="sidebar-nav-item flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-gray-800 font-semibold transition-colors hover:bg-gray-100 text-[15px] focus:outline-none">
+                  <button onclick="sidebarNavigate('/analytics')" data-sidebar-path="/analytics" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                     Analytics
                   </button>
-                  <!-- Database & Storage Dropdown -->
-                  <div class="flex flex-col">
-                    <button onclick="toggleSidebarDropdown(event, this)" class="sidebar-nav-item flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-gray-800 font-semibold transition-colors hover:bg-gray-100 text-[15px] focus:outline-none w-full text-left">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
-                        <ellipse cx="12" cy="5" rx="9" ry="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/>
-                      </svg>
-                      Database & Storage
-                      <svg class="sidebar-dropdown-arrow h-4 w-4 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </button>
-                    <div class="sidebar-dropdown-content hidden flex flex-col gap-1 mt-1">
-                      <button onclick="sidebarNavigate('/database')" data-sidebar-path="/database" class="sidebar-nav-item flex items-center px-4 py-2.5 rounded-xl text-gray-600 font-medium text-sm focus:outline-none">
-                        Database
-                      </button>
-                      <button onclick="sidebarNavigate('/storage')" data-sidebar-path="/storage" class="sidebar-nav-item flex items-center px-4 py-2.5 rounded-xl text-gray-600 font-medium text-sm focus:outline-none">
-                        Storage
-                      </button>
-                      <button onclick="sidebarNavigate('/sql-connection')" data-sidebar-path="/sql-connection" class="sidebar-nav-item flex items-center px-4 py-2.5 rounded-xl text-gray-600 font-medium text-sm focus:outline-none">
-                        Koneksi SQL
-                      </button>
-                    </div>
-                  </div>
-                
+                  <button onclick="sidebarNavigate('/database')" data-sidebar-path="/database" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2zM4 7l8 6 8-6" />
+                    </svg>
+                    Database
+                  </button>
+                  <button onclick="sidebarNavigate('/storage')" data-sidebar-path="/storage" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 7a8 8 0 0116 0v10a8 8 0 01-16 0zM4 7l8 5 8-5" />
+                    </svg>
+                    Storage
+                  </button>
+                  <button onclick="sidebarNavigate('/sql-connection')" data-sidebar-path="/sql-connection" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 8a7 7 0 0114 0v8a7 7 0 01-14 0zM5 8l7 4 7-4M5 16l7 4 7-4" />
+                    </svg>
+                    Koneksi SQL
+                  </button>
                 </nav>
                 <div class="mt-4 pt-4 border-t border-gray-100"><p class="text-xs font-semibold text-gray-400 uppercase tracking-wide px-3 mb-1">Proyek Terbaru</p><div id="sidebar-project-list" class="flex flex-col gap-0.5"></div></div>
               </div>
@@ -788,645 +1049,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div id="page-database" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
-    <div class="w-full max-w-5xl">
-      <div class="mb-4 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
-            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Database</h2>
-          </div>
-        </div>
-        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
-          <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-          </button>
-          <a href="profile.html" class="flex items-center justify-center">
-            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-          </a>
-        </div>
-      </div>
-      <div class="w-full max-w-6xl mx-auto">
-        
-        
-        <!-- Bagian Atas: Judul dan Toolbar -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Basis Data</h1>
-                <p class="text-sm text-gray-500 mt-1">Kelola semua data entitas, pengguna, dan proyek.</p>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row items-center gap-3 relative">
-                <!-- Search Bar -->
-                <div class="relative w-full sm:w-64 group">
-                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-gray-900 transition-colors"></i>
-                    <input type="text" id="db-search-input" placeholder="Cari data..." class="w-full bg-white border border-gray-200 rounded-full py-2.5 pl-10 pr-8 text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all placeholder:text-gray-400">
-                    <button id="db-clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-900">
-                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                    </button>
-                </div>
-                
-                <!-- Filter Button & Menu Dropdown -->
-                <div class="relative w-full sm:w-auto">
-                    <button id="db-filter-btn" class="w-full sm:w-auto flex items-center justify-center px-4 py-2.5 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors">
-                        <i data-lucide="list-filter" class="w-4 h-4 mr-2"></i>
-                        <span>Filter</span>
-                        <span id="db-filter-badge" class="hidden ml-2 bg-gray-900 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                    </button>
-
-                    <!-- Popup Dropdown Filter -->
-                    <div id="db-filter-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-200 p-4 z-30 transition-all">
-                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100">
-                            <span class="text-xs font-bold text-gray-900 uppercase tracking-wider">Filter Data</span>
-                            <button id="db-reset-filter" class="text-xs text-gray-500 hover:text-gray-900 underline">Reset</button>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
-                                <select id="db-filter-status" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 focus:outline-none focus:border-gray-900">
-                                    <option value="ALL">Semua Status</option>
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Dalam Proses">Dalam Proses</option>
-                                    <option value="Diarsipkan">Diarsipkan</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-xs font-medium text-gray-500 mb-1.5">Kategori</label>
-                                <select id="db-filter-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-medium text-gray-800 focus:outline-none focus:border-gray-900">
-                                    <option value="ALL">Semua Kategori</option>
-                                    <option value="Proyek Desain">Proyek Desain</option>
-                                    <option value="Konfigurasi Pengguna">Konfigurasi Pengguna</option>
-                                    <option value="Infrastruktur">Infrastruktur</option>
-                                    <option value="Basis Data">Basis Data</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Add Button -->
-                <button id="db-add-new" class="w-full sm:w-auto flex items-center justify-center px-4 py-2.5 bg-gray-900 border border-gray-900 rounded-full text-sm font-medium text-white hover:bg-gray-800 active:bg-gray-950 transition-colors shadow-sm">
-                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
-                    Tambah Baru
-                </button>
-            </div>
-        </div>
-
-        <!-- Batch Action Bar (Muncul saat ada checkbox terpilih) -->
-        <div id="db-batch-bar" class="hidden mb-4 p-3 bg-gray-900 text-white rounded-2xl flex items-center justify-between shadow-lg animate-fade-in">
-            <div class="flex items-center pl-3 gap-2 text-sm font-medium">
-                <span id="db-selected-count">0</span> data terpilih
-            </div>
-            <div class="flex items-center gap-2">
-                <button id="db-batch-delete" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-xl transition-colors flex items-center gap-1.5">
-                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                    Hapus Terpilih
-                </button>
-                <button id="db-deselect-all" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-medium rounded-xl transition-colors">
-                    Batal
-                </button>
-            </div>
-        </div>
-
-        <!-- Card Tabel Data -->
-        <div class="bg-white rounded-[24px] border border-gray-200 shadow-sm overflow-hidden flex-1 flex flex-col">
-            
-            <div class="overflow-x-auto flex-1">
-                <table class="w-full text-left border-collapse min-w-[800px]">
-                    <!-- Header Tabel -->
-                    <thead>
-                        <tr class="bg-gray-50/50 border-b border-gray-200">
-                            <th class="py-4 pl-6 pr-3 w-[50px]">
-                                <input type="checkbox" id="db-select-all" class="custom-checkbox">
-                            </th>
-                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Nama Entitas</th>
-                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Kategori</th>
-                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                            <th class="py-4 px-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider">Pembaruan Terakhir</th>
-                            <th class="py-4 pr-6 pl-4 text-[12px] font-bold text-gray-400 uppercase tracking-wider text-right">Aksi</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody id="db-table-body" class="divide-y divide-gray-100 text-sm">
-                        <!-- Baris tabel akan di-render secara dinamis melalui JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination (Bagian Bawah Tabel) -->
-            <div class="px-6 py-4 border-t border-gray-200 bg-white flex flex-col sm:flex-row items-center justify-between gap-4">
-                <span class="text-sm text-gray-500" id="pagination-info">
-                    Menampilkan <span class="font-medium text-gray-900" id="db-page-start">0</span> sampai <span class="font-medium text-gray-900" id="db-page-end">0</span> dari <span class="font-medium text-gray-900" id="db-total-count">0</span> data
-                </span>
-                
-                <div class="flex items-center gap-1" id="db-pagination-buttons">
-                    <!-- Tombol-tombol pagination di-render dinamis -->
-                </div>
-            </div>
-            
-        </div>
-    
-      </div>
-      <div id="db-data-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div class="modal-backdrop fixed inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0"></div>
-        
-        <div class="modal-content relative bg-white w-full max-w-md rounded-[24px] shadow-2xl border border-gray-100 p-6 opacity-0 scale-95 z-10">
-            <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-                <h3 id="db-modal-title" class="text-lg font-bold text-gray-900">Tambah Entitas Baru</h3>
-                <button id="db-close-modal" class="p-1 text-gray-400 hover:text-gray-900 rounded-lg">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <form id="db-entity-form" class="mt-4 space-y-4">
-                <input type="hidden" id="db-entity-id">
-                
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Nama Entitas</label>
-                    <input type="text" id="db-entity-name" placeholder="Masukkan nama entitas..." required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Kode / ID Entitas</label>
-                    <input type="text" id="db-entity-code" placeholder="Contoh: PRJ-9921A" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-all">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Kategori</label>
-                    <select id="db-entity-category" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
-                        <option value="Proyek Desain">Proyek Desain</option>
-                        <option value="Konfigurasi Pengguna">Konfigurasi Pengguna</option>
-                        <option value="Infrastruktur">Infrastruktur</option>
-                        <option value="Basis Data">Basis Data</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Status</label>
-                    <select id="db-entity-status" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-gray-900">
-                        <option value="Aktif">Aktif</option>
-                        <option value="Dalam Proses">Dalam Proses</option>
-                        <option value="Diarsipkan">Diarsipkan</option>
-                    </select>
-                </div>
-
-                <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                    <button type="button" id="db-cancel-modal" class="px-4 py-2.5 border border-gray-200 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                        Batal
-                    </button>
-                    <button type="submit" class="px-5 py-2.5 bg-gray-900 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm">
-                        Simpan Data
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Konfirmasi Hapus -->
-    <div id="db-delete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div class="modal-backdrop fixed inset-0 bg-gray-900/40 backdrop-blur-sm opacity-0"></div>
-        
-        <div class="modal-content relative bg-white w-full max-w-sm rounded-[24px] shadow-2xl border border-gray-100 p-6 opacity-0 scale-95 z-10 text-center">
-            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-base font-bold text-gray-900">Hapus Data?</h3>
-            <p id="db-delete-text" class="text-xs text-gray-500 mt-1 mb-6">Tindakan ini tidak dapat dibatalkan. Data akan dihapus secara permanen dari sistem.</p>
-
-            <div class="flex items-center justify-center gap-3">
-                <button id="db-cancel-delete" class="w-full py-2.5 border border-gray-200 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                    Batal
-                </button>
-                <button id="db-confirm-delete" class="w-full py-2.5 bg-red-600 text-white rounded-full text-xs font-medium hover:bg-red-700 transition-colors shadow-sm">
-                    Ya, Hapus
-                </button>
-            </div>
-        </div>
-    </div>
-<div id="db-context-menu" class="hidden fixed w-44 bg-white rounded-2xl shadow-xl border border-gray-200 py-1.5 z-40 text-xs">
-        <button id="db-ctx-edit" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-gray-700">
-            <i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Ubah Data
-        </button>
-        <button id="db-ctx-copy" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-gray-700">
-            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin ID
-        </button>
-        <button id="db-ctx-duplicate" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2 text-gray-700">
-            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Duplikat Data
-        </button>
-        <div class="h-[1px] bg-gray-100 my-1"></div>
-        <button id="db-ctx-delete" class="w-full text-left px-4 py-2 hover:bg-red-50 flex items-center gap-2 text-red-600">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus Data
-        </button>
-    </div>
-  </div>
-
-  <div id="page-storage" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
-    <div class="w-full max-w-2xl">
-      <div class="mb-4 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
-            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Storage</h2>
-          </div>
-        </div>
-        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
-          <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-          </button>
-          <a href="profile.html" class="flex items-center justify-center">
-            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-          </a>
-        </div>
-      </div>
-      
-        
-        <!-- HALAMAN: PENYIMPANAN -->
-        <div class="page-content flex h-full flex-col overflow-y-auto bg-white w-full no-scrollbar">
-            <div class="max-w-2xl mx-auto w-full pb-12 relative pt-6 px-4">
-
-                <!-- Header tanpa tombol kembali -->
-                <div class="pt-2 pb-6 flex items-center">
-                    <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Penyimpanan</h2>
-                </div>
-
-                <!-- Ringkasan Penyimpanan (Bg rata tanpa card) -->
-                <div class="mb-8 px-2">
-                    <div class="flex justify-between items-start mb-5">
-                        <div>
-                            <h3 id="storage-used-display" class="text-[32px] font-bold text-gray-900 leading-tight tracking-tight">0 MB</h3>
-                            <p class="text-[14px] text-gray-500 mt-1 font-medium">digunakan dari 50 MB</p>
-                        </div>
-                        <i data-lucide="cloud" class="w-8 h-8 text-gray-400 mt-1"></i>
-                    </div>
-                    
-                    <!-- Progress Bar Berwarna -->
-                    <div class="w-full bg-gray-100 rounded-full h-3 mb-4 overflow-hidden flex">
-                        <div class="bg-blue-500 h-full" style="width: 20%"></div>
-                        <div class="bg-purple-500 h-full" style="width: 15%"></div>
-                        <div class="bg-amber-400 h-full" style="width: 10.5%"></div>
-                    </div>
-                    
-                    <div class="flex items-center text-[13px] text-gray-500">
-                        <i data-lucide="info" class="w-4 h-4 text-gray-400 mr-1.5"></i>
-                        <span><span id="storage-remaining">50 MB tersisa di penyimpanan Anda.</span></span>
-                    </div>
-                </div>
-
-                <div class="space-y-8">
-                    
-                    <!-- Group 1: Rincian (Tanpa Card) -->
-                    <div>
-                        <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-3 uppercase tracking-wider">Rincian Kategori</h3>
-                        <div class="w-full flex items-center justify-between px-2 py-3">
-                            <div class="flex items-center">
-                                <div class="w-2.5 h-2.5 rounded-full bg-blue-500 mr-3.5"></div>
-                                <span class="text-[16px] font-medium text-gray-900">File Proyek</span>
-                            </div>
-                            <span id="storage-files-size" class="text-[15px] font-medium text-gray-900">0 KB</span>
-                        </div>
-                        <div class="h-[1px] bg-gray-100 ml-14"></div>
-                        
-                        <div class="w-full flex items-center justify-between px-2 py-3">
-                            <div class="flex items-center">
-                                <div class="w-2.5 h-2.5 rounded-full bg-purple-500 mr-3.5"></div>
-                                <span class="text-[16px] font-medium text-gray-900">Env Variables</span>
-                            </div>
-                            <span id="storage-env-size" class="text-[15px] font-medium text-gray-900">0 KB</span>
-                        </div>
-                        <div class="h-[1px] bg-gray-100 ml-14"></div>
-                        
-                        <div class="w-full flex items-center justify-between px-2 py-3">
-                            <div class="flex items-center">
-                                <div class="w-2.5 h-2.5 rounded-full bg-green-500 mr-3.5"></div>
-                                <span class="text-[16px] font-medium text-gray-900">Konfigurasi Deploy</span>
-                            </div>
-                            <span id="storage-config-size" class="text-[15px] font-medium text-gray-900">0 KB</span>
-                        </div>
-                        <div class="h-[1px] bg-gray-100 ml-14"></div>
-                        
-                        <!-- Item Dokumen -->
-                        <div class="w-full flex items-center justify-between px-2 py-3">
-                            <div class="flex items-center">
-                                <div class="w-2.5 h-2.5 rounded-full bg-amber-400 mr-3.5"></div>
-                                <i data-lucide="file-text" class="w-[22px] h-[22px] text-gray-500 mr-3.5"></i>
-                                <span class="text-[16px] font-medium text-gray-900">Lainnya</span>
-                            </div>
-                            <span id="storage-other-size" class="text-[15px] font-medium text-gray-900">0 KB</span>
-                        </div>
-                    </div>
-
-                    <!-- Group 2: Kelola (CTA Button Style) -->
-                    <div>
-                        <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-3 uppercase tracking-wider">Kelola Penyimpanan</h3>
-                        <div class="space-y-3 px-2">
-                            
-                            <button onclick="openModal('upgrade')" class="w-full bg-white border border-gray-200 rounded-[20px] p-4 flex items-center justify-between hover:bg-gray-50 transition-colors active:bg-gray-100">
-                                <div class="flex items-center">
-                                    <i data-lucide="arrow-up-circle" class="w-[24px] h-[24px] text-gray-500 mr-4"></i>
-                                    <div class="flex flex-col items-start">
-                                        <span class="text-[16px] font-semibold text-gray-900">Muat Ulang Data</span>
-                                        <span class="text-[13px] text-gray-500 mt-0.5">Segarkan statistik penyimpanan</span>
-                                    </div>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
-                            </button>
-                            
-                            <button onclick="openModal('cleanup')" class="w-full bg-white border border-gray-200 rounded-[20px] p-4 flex items-center justify-between hover:bg-gray-50 transition-colors active:bg-gray-100">
-                                <div class="flex items-center">
-                                    <i data-lucide="trash-2" class="w-[24px] h-[24px] text-gray-500 mr-4"></i>
-                                    <div class="flex flex-col items-start">
-                                        <span class="text-[16px] font-semibold text-gray-900">Kosongkan Cache</span>
-                                        <span class="text-[13px] text-gray-500 mt-0.5">Hapus data proyek yang dihapus</span>
-                                    </div>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-400"></i>
-                            </button>
-                            
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    
-    </div>
-  </div>
-
-  <div id="page-sql-connection" class="page-view hidden w-full min-h-screen flex flex-col items-center pt-3 px-4 sm:pt-4 pb-20">
-    <div class="w-full max-w-2xl">
-      <div class="mb-4 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-          <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka Menu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div class="flex items-center gap-1.5 sm:gap-2 relative min-w-0">
-            <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">Sql Connection</h2>
-          </div>
-        </div>
-        <div class="flex items-center justify-center gap-1.5 sm:gap-2">
-          <button onclick="toggleNotifications(event)" class="relative p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-full transition-colors focus:outline-none" aria-label="Notifikasi">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-          </button>
-          <a href="profile.html" class="flex items-center justify-center">
-            <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
-          </a>
-        </div>
-      </div>
-      
-        
-        <!-- Wrapper Scrollable -->
-        <div class="flex h-full flex-col overflow-y-auto w-full no-scrollbar">
-            <div class="max-w-2xl mx-auto w-full pb-12 relative pt-6 px-4">
-
-                <!-- STEP 1: INTRO -->
-                <div id="sql-step-1" class="step-container flex flex-col h-full animate-fade-step py-8">
-                    <div class="flex flex-col items-center pt-8 pb-12 text-center">
-                        <div class="w-[84px] h-[84px] bg-gray-50 rounded-full flex items-center justify-center text-gray-900 mb-6">
-                            <i data-lucide="database-zap" class="w-10 h-10"></i>
-                        </div>
-                        <h2 class="text-[24px] font-bold text-gray-900 tracking-tight">Koneksi SQL</h2>
-                        <p class="text-[15px] text-gray-500 mt-3 max-w-sm leading-relaxed">
-                            Hubungkan dan sinkronkan database Anda secara aman untuk memulai analisis mendalam. 
-                            <a href="#" class="text-blue-500 hover:text-blue-600 hover:underline font-medium transition-colors">Pelajari cara kerjanya</a>.
-                        </p>
-                    </div>
-                    
-                    <div class="mt-auto pt-8">
-                        <button onclick="goToSqlStep(2)" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
-                            <span class="text-[16px] font-semibold tracking-wide">Mulai</span>
-                            <i data-lucide="arrow-right" class="w-5 h-5 ml-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- STEP 2: SCHEMA -->
-                <div id="sql-step-2" class="step-container hidden flex-col h-full animate-fade-step">
-                    <div class="flex flex-col pt-4 pb-8">
-                        <button onclick="goToSqlStep(1)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
-                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                        </button>
-                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Pengaturan Skema</h2>
-                        <p class="text-[14px] text-gray-500 mt-1.5 max-w-sm leading-relaxed">Tentukan nama skema default yang akan digunakan untuk membaca struktur tabel Anda.</p>
-                    </div>
-                    
-                    <div class="space-y-5">
-                        <div>
-                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Detail Skema</h3>
-                            <!-- Form input tanpa border -->
-                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
-                                <div class="w-full flex items-center px-4 py-4">
-                                    <i data-lucide="layers" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
-                                    <input type="text" id="schema_name" value="public" placeholder="Nama Skema (contoh: public)" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-10">
-                        <button onclick="goToSqlStep(3)" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
-                            <span class="text-[16px] font-semibold tracking-wide">Lanjutkan</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- STEP 3: SOURCE METHOD -->
-                <div id="sql-step-3" class="step-container hidden flex-col h-full animate-fade-step">
-                    <div class="flex flex-col pt-4 pb-6">
-                        <button onclick="goToSqlStep(2)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
-                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                        </button>
-                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Hubungkan Sumber Data</h2>
-                        <p class="text-[14px] text-gray-500 mt-1.5 leading-relaxed">Pilih bagaimana Anda ingin mengonfigurasi pengaturan sumber data ini.</p>
-                    </div>
-                    
-                    <div class="space-y-3.5 mt-2">
-                        <!-- Opsi 1 -->
-                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
-                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
-                                <i data-lucide="plus" class="w-5 h-5 text-gray-900"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-[16px] font-semibold text-gray-900">Buat Baru</h4>
-                                <p class="text-[13px] text-gray-500 mt-0.5">Konfigurasi manual dari awal</p>
-                            </div>
-                            <input type="radio" name="source_method" value="new" checked class="w-5 h-5 ml-4 cursor-pointer">
-                        </label>
-                        
-                        <!-- Opsi 2 -->
-                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
-                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
-                                <i data-lucide="copy" class="w-5 h-5 text-gray-900"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-[16px] font-semibold text-gray-900">Gunakan Template</h4>
-                                <p class="text-[13px] text-gray-500 mt-0.5">Terapkan dari pengaturan sebelumnya</p>
-                            </div>
-                            <input type="radio" name="source_method" value="template" class="w-5 h-5 ml-4 cursor-pointer">
-                    </label>
-                </div>
-                
-                <div class="pt-10">
-                    <button onclick="nextFromSourceMethod()" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
-                        <span class="text-[16px] font-semibold tracking-wide">Lanjutkan</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- STEP 4: DETAILS FORM -->
-                <div id="sql-step-4" class="step-container hidden flex-col h-full animate-fade-step pb-6">
-                    <div class="flex flex-col pt-4 pb-6">
-                        <button onclick="goToSqlStep(3)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
-                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                        </button>
-                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Rincian Sumber Data</h2>
-                        <p class="text-[14px] text-gray-500 mt-1.5 leading-relaxed">Masukkan kredensial server database Anda dengan teliti.</p>
-                    </div>
-
-                    <div class="space-y-5">
-                        
-                        <!-- Group 1: Server -->
-                        <div>
-                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Kredensial Server</h3>
-                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
-                                <div class="w-full flex items-center px-4 py-3.5">
-                                    <i data-lucide="server" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
-                                    <input type="text" id="sql-host" placeholder="Host (contoh: localhost)" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
-                                </div>
-                                <div class="h-[1px] bg-gray-200 ml-14"></div>
-                                <div class="w-full flex items-center px-4 py-3.5">
-                                    <i data-lucide="network" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
-                                    <input type="number" id="sql-port" placeholder="Port (contoh: 3306)" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Group 2: Autentikasi -->
-                        <div>
-                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Autentikasi</h3>
-                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
-                                <div class="w-full flex items-center px-4 py-3.5">
-                                    <i data-lucide="user" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
-                                    <input type="text" id="sql-username" placeholder="Username" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
-                                </div>
-                                <div class="h-[1px] bg-gray-200 ml-14"></div>
-                                <div class="w-full flex items-center px-4 py-3.5 group relative">
-                                    <i data-lucide="key-round" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
-                                    <input type="password" id="password" placeholder="Password" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full pr-10">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Group 3: Database -->
-                        <div>
-                            <h3 class="px-3 text-[13px] font-bold text-gray-400 mb-2.5 uppercase tracking-wider">Database</h3>
-                            <div class="bg-gray-50 rounded-[24px] overflow-hidden focus-within:ring-2 focus-within:ring-gray-200 transition-shadow">
-                                <div class="w-full flex items-center px-4 py-3.5">
-                                    <i data-lucide="hard-drive" class="w-[22px] h-[22px] text-gray-400 mr-3.5"></i>
-                                    <input type="text" id="sql-dbname" placeholder="Nama Database" class="flex-1 bg-transparent text-[16px] font-medium text-gray-900 outline-none placeholder-gray-400 w-full">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="pt-6">
-                            <!-- Tombol disamakan stylenya: bg-putih dengan border abu -->
-                            <button id="sql-btn-connect" onclick="testSqlConnection()" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
-                                <i data-lucide="plug" class="w-5 h-5 mr-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>
-                                <span class="text-[16px] font-semibold tracking-wide" id="sql-btn-text">Simpan & Uji Koneksi</span>
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-                
-                <!-- STEP 5: PILIH TEMPLATE -->
-                <div id="sql-step-5" class="step-container hidden flex-col h-full animate-fade-step pb-6">
-                    <div class="flex flex-col pt-4 pb-6">
-                        <button onclick="goToSqlStep(3)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full mb-6 hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-900 shadow-sm">
-                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                        </button>
-                        <h2 class="text-[22px] font-bold text-gray-900 tracking-tight">Pilih Template</h2>
-                        <p class="text-[14px] text-gray-500 mt-1.5 leading-relaxed">Pilih konfigurasi koneksi database yang sudah Anda simpan sebelumnya.</p>
-                    </div>
-
-                    <div class="space-y-3.5 mt-2">
-                        <!-- Template 1 -->
-                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
-                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
-                                <i data-lucide="database" class="w-5 h-5 text-gray-900"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-[16px] font-semibold text-gray-900">Database Produksi Utama</h4>
-                                <p class="text-[13px] text-gray-500 mt-0.5">PostgreSQL • 192.168.1.10</p>
-                            </div>
-                            <input type="radio" name="template_choice" value="prod" checked class="w-5 h-5 ml-4 cursor-pointer">
-                        </label>
-                        
-                        <!-- Template 2 -->
-                        <label class="w-full flex items-center p-4 bg-gray-50 rounded-[24px] cursor-pointer border border-transparent hover:border-gray-200 transition-all active:bg-gray-100">
-                            <div class="w-[42px] h-[42px] bg-white rounded-full flex items-center justify-center mr-4 shadow-sm border border-gray-100">
-                                <i data-lucide="database" class="w-5 h-5 text-gray-900"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-[16px] font-semibold text-gray-900">Database Staging (Uji Coba)</h4>
-                                <p class="text-[13px] text-gray-500 mt-0.5">MySQL • 10.0.0.5</p>
-                            </div>
-                            <input type="radio" name="template_choice" value="staging" class="w-5 h-5 ml-4 cursor-pointer">
-                        </label>
-                    </div>
-                    
-                    <div class="pt-10">
-                        <button id="sql-btn-connect-template" onclick="testSqlConnectionTemplate()" class="w-full flex items-center justify-center px-4 py-4 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[24px] transition-colors shadow-sm group">
-                            <i data-lucide="plug" class="w-5 h-5 mr-2.5 text-gray-400 group-hover:text-gray-900 transition-colors"></i>
-                            <span class="text-[16px] font-semibold tracking-wide" id="sql-btn-text-template">Gunakan & Uji Koneksi</span>
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    
-    </div>
-  </div>
-  <div id="sql-custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm opacity-0 pointer-events-none modal-transition">
-        <!-- Modal Content -->
-        <div id="sql-modal-panel" class="bg-white w-full max-w-sm rounded-[32px] p-6 shadow-2xl transform scale-95 modal-transition flex flex-col items-center text-center mx-4 border border-gray-200">
-            <div id="sql-modal-icon-container" class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <i id="sql-modal-icon" data-lucide="info" class="w-7 h-7 text-gray-900"></i>
-            </div>
-            <h3 id="sql-modal-title" class="text-[20px] font-bold text-gray-900 tracking-tight mb-2">Informasi</h3>
-            <p id="sql-modal-message" class="text-[15px] text-gray-500 mb-6 leading-relaxed">Pesan akan tampil di sini.</p>
-            <!-- Tombol Modal disamakan stylenya: bg-putih dengan border abu -->
-            <button onclick="closeSqlModal()" class="w-full py-3.5 bg-white border border-gray-200 hover:bg-gray-50 active:bg-gray-100 text-gray-900 rounded-[20px] font-semibold text-[16px] transition-colors shadow-sm">
-                Tutup
-            </button>
-        </div>
-    </div>
-
-  <!-- Database Toast -->
-  <div id="db-toast" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs md:text-sm px-4 py-2.5 rounded-full shadow-xl z-[110] transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none flex items-center gap-2">
-    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
-    <span id="db-toast-message">Pesan notifikasi</span>
   </div>
 
   <!-- Chart Info Modal -->
@@ -4147,6 +3769,486 @@ async function saveDeployDomain() {
         } catch(e) { console.warn('[Clincoo] Session end beacon failed:', e.message); }
       }
     });
+
+
+    // ============================================================
+    // DATABASE / STORAGE / SQL CONNECTION PAGE FUNCTIONS
+    // ============================================================
+
+    // === DATABASE PAGE ===
+    var _dbInitialized = false;
+    var databaseItems = [];
+    var dbCurrentPage = 1;
+    const dbPageSize = 8;
+    var dbSelectedIds = new Set();
+    var dbActiveDeleteId = null;
+    var dbIsBatchDelete = false;
+    var dbActiveContextMenuId = null;
+    var dbSearchQuery = '';
+    var dbFilterStatus = 'ALL';
+    var dbFilterCategory = 'ALL';
+
+    function syncDatabaseItems() {
+      var stored = localStorage.getItem('clincoo_projects');
+      var projs = [];
+      if (stored) { try { projs = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse projects:', e.message); } }
+      databaseItems = projs.map(function(p) {
+        return {
+          id: p.id,
+          code: 'PRJ-' + String(p.id).substring(0, 6).toUpperCase(),
+          name: p.name || p.title || 'Tanpa Nama',
+          category: p.category || 'Proyek Web',
+          status: 'Aktif',
+          updated: p.updated_date ? new Date(p.updated_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : 'Baru saja'
+        };
+      });
+    }
+
+    function initDatabasePage() {
+      syncDatabaseItems();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      if (!_dbInitialized) {
+        _dbInitialized = true;
+        setupDatabaseListeners();
+      }
+      renderDbTable();
+    }
+
+    function dbShowToast(message) {
+      var toast = document.getElementById('db-toast');
+      if (!toast) return;
+      var toastMsg = document.getElementById('db-toast-message');
+      if (toastMsg) toastMsg.innerText = message;
+      toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(function() {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    function dbOpenModal(modalId) {
+      var modal = document.getElementById(modalId);
+      if (!modal) return;
+      var backdrop = modal.querySelector('.db-modal-backdrop');
+      var contentEl = modal.querySelector('.db-modal-content');
+      modal.classList.remove('hidden');
+      setTimeout(function() {
+        if (backdrop) backdrop.classList.remove('opacity-0');
+        if (contentEl) { contentEl.classList.remove('opacity-0', 'scale-95'); contentEl.classList.add('opacity-100', 'scale-100'); }
+      }, 10);
+    }
+
+    function dbCloseModal(modalId) {
+      var modal = document.getElementById(modalId);
+      if (!modal) return;
+      var backdrop = modal.querySelector('.db-modal-backdrop');
+      var contentEl = modal.querySelector('.db-modal-content');
+      if (backdrop) backdrop.classList.add('opacity-0');
+      if (contentEl) { contentEl.classList.remove('opacity-100', 'scale-100'); contentEl.classList.add('opacity-0', 'scale-95'); }
+      setTimeout(function() { modal.classList.add('hidden'); }, 250);
+    }
+
+    function getFilteredDbData() {
+      return databaseItems.filter(function(item) {
+        var matchesSearch = item.name.toLowerCase().indexOf(dbSearchQuery.toLowerCase()) !== -1 ||
+                            item.code.toLowerCase().indexOf(dbSearchQuery.toLowerCase()) !== -1;
+        var matchesStatus = dbFilterStatus === 'ALL' || item.status === dbFilterStatus;
+        var matchesCategory = dbFilterCategory === 'ALL' || item.category === dbFilterCategory;
+        return matchesSearch && matchesStatus && matchesCategory;
+      });
+    }
+
+    function renderDbTable() {
+      var filteredData = getFilteredDbData();
+      var totalItems = filteredData.length;
+      var totalPages = Math.ceil(totalItems / dbPageSize) || 1;
+      if (dbCurrentPage > totalPages) dbCurrentPage = totalPages;
+      var startIdx = (dbCurrentPage - 1) * dbPageSize;
+      var pageData = filteredData.slice(startIdx, startIdx + dbPageSize);
+      var tbody = document.getElementById('db-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (pageData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-gray-400"><svg class="w-8 h-8 mx-auto mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><p class="text-sm font-medium">Belum ada data. Buat proyek baru untuk melihat data di sini.</p></td></tr>';
+      } else {
+        pageData.forEach(function(item) {
+          var isChecked = dbSelectedIds.has(item.id);
+          var tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50 transition-colors group cursor-pointer' + (isChecked ? ' bg-gray-50/80' : '');
+          var statusBadgeHtml = '';
+          if (item.status === 'Aktif') {
+            statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-100 text-gray-800 border border-gray-200">Aktif</span>';
+          } else if (item.status === 'Dalam Proses') {
+            statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-900 text-white border border-gray-900">Dalam Proses</span>';
+          } else {
+            statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 text-gray-400 border border-gray-200">Diarsipkan</span>';
+          }
+          tr.innerHTML = '<td class="py-4 pl-6 pr-3"><input type="checkbox" class="custom-checkbox db-row-checkbox" data-id="' + item.id + '"' + (isChecked ? ' checked' : '') + '></td>' +
+            '<td class="py-4 px-4"><div class="font-medium text-gray-900">' + item.name + '</div><div class="text-xs text-gray-500 mt-0.5">ID: ' + item.code + '</div></td>' +
+            '<td class="py-4 px-4 text-gray-600">' + item.category + '</td>' +
+            '<td class="py-4 px-4">' + statusBadgeHtml + '</td>' +
+            '<td class="py-4 px-4 text-gray-500">' + item.updated + '</td>' +
+            '<td class="py-4 pr-6 pl-4 text-right"><div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"><button class="db-btn-more p-1.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" data-id="' + item.id + '" title="Opsi Lainnya"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01"/></svg></button></div></td>';
+          tbody.appendChild(tr);
+        });
+      }
+      var ps = document.getElementById('db-page-start');
+      var pe = document.getElementById('db-page-end');
+      var tc = document.getElementById('db-total-count');
+      if (ps) ps.innerText = totalItems > 0 ? startIdx + 1 : 0;
+      if (pe) pe.innerText = Math.min(startIdx + dbPageSize, totalItems);
+      if (tc) tc.innerText = totalItems;
+      renderDbPagination(totalPages);
+      var selectAll = document.getElementById('db-select-all');
+      if (selectAll) {
+        var allCurrentChecked = pageData.length > 0 && pageData.every(function(item) { return dbSelectedIds.has(item.id); });
+        selectAll.checked = allCurrentChecked;
+      }
+      updateDbBatchBar();
+      attachDbRowListeners();
+    }
+
+    function renderDbPagination(totalPages) {
+      var container = document.getElementById('db-pagination-buttons');
+      if (!container) return;
+      container.innerHTML = '';
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors';
+      prevBtn.innerText = 'Sebelumnya';
+      prevBtn.disabled = dbCurrentPage === 1;
+      prevBtn.addEventListener('click', function() { if (dbCurrentPage > 1) { dbCurrentPage--; renderDbTable(); } });
+      container.appendChild(prevBtn);
+      for (var i = 1; i <= totalPages; i++) {
+        (function(pageNum) {
+          var pageBtn = document.createElement('button');
+          if (pageNum === dbCurrentPage) {
+            pageBtn.className = 'w-8 h-8 flex items-center justify-center rounded-lg bg-gray-900 text-white text-sm font-medium transition-colors';
+          } else {
+            pageBtn.className = 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-700 text-sm font-medium transition-colors';
+          }
+          pageBtn.innerText = pageNum;
+          pageBtn.addEventListener('click', function() { dbCurrentPage = pageNum; renderDbTable(); });
+          container.appendChild(pageBtn);
+        })(i);
+      }
+      var nextBtn = document.createElement('button');
+      nextBtn.className = 'px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors';
+      nextBtn.innerText = 'Berikutnya';
+      nextBtn.disabled = dbCurrentPage === totalPages;
+      nextBtn.addEventListener('click', function() { if (dbCurrentPage < totalPages) { dbCurrentPage++; renderDbTable(); } });
+      container.appendChild(nextBtn);
+    }
+
+    function updateDbBatchBar() {
+      var bar = document.getElementById('db-batch-bar');
+      var countLabel = document.getElementById('db-selected-count');
+      if (!bar) return;
+      if (dbSelectedIds.size > 0) { bar.classList.remove('hidden'); if (countLabel) countLabel.innerText = dbSelectedIds.size; }
+      else bar.classList.add('hidden');
+    }
+
+    function attachDbRowListeners() {
+      document.querySelectorAll('.db-row-checkbox').forEach(function(cb) {
+        cb.addEventListener('change', function(e) {
+          var id = e.target.getAttribute('data-id');
+          if (e.target.checked) dbSelectedIds.add(id); else dbSelectedIds.delete(id);
+          renderDbTable();
+        });
+      });
+      document.querySelectorAll('.db-btn-more').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dbActiveContextMenuId = btn.getAttribute('data-id');
+          var rect = btn.getBoundingClientRect();
+          var menu = document.getElementById('db-context-menu');
+          if (!menu) return;
+          menu.style.top = (rect.bottom + 4) + 'px';
+          menu.style.left = (rect.left - 130) + 'px';
+          menu.classList.remove('hidden');
+        });
+      });
+    }
+
+    function openDbAddModal() {
+      document.getElementById('db-modal-title').innerText = 'Tambah Entitas Baru';
+      document.getElementById('db-entity-id').value = '';
+      document.getElementById('db-entity-name').value = '';
+      document.getElementById('db-entity-code').value = '';
+      document.getElementById('db-entity-category').value = 'Proyek Web';
+      document.getElementById('db-entity-status').value = 'Aktif';
+      dbOpenModal('db-data-modal');
+    }
+
+    function openDbEditModal(id) {
+      var item = databaseItems.find(function(i) { return i.id === id; });
+      if (!item) return;
+      document.getElementById('db-modal-title').innerText = 'Ubah Data Entitas';
+      document.getElementById('db-entity-id').value = item.id;
+      document.getElementById('db-entity-name').value = item.name;
+      document.getElementById('db-entity-code').value = item.code;
+      document.getElementById('db-entity-category').value = item.category;
+      document.getElementById('db-entity-status').value = item.status;
+      dbOpenModal('db-data-modal');
+    }
+
+    function setupDatabaseListeners() {
+      var searchInput = document.getElementById('db-search-input');
+      var clearBtn = document.getElementById('db-clear-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          dbSearchQuery = e.target.value;
+          if (clearBtn) { if (dbSearchQuery.trim() !== '') clearBtn.classList.remove('hidden'); else clearBtn.classList.add('hidden'); }
+          dbCurrentPage = 1; renderDbTable();
+        });
+      }
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          if (searchInput) searchInput.value = '';
+          dbSearchQuery = ''; clearBtn.classList.add('hidden'); dbCurrentPage = 1; renderDbTable();
+        });
+      }
+      var filterBtn = document.getElementById('db-filter-btn');
+      var filterDropdown = document.getElementById('db-filter-dropdown');
+      if (filterBtn) {
+        filterBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (filterDropdown) filterDropdown.classList.toggle('hidden');
+        });
+      }
+      document.addEventListener('click', function(e) {
+        if (filterDropdown && !filterDropdown.contains(e.target) && e.target !== filterBtn) filterDropdown.classList.add('hidden');
+        var contextMenu = document.getElementById('db-context-menu');
+        if (contextMenu && !contextMenu.contains(e.target)) contextMenu.classList.add('hidden');
+      });
+      var filterStatusSelect = document.getElementById('db-filter-status');
+      var filterCategorySelect = document.getElementById('db-filter-category');
+      var filterBadge = document.getElementById('db-filter-badge');
+      function updateFilterBadge() {
+        var activeCount = 0;
+        if (dbFilterStatus !== 'ALL') activeCount++;
+        if (dbFilterCategory !== 'ALL') activeCount++;
+        if (filterBadge) { if (activeCount > 0) { filterBadge.innerText = activeCount; filterBadge.classList.remove('hidden'); } else filterBadge.classList.add('hidden'); }
+      }
+      if (filterStatusSelect) filterStatusSelect.addEventListener('change', function(e) { dbFilterStatus = e.target.value; updateFilterBadge(); dbCurrentPage = 1; renderDbTable(); });
+      if (filterCategorySelect) filterCategorySelect.addEventListener('change', function(e) { dbFilterCategory = e.target.value; updateFilterBadge(); dbCurrentPage = 1; renderDbTable(); });
+      var resetBtn = document.getElementById('db-reset-filter');
+      if (resetBtn) resetBtn.addEventListener('click', function() {
+        dbFilterStatus = 'ALL'; dbFilterCategory = 'ALL';
+        if (filterStatusSelect) filterStatusSelect.value = 'ALL';
+        if (filterCategorySelect) filterCategorySelect.value = 'ALL';
+        updateFilterBadge(); dbCurrentPage = 1; renderDbTable();
+      });
+      var selectAllCb = document.getElementById('db-select-all');
+      if (selectAllCb) selectAllCb.addEventListener('change', function(e) {
+        var pageData = getFilteredDbData().slice((dbCurrentPage - 1) * dbPageSize, dbCurrentPage * dbPageSize);
+        if (e.target.checked) pageData.forEach(function(item) { dbSelectedIds.add(item.id); });
+        else pageData.forEach(function(item) { dbSelectedIds.delete(item.id); });
+        renderDbTable();
+      });
+      var deselectBtn = document.getElementById('db-deselect-all');
+      if (deselectBtn) deselectBtn.addEventListener('click', function() { dbSelectedIds.clear(); renderDbTable(); });
+      var batchDeleteBtn = document.getElementById('db-batch-delete');
+      if (batchDeleteBtn) batchDeleteBtn.addEventListener('click', function() {
+        dbIsBatchDelete = true;
+        var dt = document.getElementById('db-delete-text');
+        if (dt) dt.innerText = dbSelectedIds.size + ' data terpilih akan dihapus secara permanen.';
+        dbOpenModal('db-delete-modal');
+      });
+      var addBtn = document.getElementById('db-add-new');
+      if (addBtn) addBtn.addEventListener('click', openDbAddModal);
+      var closeModalBtn = document.getElementById('db-close-modal');
+      if (closeModalBtn) closeModalBtn.addEventListener('click', function() { dbCloseModal('db-data-modal'); });
+      var cancelModalBtn = document.getElementById('db-cancel-modal');
+      if (cancelModalBtn) cancelModalBtn.addEventListener('click', function() { dbCloseModal('db-data-modal'); });
+      var entityForm = document.getElementById('db-entity-form');
+      if (entityForm) {
+        entityForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var id = document.getElementById('db-entity-id').value;
+          var name = document.getElementById('db-entity-name').value.trim();
+          if (!name) { dbShowToast('Nama wajib diisi'); return; }
+          var category = document.getElementById('db-entity-category').value;
+          var status = document.getElementById('db-entity-status').value;
+          if (id) {
+            var idx = databaseItems.findIndex(function(i) { return i.id === id; });
+            if (idx !== -1) {
+              databaseItems[idx] = Object.assign({}, databaseItems[idx], { name: name, category: category, status: status, updated: 'Baru saja' });
+              var projIdx = projects.findIndex(function(p) { return p.id === id; });
+              if (projIdx !== -1) { projects[projIdx].name = name; saveData(); }
+              dbShowToast('Data berhasil diperbarui');
+            }
+          } else {
+            var newId = String(Date.now());
+            projects.push({ id: newId, name: name, desc: '', visibility: 'public' });
+            projectFilesData = { 'root': [] };
+            localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
+            saveData();
+            syncDatabaseItems();
+            dbShowToast('Data baru berhasil ditambahkan');
+          }
+          dbCloseModal('db-data-modal');
+          renderDbTable();
+        });
+      }
+      var cancelDeleteBtn = document.getElementById('db-cancel-delete');
+      if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', function() { dbCloseModal('db-delete-modal'); });
+      var confirmDeleteBtn = document.getElementById('db-confirm-delete');
+      if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+          if (dbIsBatchDelete) {
+            dbSelectedIds.forEach(function(id) {
+              var projIdx = projects.findIndex(function(p) { return p.id === id; });
+              if (projIdx !== -1) projects.splice(projIdx, 1);
+              localStorage.removeItem('clincoo_' + id + '_files');
+              localStorage.removeItem('clincoo_' + id + '_deploy_site');
+              localStorage.removeItem('clincoo_' + id + '_deploy_domain');
+              localStorage.removeItem('clincoo_' + id + '_env_variables');
+              localStorage.removeItem('clincoo_' + id + '_github_repo');
+            });
+            saveData();
+            syncDatabaseItems();
+            dbShowToast(dbSelectedIds.size + ' data berhasil dihapus');
+            dbSelectedIds.clear();
+          } else if (dbActiveDeleteId) {
+            var projIdx = projects.findIndex(function(p) { return p.id === dbActiveDeleteId; });
+            if (projIdx !== -1) { projects.splice(projIdx, 1); saveData(); }
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_files');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_deploy_site');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_deploy_domain');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_env_variables');
+            localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_github_repo');
+            syncDatabaseItems();
+            dbShowToast('Data berhasil dihapus');
+            dbActiveDeleteId = null;
+          }
+          dbCloseModal('db-delete-modal');
+          renderDbTable();
+        });
+      }
+      var ctxEditBtn = document.getElementById('db-ctx-edit');
+      if (ctxEditBtn) ctxEditBtn.addEventListener('click', function() {
+        var cm = document.getElementById('db-context-menu'); if (cm) cm.classList.add('hidden');
+        openDbEditModal(dbActiveContextMenuId);
+      });
+      var ctxCopyBtn = document.getElementById('db-ctx-copy');
+      if (ctxCopyBtn) ctxCopyBtn.addEventListener('click', function() {
+        var item = databaseItems.find(function(i) { return i.id === dbActiveContextMenuId; });
+        if (item) {
+          var tempInput = document.createElement('input');
+          tempInput.value = item.code; document.body.appendChild(tempInput);
+          tempInput.select(); document.execCommand('copy'); document.body.removeChild(tempInput);
+          dbShowToast('ID ' + item.code + ' disalin');
+        }
+        var cm = document.getElementById('db-context-menu'); if (cm) cm.classList.add('hidden');
+      });
+      var ctxDupBtn = document.getElementById('db-ctx-duplicate');
+      if (ctxDupBtn) ctxDupBtn.addEventListener('click', function() {
+        var item = databaseItems.find(function(i) { return i.id === dbActiveContextMenuId; });
+        if (item) {
+          var newId = String(Date.now());
+          projects.push({ id: newId, name: item.name + ' (Salinan)', desc: '', visibility: 'public' });
+          saveData();
+          syncDatabaseItems();
+          dbShowToast('Data berhasil diduplikasi');
+          renderDbTable();
+        }
+        var cm = document.getElementById('db-context-menu'); if (cm) cm.classList.add('hidden');
+      });
+      var ctxDeleteBtn = document.getElementById('db-ctx-delete');
+      if (ctxDeleteBtn) ctxDeleteBtn.addEventListener('click', function() {
+        dbActiveDeleteId = dbActiveContextMenuId;
+        dbIsBatchDelete = false;
+        var dt = document.getElementById('db-delete-text');
+        if (dt) dt.innerText = 'Data ini akan dihapus secara permanen dari sistem.';
+        var cm = document.getElementById('db-context-menu'); if (cm) cm.classList.add('hidden');
+        dbOpenModal('db-delete-modal');
+      });
+    }
+
+    // === STORAGE PAGE ===
+    function initStoragePage() {
+      calculateStorageUsage();
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(2) + ' MB';
+    }
+
+    function calculateStorageUsage() {
+      var totalBytes = 0, filesBytes = 0, envBytes = 0, configBytes = 0;
+      var stored = localStorage.getItem('clincoo_projects');
+      var projs = [];
+      if (stored) { try { projs = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse stored projects:', e.message); } }
+      if (stored) { configBytes += new Blob([stored]).size; totalBytes += configBytes; }
+      projs.forEach(function(proj) {
+        var filesStr = localStorage.getItem('clincoo_' + proj.id + '_files');
+        if (filesStr) { var s = new Blob([filesStr]).size; filesBytes += s; totalBytes += s; }
+        var envStr = localStorage.getItem('clincoo_' + proj.id + '_env_variables');
+        if (envStr) { var e = new Blob([envStr]).size; envBytes += e; totalBytes += e; }
+      });
+      var limitBytes = 5 * 1024 * 1024;
+      var percent = Math.min(Math.round((totalBytes / limitBytes) * 100), 100);
+      var el;
+      el = document.getElementById('st-total-size'); if (el) el.innerText = formatBytes(totalBytes);
+      el = document.getElementById('st-files-size'); if (el) el.innerText = formatBytes(filesBytes);
+      el = document.getElementById('st-env-size'); if (el) el.innerText = formatBytes(envBytes);
+      el = document.getElementById('st-config-size'); if (el) el.innerText = formatBytes(configBytes);
+      el = document.getElementById('st-total-bar'); if (el) el.style.width = percent + '%';
+      el = document.getElementById('st-percent'); if (el) el.innerText = percent + '%';
+    }
+
+    // === SQL CONNECTION PAGE ===
+    function initSqlConnectionPage() {
+      renderSqlConnections();
+    }
+
+    function saveSqlConnection() {
+      var type = document.getElementById('sql-type').value;
+      var host = document.getElementById('sql-host').value.trim();
+      var port = document.getElementById('sql-port').value.trim();
+      var database = document.getElementById('sql-database').value.trim();
+      var username = document.getElementById('sql-username').value.trim();
+      var password = document.getElementById('sql-password').value;
+      if (!host || !database) { alert('Host dan database wajib diisi'); return; }
+      var conns = [];
+      var stored = localStorage.getItem('clincoo_sql_connections');
+      if (stored) { try { conns = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse SQL connections:', e.message); } }
+      conns.push({ id: String(Date.now()), type: type, host: host, port: port, database: database, username: username, password: password });
+      localStorage.setItem('clincoo_sql_connections', JSON.stringify(conns));
+      ['sql-host','sql-port','sql-database','sql-username','sql-password'].forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+      renderSqlConnections();
+    }
+
+    function deleteSqlConnection(id) {
+      var conns = [];
+      var stored = localStorage.getItem('clincoo_sql_connections');
+      if (stored) { try { conns = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse SQL connections:', e.message); } }
+      conns = conns.filter(function(c) { return c.id !== id; });
+      localStorage.setItem('clincoo_sql_connections', JSON.stringify(conns));
+      renderSqlConnections();
+    }
+
+    function renderSqlConnections() {
+      var container = document.getElementById('sql-saved-list');
+      if (!container) return;
+      var conns = [];
+      var stored = localStorage.getItem('clincoo_sql_connections');
+      if (stored) { try { conns = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse SQL connections:', e.message); } }
+      if (conns.length === 0) { container.innerHTML = '<p class="text-sm text-gray-500">Belum ada koneksi tersimpan.</p>'; return; }
+      var html = '';
+      conns.forEach(function(c) {
+        html += '<div class="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">' +
+          '<div class="flex flex-col"><span class="text-sm font-medium text-gray-900">' + c.type.toUpperCase() + ' - ' + c.database + '</span>' +
+          '<span class="text-xs text-gray-500">' + c.host + (c.port ? ':' + c.port : '') + '</span></div>' +
+          '<button onclick="deleteSqlConnection(\'' + c.id + '\')" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>' +
+          '</div>';
+      });
+      container.innerHTML = html;
+    }
+
 
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
