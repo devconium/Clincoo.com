@@ -63,7 +63,7 @@
         <!-- Group 1: Akun -->
         <div>
           <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-2 uppercase tracking-wider">Akun</h3>
-          <div class="bg-white rounded-[24px] overflow-hidden border border-gray-200">
+          <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
             <button onclick="window.location.href='workspace.html'" class="w-full flex items-center px-4 py-3.5 hover:bg-gray-50 transition-colors active:bg-gray-100">
               <svg class="w-[22px] h-[22px] text-gray-900 mr-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
@@ -91,7 +91,7 @@
         <!-- Group 2: Pengaturan -->
         <div>
           <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-2 uppercase tracking-wider">Pengaturan</h3>
-          <div class="bg-white rounded-[24px] overflow-hidden border border-gray-200">
+          <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
             <button onclick="window.location.href='umum.html'" class="w-full flex items-center px-4 py-3.5 hover:bg-gray-50 transition-colors active:bg-gray-100">
               <svg class="w-[22px] h-[22px] text-gray-900 mr-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -125,9 +125,48 @@
           </div>
         </div>
 
-        <!-- Group 3: Keluar -->
+        <!-- Group 3: Cloud & Tim -->
         <div>
-          <div class="bg-white rounded-[24px] overflow-hidden border border-gray-200">
+          <h3 class="px-2 text-[13px] font-bold text-gray-400 mb-2 uppercase tracking-wider">Cloud & Tim</h3>
+          <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+            <button onclick="window.location.href='cloud.html'" class="w-full flex items-center px-4 py-3.5 hover:bg-gray-50 transition-colors active:bg-gray-100">
+              <svg class="w-[22px] h-[22px] text-gray-900 mr-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+              </svg>
+              <div class="flex flex-col items-start flex-1">
+                <span class="text-[16px] font-medium text-gray-900">Cloud Storage</span>
+                <span class="text-[13px] text-gray-500 mt-0.5" id="cloud-subtitle">Cloudflare R2</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <div class="h-[1px] bg-gray-100 ml-14"></div>
+            <button onclick="window.location.href='vps.html'" class="w-full flex items-center px-4 py-3.5 hover:bg-gray-50 transition-colors active:bg-gray-100">
+              <svg class="w-[22px] h-[22px] text-gray-900 mr-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7M9 21v-6h6v6" />
+              </svg>
+              <div class="flex flex-col items-start flex-1">
+                <span class="text-[16px] font-medium text-gray-900">VPS Cloud</span>
+                <span class="text-[13px] text-gray-500 mt-0.5" id="vps-subtitle">Cloudflare Workers</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <div class="h-[1px] bg-gray-100 ml-14"></div>
+            <button onclick="window.location.href='invite.html'" class="w-full flex items-center px-4 py-3.5 hover:bg-gray-50 transition-colors active:bg-gray-100">
+              <svg class="w-[22px] h-[22px] text-gray-900 mr-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              </svg>
+              <div class="flex flex-col items-start flex-1">
+                <span class="text-[16px] font-medium text-gray-900">Invite Anggota</span>
+                <span class="text-[13px] text-gray-500 mt-0.5" id="invite-subtitle">0 anggota</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Group 4: Keluar -->
+        <div>
+          <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
             <button onclick="logout()" class="w-full flex items-center px-4 py-3.5 hover:bg-gray-50 transition-colors active:bg-gray-100">
               <svg class="w-[22px] h-[22px] text-gray-900 mr-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -176,6 +215,30 @@
       var projectCount = getProjectCount();
       var wsSub = document.getElementById('workspace-subtitle');
       if (wsSub) wsSub.textContent = projectCount + ' proyek';
+
+      var members = getInviteCount();
+      var invSub = document.getElementById('invite-subtitle');
+      if (invSub) invSub.textContent = members + ' anggota';
+
+      var storageSize = getStorageSize();
+      var cloudSub = document.getElementById('cloud-subtitle');
+      if (cloudSub) cloudSub.textContent = 'R2 - ' + storageSize + ' terpakai';
+    }
+
+    function getInviteCount() {
+      var stored = localStorage.getItem('clincoo_invites');
+      if (stored) { try { return JSON.parse(stored).length; } catch(e) { return 0; } }
+      return 0;
+    }
+
+    function getStorageSize() {
+      var total = 0;
+      for (var key in localStorage) {
+        if (key.indexOf('clincoo_') === 0) total += (localStorage[key] || '').length;
+      }
+      if (total < 1024) return total + ' B';
+      if (total < 1048576) return (total / 1024).toFixed(1) + ' KB';
+      return (total / 1048576).toFixed(1) + ' MB';
     }
 
     function getProjectCount() {
