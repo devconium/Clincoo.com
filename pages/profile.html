@@ -159,7 +159,7 @@
 
  <script>
  function goBack() {
- if (document.referrer && document.referrer.indexOf('clincoo') !== -1) {
+ if (document.referrer && document.referrer.indexOf(window.location.hostname) !== -1) {
  history.back();
  } else {
  window.location.href = '../index.html';
@@ -177,7 +177,7 @@
  if (!initials) initials = 'U';
  document.getElementById('profile-avatar').textContent = initials;
 
- var ghToken = localStorage.getItem('github_token') || '';
+ var ghToken = localStorage.getItem('clincoo_github_token') || '';
  var keamananSub = document.getElementById('keamanan-subtitle');
  if (keamananSub) keamananSub.textContent = ghToken ? 'GitHub terhubung' : 'GitHub belum terhubung';
 
@@ -236,7 +236,7 @@
 
  function logout() {
  if (confirm('Yakin ingin keluar?')) {
- localStorage.removeItem('github_token');
+ localStorage.removeItem('clincoo_github_token');
  localStorage.removeItem('clincoo_user_name');
  localStorage.removeItem('clincoo_user_email');
  window.location.href = '../index.html';

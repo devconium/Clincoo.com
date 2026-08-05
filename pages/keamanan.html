@@ -19,7 +19,7 @@
  </button>
  <h2 class="text-xl font-bold text-gray-800 tracking-tight">Keamanan</h2>
  </div>
- <a href="../index.html"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white shadow-sm"></a>
+ <a href="../index.html"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm"></a>
  </div>
  </div>
  </div>
@@ -62,9 +62,9 @@
  }
  }
 
- function init(){var t=localStorage.getItem('github_token')||'';var s=document.getElementById('gh-token-status'),b=document.getElementById('gh-token-badge'),d=document.getElementById('gh-disconnect-btn');if(t){s.textContent='Token tersimpan dan aktif';b.textContent='Terhubung';b.className='px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-600';d.classList.remove('hidden')}else{s.textContent='Belum ada token GitHub';b.textContent='Belum';b.className='px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-500';d.classList.add('hidden')}}
- function connectGithub(){var t=prompt('Masukkan GitHub Personal Access Token:');if(t&&t.trim()){localStorage.setItem('github_token',t.trim());init()}}
- function disconnectGithub(){if(confirm('Putuskan koneksi GitHub?')){localStorage.removeItem('github_token');init()}}
+ function init(){var t=localStorage.getItem('clincoo_github_token')||'';var s=document.getElementById('gh-token-status'),b=document.getElementById('gh-token-badge'),d=document.getElementById('gh-disconnect-btn');if(t){s.textContent='Token tersimpan dan aktif';b.textContent='Terhubung';b.className='px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-600';d.classList.remove('hidden')}else{s.textContent='Belum ada token GitHub';b.textContent='Belum';b.className='px-2.5 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-500';d.classList.add('hidden')}}
+ function connectGithub(){var t=prompt('Masukkan GitHub Personal Access Token:');if(t&&t.trim()){localStorage.setItem('clincoo_github_token',t.trim());init()}}
+ function disconnectGithub(){if(confirm('Putuskan koneksi GitHub?')){localStorage.removeItem('clincoo_github_token');init()}}
  init();
  </script>
 </body>

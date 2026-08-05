@@ -260,9 +260,7 @@
             <div class="min-w-0">
               <button onclick="toggleProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
                 <span id="current-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
-
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
               </button>
               <div id="project-shortcut-dropdown" class="hidden absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all z-50">
                 <div class="p-1 max-h-60 overflow-y-auto hide-scrollbar" id="project-shortcut-list">
@@ -556,7 +554,7 @@
              <div class="min-w-0">
               <button onclick="toggleAnalyticsProjectDropdown(event)" class="flex items-center gap-1 sm:gap-1.5 text-lg font-bold text-gray-600 hover:text-gray-900 focus:outline-none transition-colors border-none bg-transparent w-full text-left" aria-label="Pilih Proyek">
                 <span id="analytics-project-name" class="truncate block max-w-[100px] sm:max-w-[200px]">Proyek</span>
-                <span class="flex-shrink-0 rounded flex items-center justify-center text-gray-600">
+                <span class="flex-shrink-0 flex items-center justify-center text-gray-600">
 
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                   </span>
@@ -1106,7 +1104,7 @@
         <p class="text-xs text-gray-500 leading-relaxed">Masuk ke pengelola DNS domain Anda, buat record CNAME dengan:</p>
         <div class="mt-1.5 bg-gray-50 rounded-lg px-3 py-2 text-xs font-mono text-gray-700 space-y-0.5">
           <p><span class="text-gray-400">Name:</span> @ atau www</p>
-          <p><span class="text-gray-400">Target:</span> testbugfix.pages.dev</p>
+          <p><span class="text-gray-400">Target:</span> clincoo-deploy.clincoo.workers.dev</p>
           <p><span class="text-gray-400">Tipe:</span> CNAME</p>
         </div>
       </div>
@@ -1381,14 +1379,7 @@ function closeAll() {
     _chartInfoOpen = false;
 }
 
-function toggleDropdown(btn) {
-    const e = window.event; if(e) e.stopPropagation();
-    const content = btn.nextElementSibling;
-    const arrow = btn.querySelector('.dropdown-arrow');
-    closeAll();
-    content.classList.remove('hidden');
-    arrow.classList.add('rotate-180');
-}
+
 
 function toggleNotifications(e){ 
     e.stopPropagation();
@@ -1601,62 +1592,36 @@ function selectDeployBranch(val, label) {
     };
 
   var _chartInfoOpen = false;
-function showChartInfo(id, btn) {
-    const e = window.event;
-    if (e) e.stopPropagation();
+  var _domainInfoOpen = false;
 
-    let popup = document.getElementById('chart-info-popup');
-    if(!popup){
-        popup = document.createElement('div');
-        popup.id = 'chart-info-popup';
-        popup.className = 'hidden absolute z-[100] w-72 p-3 bg-white border border-gray-200 rounded-xl shadow-xl text-sm text-gray-700';
-        document.body.appendChild(popup);
-    }
-
-    if(_chartInfoOpen){ closeChartInfo(); return; }
-
-    const texts = {
-        lineChart: 'Menampilkan total views harian selama 7 hari terakhir.',
-        barChart: 'Menampilkan total views per bulan.',
-        pieChart: 'Distribusi sumber trafik: Direct, Social, Referral.',
-        doughnutChart: 'Perbandingan pengguna Desktop, Mobile, Tablet.',
-        radarChart: 'Distribusi bahasa yang digunakan pengunjung.',
-        polarAreaChart: 'Distribusi negara asal pengunjung.',
-        scatterChart: 'Aktivitas views per jam dalam 24 jam.',
-        bubbleChart: 'Korelasi antara visitors dan views.',
-        mixedChart: 'Perbandingan bar views dan line visitors.',
-        horizontalBarChart: '10 halaman paling banyak dikunjungi.'
-    };
-    popup.innerHTML = texts[id] || 'Info tidak tersedia';
-
-    const rect = btn.getBoundingClientRect();
-    popup.style.left = (rect.right + 8) + 'px';
-    popup.style.top = rect.top + 'px';
-    if(rect.right + 296 > window.innerWidth) popup.style.left = (rect.left - 296) + 'px';
-    if(rect.top + 200 > window.innerHeight) popup.style.top = (window.innerHeight - 210) + 'px';
-
-    popup.classList.remove('hidden');
-    _chartInfoOpen = true;
-}
-function closeChartInfo() {
-    const popup = document.getElementById('chart-info-popup');
-    if(popup) popup.classList.add('hidden');
+  function closeChartInfo() {
+    var popup = document.getElementById('chart-info-popup');
+    if (popup) popup.classList.add('hidden');
     _chartInfoOpen = false;
-}
+  }
 
-function toggleDropdown(btn) {
-    const e = window.event;
-    if(e) e.stopPropagation();
-    const content = btn.nextElementSibling;
-    const arrow = btn.querySelector('.dropdown-arrow');
-    content.classList.toggle('hidden');
-    arrow.classList.toggle('rotate-180');
-}
+  function showDomainInfo(event) {
+    event.stopPropagation();
+    var popup = document.getElementById('domain-info-popup');
+    if (!popup) return;
+    if (_domainInfoOpen) { closeDomainInfo(); return; }
+    popup.classList.remove('hidden');
+    _domainInfoOpen = true;
+    var left = event.clientX + 10;
+    var top = event.clientY + 10;
+    if (left + 288 > window.innerWidth) left = event.clientX - 288 - 10;
+    if (top + 200 > window.innerHeight) top = window.innerHeight - 210;
+    popup.style.left = left + 'px';
+    popup.style.top = top + 'px';
+    setTimeout(function() {
+      document.addEventListener('click', closeDomainInfo);
+    }, 300);
+  }
 
 document.addEventListener('click', (e) => {
     if(!e.target.closest('.sidebar-dropdown')) {
-        document.querySelectorAll('.sidebar-dropdown.dropdown-content').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.sidebar-dropdown.dropdown-arrow').forEach(ic => ic.classList.remove('rotate-180'));
+        document.querySelectorAll('.sidebar-dropdown .dropdown-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.sidebar-dropdown .dropdown-arrow').forEach(ic => ic.classList.remove('rotate-180'));
     }
     if(!e.target.closest('#chart-info-popup') &&!e.target.closest('[onclick*="showChartInfo"]')) {
         closeChartInfo();
@@ -2977,11 +2942,7 @@ document.addEventListener('click', () => {
       }
     }
 
-    function toggleNotifications(e) {
-      e.stopPropagation();
-      const notif = document.getElementById('notif-dropdown');
-      if (notif) notif.classList.toggle('hidden');
-    }
+
 
     function toggleAddMenu(e) {
       e.stopPropagation();
@@ -4517,7 +4478,7 @@ async function saveDeployDomain() {
     });
     
   </script>
-  <script src="backend.js"></script>
+  <script src="assets/js/backend.js"></script>
 </body>
 </html>
 
