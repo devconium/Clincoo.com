@@ -2315,16 +2315,21 @@
 
     // === DATABASE PAGE ===
     var _dbInitialized = false;
-    var databaseItems = [
-      { id: '1', code: 'PRJ-9921A', name: 'Arsitektur UI/UX v2.0', category: 'Proyek Desain', status: 'Aktif', updated: '2 jam yang lalu' },
-      { id: '2', code: 'USR-1004X', name: 'Muzawwied Profile Data', category: 'Konfigurasi Pengguna', status: 'Aktif', updated: 'Kemarin, 14:30' },
-      { id: '3', code: 'SYS-4492B', name: 'Sistem Autentikasi API', category: 'Infrastruktur', status: 'Diarsipkan', updated: '22 Okt 2026' },
-      { id: '4', code: 'DB-7718C', name: 'Database Pelanggan Q3', category: 'Basis Data', status: 'Dalam Proses', updated: '18 Okt 2026' },
-      { id: '5', code: 'PRJ-8810M', name: 'Desain Komponen UI', category: 'Proyek Desain', status: 'Aktif', updated: '12 Okt 2026' },
-      { id: '6', code: 'SYS-1012C', name: 'Gateway Pembayaran', category: 'Infrastruktur', status: 'Dalam Proses', updated: '05 Okt 2026' },
-      { id: '7', code: 'USR-3301L', name: 'Manajemen Log Pengguna', category: 'Konfigurasi Pengguna', status: 'Diarsipkan', updated: '28 Sep 2026' },
-      { id: '8', code: 'DB-2209K', name: 'Backup Server Otomatis', category: 'Basis Data', status: 'Aktif', updated: '15 Sep 2026' }
-    ];
+    var databaseItems = [];
+
+    function loadDatabaseItems() {
+      loadData();
+      databaseItems = projects.map(function(p, i) {
+        return {
+          id: p.id,
+          code: 'PRJ-' + p.id.substring(0, 6).toUpperCase(),
+          name: p.name || ('Proyek ' + (i + 1)),
+          category: 'Proyek Web',
+          status: 'Aktif',
+          updated: p.desc ? 'Baru saja' : 'Baru saja'
+        };
+      });
+    }
     var dbCurrentPage = 1;
     const dbPageSize = 4;
     var dbSelectedIds = new Set();
@@ -2361,8 +2366,8 @@
     function dbOpenModal(modalId) {
       var modal = document.getElementById(modalId);
       if (!modal) return;
-      var backdrop = modal.querySelector('.db-modal-backdrop');
-      var contentEl = modal.querySelector('.db-modal-content');
+      var backdrop = modal.querySelector('.modal-backdrop');
+      var contentEl = modal.querySelector('.modal-content');
       modal.classList.remove('hidden');
       setTimeout(function() {
         if (backdrop) backdrop.classList.remove('opacity-0');
@@ -2376,8 +2381,8 @@
     function dbCloseModal(modalId) {
       var modal = document.getElementById(modalId);
       if (!modal) return;
-      var backdrop = modal.querySelector('.db-modal-backdrop');
-      var contentEl = modal.querySelector('.db-modal-content');
+      var backdrop = modal.querySelector('.modal-backdrop');
+      var contentEl = modal.querySelector('.modal-content');
       if (backdrop) backdrop.classList.add('opacity-0');
       if (contentEl) {
         contentEl.classList.remove('opacity-100', 'scale-100');
