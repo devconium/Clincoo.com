@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPS Cloud - Clincoo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}</style>
+</head>
+<body class="bg-[#f7f7f9] text-gray-900 min-h-screen flex flex-col">
+  <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
+    <div class="w-full max-w-5xl px-4 sm:px-6 mx-auto">
+      <div class="flex items-center justify-between h-14">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="history.back()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          </button>
+          <h2 class="text-xl font-bold text-gray-800 tracking-tight">VPS Cloud</h2>
+        </div>
+        <a href="../index.html"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white shadow-sm"></a>
+      </div>
+    </div>
+  </div>
+  <main class="flex-1 overflow-y-auto no-scrollbar">
+    <div class="max-w-2xl mx-auto w-full pb-12 pt-6 px-4">
+      <div class="space-y-4">
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7M9 21v-6h6v6"/></svg>
+              </div>
+              <div>
+                <p class="text-base font-bold text-gray-900">Cloudflare Workers</p>
+                <p class="text-xs text-gray-500 mt-0.5">100k request/hari gratis</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-sm text-gray-500">Request hari ini</span>
+                  <span class="text-sm font-semibold text-gray-900" id="vps-requests">0</span>
+                </div>
+                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-gray-900 rounded-full transition-all" id="vps-bar" style="width: 0%"></div>
+                </div>
+                <p class="text-xs text-gray-400 mt-1.5" id="vps-quota">0 dari 100.000 request hari ini</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <p class="text-base font-bold text-gray-900 mb-3">Worker Aktif</p>
+            <div id="vps-workers" class="space-y-3">
+              <p class="text-sm text-gray-500">Memuat...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <p class="text-base font-bold text-gray-900 mb-3">Layanan Cloudflare Gratis</p>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-900">Pages</span>
+                  <span class="text-xs text-gray-500">Hosting static, unlimited requests</span>
+                </div>
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Aktif</span>
+              </div>
+              <div class="h-[1px] bg-gray-100"></div>
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-900">KV Storage</span>
+                  <span class="text-xs text-gray-500">100k read/hari, 1k write/hari</span>
+                </div>
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Aktif</span>
+              </div>
+              <div class="h-[1px] bg-gray-100"></div>
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-900">D1 Database</span>
+                  <span class="text-xs text-gray-500">5GB, 5M read/hari</span>
+                </div>
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Aktif</span>
+              </div>
+              <div class="h-[1px] bg-gray-100"></div>
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-900">Turnstile</span>
+                  <span class="text-xs text-gray-500">CAPTCHA gratis, unlimited</span>
+                </div>
+                <span class="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Tersedia</span>
+              </div>
+              <div class="h-[1px] bg-gray-100"></div>
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="text-sm font-medium text-gray-900">Analytics</span>
+                  <span class="text-xs text-gray-500">Privacy-friendly, gratis</span>
+                </div>
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Aktif</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <p class="text-base font-bold text-gray-900 mb-3">Endpoint API</p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2 py-2 px-3 bg-gray-50 rounded-xl">
+                <span class="text-xs font-mono text-gray-400">POST</span>
+                <span class="text-xs font-mono text-gray-700 flex-1 truncate">clincoo-deploy.clincoo.workers.dev</span>
+                <button onclick="copyText('https://clincoo-deploy.clincoo.workers.dev')" class="text-xs text-gray-400 hover:text-gray-700">Salin</button>
+              </div>
+              <div class="flex items-center gap-2 py-2 px-3 bg-gray-50 rounded-xl">
+                <span class="text-xs font-mono text-gray-400">POST</span>
+                <span class="text-xs font-mono text-gray-700 flex-1 truncate">/domain (custom domain)</span>
+              </div>
+              <div class="flex items-center gap-2 py-2 px-3 bg-gray-50 rounded-xl">
+                <span class="text-xs font-mono text-gray-400">DEL</span>
+                <span class="text-xs font-mono text-gray-700 flex-1 truncate">/domain (hapus domain)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  <script>
+    function init() {
+      var reqs = parseInt(localStorage.getItem('clincoo_worker_requests') || '0');
+      var maxReqs = 100000;
+      document.getElementById('vps-requests').textContent = reqs.toLocaleString('id-ID');
+      var pct = Math.min(100, (reqs / maxReqs) * 100);
+      document.getElementById('vps-bar').style.width = pct + '%';
+      document.getElementById('vps-quota').textContent = reqs.toLocaleString('id-ID') + ' dari 100.000 request hari ini';
+
+      var workerContainer = document.getElementById('vps-workers');
+      var workers = [
+        { name: 'clincoo-deploy', status: 'Aktif', desc: 'Deploy & hosting worker' },
+        { name: 'clincoo-api', status: 'Aktif', desc: 'API & D1 sync worker' }
+      ];
+      var saved = localStorage.getItem('clincoo_custom_workers');
+      if (saved) { try { var extra = JSON.parse(saved); workers = workers.concat(extra); } catch(e) {} }
+
+      var html = '';
+      workers.forEach(function(w) {
+        var statusColor = w.status === 'Aktif' ? 'text-emerald-600 bg-emerald-50' : 'text-gray-400 bg-gray-100';
+        html += '<div class="flex items-center justify-between">' +
+          '<div class="flex flex-col">' +
+          '<span class="text-sm font-medium text-gray-900">' + w.name + '</span>' +
+          '<span class="text-xs text-gray-500">' + w.desc + '</span>' +
+          '</div>' +
+          '<span class="text-xs font-semibold ' + statusColor + ' px-2.5 py-1 rounded-full">' + w.status + '</span>' +
+          '</div>';
+      });
+      workerContainer.innerHTML = html;
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        alert('Tersalin: ' + text);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
