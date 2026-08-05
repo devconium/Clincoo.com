@@ -25,7 +25,7 @@
           duration: 0
         });
         navigator.sendBeacon(ANALYTICS_TRACK_URL, trackData);
-      } catch(e) {}
+      } catch(e) { console.warn("[Clincoo] Tracking beacon failed:", e.message); }
     }
 
     // === ANALYTICS DASHBOARD ===
@@ -249,7 +249,7 @@
             session_id: _clincooSessionId,
             duration: Math.round(dur)
           }));
-        } catch(e) {}
+        } catch(e) { console.warn('[Clincoo] Session end beacon failed:', e.message); }
       }
     });
 

@@ -403,19 +403,26 @@
       handleRoute();
     }
 
+    function stopAnalyticsRefresh() {
+      if (typeof _analyticsRefreshTimer !== 'undefined' && _analyticsRefreshTimer) { clearInterval(_analyticsRefreshTimer); _analyticsRefreshTimer = null; }
+    }
+
     function handleRoute() {
       const params = new URLSearchParams(window.location.search);
       const path = params.get('p') || '/';
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (path.startsWith('/tambah')) {
+        stopAnalyticsRefresh();
         setupFormPage(null);
         showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else if (path.startsWith('/edit/')) {
+        stopAnalyticsRefresh();
         const id = parseInt(path.replace('/edit/', ''));
         setupFormPage(id);
         showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else if (path.startsWith('/proyek/')) {
+        stopAnalyticsRefresh();
         const id = parseInt(path.replace('/proyek/', ''));
         setupDetailPage(id);
         showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
@@ -423,17 +430,22 @@
         showPage(pageAnalytics, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageDatabase, pageStorage, pageSqlConnection]); updateAnalyticsProjectName();
         initAnalyticsCharts();
       } else if (path.startsWith('/database')) {
+        stopAnalyticsRefresh();
         showPage(pageDatabase, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageStorage, pageSqlConnection]);
         initDatabasePage();
       } else if (path.startsWith('/storage')) {
+        stopAnalyticsRefresh();
         showPage(pageStorage, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageSqlConnection]);
         initStoragePage();
       } else if (path.startsWith('/sql-connection')) {
+        stopAnalyticsRefresh();
         showPage(pageSqlConnection, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage]);
         initSqlConnectionPage();
       } else if (path.startsWith('/editor')) {
+        stopAnalyticsRefresh();
         showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
       } else {
+        stopAnalyticsRefresh();
         showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
         applyFilters();
       }
@@ -953,7 +965,7 @@
 
       var storageKey = 'clincoo_' + projId + '_files';
       var localFiles = {};
-      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) { console.warn('[Clincoo] Failed to parse project files:', e.message); }
       var allFiles = [];
       for (var folderPath in localFiles) {
         if (!Array.isArray(localFiles[folderPath])) continue;
@@ -1219,7 +1231,24 @@
       }
       try {
         const zip = await JSZip.loadAsync(file);
-        const entries = Object.keys(zip.files);
+        const entries = Object.keys(zip.files).filter(function(k) { return !zip.files[k].dir; });
+        const totalFiles = entries.length;
+        if (totalFiles === 0) {
+          if (typeof showToast === 'function') showToast('ZIP kosong, tidak ada file', 'warning');
+          e.target.value = '';
+          return;
+        }
+        var progToast = document.createElement('div');
+        progToast.id = 'zip-progress-toast';
+        progToast.className = 'fixed bottom-6 right-6 z-[300] px-5 py-4 rounded-xl shadow-lg bg-white border border-gray-100 flex items-center gap-3 toast-enter';
+        progToast.innerHTML = '<div class="w-8 h-8 flex-shrink-0 border-2 border-[#273849] border-t-transparent rounded-full animate-spin"></div>' +
+          '<div class="flex flex-col gap-1">' +
+          '<span class="text-sm font-semibold text-gray-800">Ekstrak ZIP...</span>' +
+          '<span id="zip-progress-text" class="text-xs text-gray-500">0 / ' + totalFiles + ' file</span>' +
+          '<div class="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="zip-progress-bar" class="h-full bg-[#273849] rounded-full transition-all duration-200" style="width: 0%"></div></div>' +
+          '</div>';
+        document.body.appendChild(progToast);
+
         let importedCount = 0;
         for (const entryPath of entries) {
           const zipEntry = zip.files[entryPath];
@@ -1264,17 +1293,30 @@
             projectFilesData[currentPathIter].push({ type: 'file', name: fileName, size: sizeStr, path: filePath, content: content });
           }
           importedCount++;
-          if (importedCount % 5 === 0) {
+          var progText = document.getElementById('zip-progress-text');
+          var progBar = document.getElementById('zip-progress-bar');
+          if (progText) progText.textContent = importedCount + ' / ' + totalFiles + ' file';
+          if (progBar) progBar.style.width = Math.round((importedCount / totalFiles) * 100) + '%';
+          if (importedCount % 3 === 0 || importedCount === totalFiles) {
             saveData();
             renderFileList();
           }
+          await new Promise(function(r) { setTimeout(r, 0); });
         }
         saveData();
         renderFileList();
+        if (progToast) {
+          progToast.classList.remove('toast-enter');
+          progToast.classList.add('toast-exit');
+          setTimeout(function() { progToast.remove(); }, 300);
+        }
+        if (typeof showToast === 'function') showToast(importedCount + ' file berhasil diimpor dari ZIP', 'success');
         console.log('[Clincoo ZIP] ' + importedCount + ' file(s) imported from ZIP');
       } catch(err) {
+        var pt = document.getElementById('zip-progress-toast');
+        if (pt) pt.remove();
         console.error('[Clincoo ZIP] Error:', err.message);
-        alert('Gagal membaca ZIP: ' + err.message);
+        if (typeof showToast === 'function') showToast('Gagal membaca ZIP: ' + err.message, 'error');
       }
       e.target.value = '';
     }
@@ -1451,7 +1493,7 @@
       if (item.type === 'file') {
         let contentData = item.content;
         if (contentData.startsWith('http') || contentData.startsWith('blob:') || contentData.startsWith('data:')) {
-          try { const response = await fetch(contentData); contentData = await response.blob(); } catch (e) {}
+          try { const response = await fetch(contentData); contentData = await response.blob(); } catch (e) { console.warn('[Clincoo] ZIP fetch failed:', e.message); }
         }
         zip.file(item.name, contentData);
       } else if (item.type === 'folder') {
@@ -1474,7 +1516,7 @@
         if (child.type === 'file') {
           let contentData = child.content;
           if (contentData.startsWith('http') || contentData.startsWith('blob:') || contentData.startsWith('data:')) {
-            try { const response = await fetch(contentData); contentData = await response.blob(); } catch(e){}
+            try { const response = await fetch(contentData); contentData = await response.blob(); } catch(e) { console.warn('[Clincoo] ZIP fetch failed:', e.message); }
           }
           zipFolder.file(child.name, contentData);
         } else if (child.type === 'folder') {
@@ -1967,7 +2009,7 @@
       if (!currentProjectId) return 0;
       var envKey = getEnvKey();
       var envVars = [];
-      try { envVars = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+      try { envVars = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse env vars:', e.message); }
       var existingKeys = envVars.map(function(e) { return e.key.toUpperCase(); });
       var existingValues = envVars.map(function(e) { return e.value; });
       var added = 0;
@@ -2017,7 +2059,7 @@
       if (!currentProjectId) return [];
       var storageKey = 'clincoo_' + currentProjectId + '_files';
       var localFiles = {};
-      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) { console.warn('[Clincoo] Failed to parse project files:', e.message); }
       var allFiles = [];
       for (var folderPath in localFiles) {
         if (!Array.isArray(localFiles[folderPath])) continue;
@@ -2039,7 +2081,7 @@
 
       // Get existing env values to skip already-moved credentials
       var _envVals = [];
-      try { _envVals = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) {}
+      try { _envVals = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse env vals:', e.message); }
       var _envValueSet = _envVals.map(function(ev) { return ev.value; });
 
       files.forEach(function(file) {
@@ -2075,7 +2117,7 @@
 
       var envKey = getEnvKey();
       var savedEnv = [];
-      try { savedEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+      try { savedEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse saved env:', e.message); }
       var weakEnvCount = 0;
       savedEnv.forEach(function(item) {
         if (item.value && item.value.length < 8) weakEnvCount++;
@@ -2741,7 +2783,7 @@
 
       var stored = localStorage.getItem('clincoo_projects');
       var projs = [];
-      if (stored) { try { projs = JSON.parse(stored); } catch(e) {} }
+      if (stored) { try { projs = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse stored projects:', e.message); } }
 
       projs.forEach(function(proj) {
         var filesStr = localStorage.getItem('clincoo_' + proj.id + '_files');
@@ -2898,7 +2940,7 @@
         btnConnect.innerHTML = originalIcon + '<span class="text-[16px] font-semibold tracking-wide text-gray-900" id="sql-btn-text">Simpan & Uji Koneksi</span>';
         if (typeof lucide !== 'undefined') lucide.createIcons();
         var connections = [];
-        try { connections = JSON.parse(localStorage.getItem('clincoo_sql_connections') || '[]'); } catch(e) {}
+        try { connections = JSON.parse(localStorage.getItem('clincoo_sql_connections') || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse SQL connections:', e.message); }
         connections.push({ host: host.value, port: port.value, username: username.value, database: dbname.value, created: new Date().toISOString() });
         localStorage.setItem('clincoo_sql_connections', JSON.stringify(connections));
         showSqlModal('success', 'Koneksi Berhasil', 'Berhasil mengautentikasi dan terhubung ke database "' + dbname.value + '".');

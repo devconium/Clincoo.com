@@ -1958,7 +1958,24 @@
       }
       try {
         const zip = await JSZip.loadAsync(file);
-        const entries = Object.keys(zip.files);
+        const entries = Object.keys(zip.files).filter(function(k) { return !zip.files[k].dir; });
+        const totalFiles = entries.length;
+        if (totalFiles === 0) {
+          showToast('ZIP kosong, tidak ada file', 'warning');
+          e.target.value = '';
+          return;
+        }
+        var progToast = document.createElement('div');
+        progToast.id = 'zip-progress-toast';
+        progToast.className = 'fixed bottom-6 right-6 z-[300] px-5 py-4 rounded-xl shadow-lg bg-white border border-gray-100 flex items-center gap-3 toast-enter';
+        progToast.innerHTML = '<div class="w-8 h-8 flex-shrink-0 border-2 border-[#273849] border-t-transparent rounded-full animate-spin"></div>' +
+          '<div class="flex flex-col gap-1">' +
+          '<span class="text-sm font-semibold text-gray-800">Ekstrak ZIP...</span>' +
+          '<span id="zip-progress-text" class="text-xs text-gray-500">0 / ' + totalFiles + ' file</span>' +
+          '<div class="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="zip-progress-bar" class="h-full bg-[#273849] rounded-full transition-all duration-200" style="width: 0%"></div></div>' +
+          '</div>';
+        document.body.appendChild(progToast);
+
         let importedCount = 0;
         for (const entryPath of entries) {
           const zipEntry = zip.files[entryPath];
@@ -2003,17 +2020,30 @@
             projectFilesData[currentPathIter].push({ type: 'file', name: fileName, size: sizeStr, path: filePath, content: content });
           }
           importedCount++;
-          if (importedCount % 5 === 0) {
+          var progText = document.getElementById('zip-progress-text');
+          var progBar = document.getElementById('zip-progress-bar');
+          if (progText) progText.textContent = importedCount + ' / ' + totalFiles + ' file';
+          if (progBar) progBar.style.width = Math.round((importedCount / totalFiles) * 100) + '%';
+          if (importedCount % 3 === 0 || importedCount === totalFiles) {
             saveData();
             renderFileList();
           }
+          await new Promise(function(r) { setTimeout(r, 0); });
         }
         saveData();
         renderFileList();
+        if (progToast) {
+          progToast.classList.remove('toast-enter');
+          progToast.classList.add('toast-exit');
+          setTimeout(function() { progToast.remove(); }, 300);
+        }
+        showToast(importedCount + ' file berhasil diimpor dari ZIP', 'success');
         console.log('[Clincoo ZIP] ' + importedCount + ' file(s) imported from ZIP');
       } catch(err) {
+        var pt = document.getElementById('zip-progress-toast');
+        if (pt) pt.remove();
         console.error('[Clincoo ZIP] Error:', err.message);
-        alert('Gagal membaca ZIP: ' + err.message);
+        showToast('Gagal membaca ZIP: ' + err.message, 'error');
       }
       e.target.value = '';
     }

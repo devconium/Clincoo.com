@@ -247,7 +247,7 @@ async function _syncEnvToD1(projectId) {
   try {
     var envKey = 'clincoo_' + projectId + '_env_variables';
     var localEnv = [];
-    try { localEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+    try { localEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse local env:', e.message); }
 
     // Fetch existing D1 env vars
     var existing = await _api('GET', '/api/projects/' + projectId + '/env');
@@ -293,7 +293,7 @@ async function _syncEnvFromD1(projectId) {
 
     var envKey = 'clincoo_' + projectId + '_env_variables';
     var localEnv = [];
-    try { localEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) {}
+    try { localEnv = JSON.parse(localStorage.getItem(envKey) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse local env:', e.message); }
 
     var d1Hash = _hash(d1Env);
     if (d1Hash !== (_lastEnvHash[projectId] || '') && JSON.stringify(d1Env) !== JSON.stringify(localEnv)) {

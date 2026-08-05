@@ -107,7 +107,7 @@ async function saveDeployDomain() {
           setTimeout(function() { checkDNS(); }, 600);
           // Deploy 404 page if no real deployment exists yet
           var existingSite = null;
-          try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+          try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site:', e.message); }
           if (!existingSite || !existingSite.url) {
             deploy404Page(projectSlug);
           }
@@ -139,12 +139,12 @@ async function saveDeployDomain() {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
           });
-        } catch(err) {}
+        } catch(err) { console.warn('[Clincoo] Domain delete sync failed:', err.message); }
       }
 
       // Re-deploy current files WITHOUT redirect script (so pages.dev works again without redirecting to deleted domain)
       var existingSite = null;
-      try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+      try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site:', e.message); }
       if (existingSite && existingSite.url) {
         // Re-deploy existing files without redirect
         try {
@@ -276,7 +276,7 @@ async function saveDeployDomain() {
                   renderDeployStatus();
                   // Deploy/update 404 page with redirect if no real deployment exists
                   var _existingSite = null;
-                  try { _existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+                  try { _existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site:', e.message); }
                   if (!_existingSite || !_existingSite.url) {
                     var _proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
                     var _projName = _proj ? _proj.name : (currentProjectId || 'project');
@@ -311,7 +311,7 @@ async function saveDeployDomain() {
               if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
               renderDeployStatus();
               var _existingSite2 = null;
-              try { _existingSite2 = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) {}
+              try { _existingSite2 = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site 2:', e.message); }
               if (!_existingSite2 || !_existingSite2.url) {
                 var _proj2 = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
                 var _projName2 = _proj2 ? _proj2.name : (currentProjectId || 'project');
@@ -345,7 +345,7 @@ async function saveDeployDomain() {
         // Check if project actually has files to deploy
         var storageKey = 'clincoo_' + currentProjectId + '_files';
         var files = {};
-        try { files = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+        try { files = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) { console.warn('[Clincoo] Failed to parse files for deploy:', e.message); }
         var hasFiles = false;
         for (var k in files) {
           if (Array.isArray(files[k])) {
@@ -374,7 +374,7 @@ async function saveDeployDomain() {
       if (typeof saveData === 'function') saveData();
       var storageKey = 'clincoo_' + (currentProjectId || 'default') + '_files';
       var localFiles = {};
-      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+      try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) { console.warn('[Clincoo] Failed to parse local files:', e.message); }
       var allFiles = [];
       for (var folderPath in localFiles) {
         if (!Array.isArray(localFiles[folderPath])) continue;
@@ -412,7 +412,7 @@ async function saveDeployDomain() {
       }
       // Auto-inject env vars into deployed files
       var _envVars = [];
-      try { _envVars = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) {}
+      try { _envVars = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse env vars:', e.message); }
       var _envScript = '';
       if (_envVars.length > 0) {
         var _envObj = {};
