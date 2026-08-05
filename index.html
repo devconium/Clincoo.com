@@ -1220,8 +1220,8 @@
  if (stored) {
  try { projects = JSON.parse(stored); } catch(e) { projects = []; }
  } else { projects = []; }
- 
- 
+ }
+
  function toggleDropdown(btn) {
  const e = window.event;
  if(e) e.stopPropagation();
@@ -1238,12 +1238,11 @@
 
  content.classList.toggle('hidden');
  arrow.classList.toggle('rotate-180');
-} 
+}
 document.addEventListener('click', () => {
  document.querySelectorAll('.sidebar-dropdown .dropdown-content').forEach(el => el.classList.add('hidden'));
  document.querySelectorAll('.sidebar-dropdown .dropdown-arrow').forEach(ic => ic.classList.remove('rotate-180'));
 });
-}
 
  function saveData() {
  localStorage.setItem('clincoo_projects', JSON.stringify(projects));
