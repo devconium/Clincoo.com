@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invite Anggota - Clincoo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif}.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}</style>
+</head>
+<body class="bg-[#f7f7f9] text-gray-900 min-h-screen flex flex-col">
+  <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/60">
+    <div class="w-full max-w-5xl px-4 sm:px-6 mx-auto">
+      <div class="flex items-center justify-between h-14">
+        <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
+          <button onclick="history.back()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          </button>
+          <h2 class="text-xl font-bold text-gray-800 tracking-tight">Invite Anggota</h2>
+        </div>
+        <a href="../index.html"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white shadow-sm"></a>
+      </div>
+    </div>
+  </div>
+  <main class="flex-1 overflow-y-auto no-scrollbar">
+    <div class="max-w-2xl mx-auto w-full pb-12 pt-6 px-4">
+      <div class="space-y-4">
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+              </div>
+              <div>
+                <p class="text-base font-bold text-gray-900">Bagikan Akses</p>
+                <p class="text-xs text-gray-500 mt-0.5">Undang anggota tim ke workspace</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <input type="email" id="invite-email" placeholder="email@anggota.com" class="flex-1 px-4 py-3 bg-gray-50 border-0 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-200">
+              <button onclick="sendInvite()" class="px-5 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors whitespace-nowrap">Kirim</button>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Anggota akan mendapat link akses ke workspace Anda.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <div class="flex items-center justify-between mb-3">
+              <p class="text-base font-bold text-gray-900">Link Invite</p>
+              <button onclick="regenerateLink()" class="text-xs text-gray-500 hover:text-gray-900 font-medium">Buat Baru</button>
+            </div>
+            <div class="flex items-center gap-2 py-2.5 px-3 bg-gray-50 rounded-xl">
+              <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              <span class="text-xs font-mono text-gray-700 flex-1 truncate" id="invite-link">Belum dibuat</span>
+              <button onclick="copyInviteLink()" class="text-xs text-gray-400 hover:text-gray-700 font-semibold">Salin</button>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Link ini bisa dipakai untuk invite tanpa email. Berlaku selamanya sampai dibuat baru.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <p class="text-base font-bold text-gray-900 mb-3">Anggota Tim</p>
+            <div id="invite-members" class="space-y-3">
+              <p class="text-sm text-gray-500">Belum ada anggota. Undang orang untuk mulai berkolaborasi.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm">
+          <div class="px-5 py-4">
+            <p class="text-base font-bold text-gray-900 mb-3">Peran</p>
+            <div class="space-y-3">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17l-3 3m0 0l3 3m-3-3h18M13 3v4m-2-2h4M19 17l-3 3m0 0l3 3m-3-3h2"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-900">Admin</p>
+                  <p class="text-xs text-gray-500">Akses penuh: buat, edit, hapus, deploy, atur domain</p>
+                </div>
+              </div>
+              <div class="h-[1px] bg-gray-100"></div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-900">Editor</p>
+                  <p class="text-xs text-gray-500">Bisa edit kode & file, tapi tidak bisa deploy atau hapus proyek</p>
+                </div>
+              </div>
+              <div class="h-[1px] bg-gray-100"></div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-900">Viewer</p>
+                  <p class="text-xs text-gray-500">Hanya bisa melihat proyek, tidak bisa mengubah</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  <script>
+    function getInviteLink() {
+      var link = localStorage.getItem('clincoo_invite_link');
+      if (!link) return null;
+      return link;
+    }
+
+    function init() {
+      renderMembers();
+      var link = getInviteLink();
+      if (link) {
+        document.getElementById('invite-link').textContent = link;
+      }
+    }
+
+    function renderMembers() {
+      var members = [];
+      var stored = localStorage.getItem('clincoo_invites');
+      if (stored) { try { members = JSON.parse(stored); } catch(e) {} }
+      var container = document.getElementById('invite-members');
+      if (members.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500">Belum ada anggota. Undang orang untuk mulai berkolaborasi.</p>';
+        return;
+      }
+      var html = '';
+      var roleColors = { 'Admin': 'bg-gray-900 text-white', 'Editor': 'bg-gray-200 text-gray-700', 'Viewer': 'bg-gray-100 text-gray-500' };
+      members.forEach(function(m) {
+        var initials = m.email ? m.email[0].toUpperCase() : '?';
+        html += '<div class="flex items-center gap-3">' +
+          '<div class="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-sm font-bold text-gray-700">' + initials + '</div>' +
+          '<div class="flex-1 min-w-0">' +
+          '<p class="text-sm font-medium text-gray-900 truncate">' + m.email + '</p>' +
+          '<p class="text-xs text-gray-500">Bergabung ' + (m.joined || 'baru saja') + '</p>' +
+          '</div>' +
+          '<span class="text-xs font-semibold ' + (roleColors[m.role] || roleColors['Viewer']) + ' px-2.5 py-1 rounded-full">' + (m.role || 'Viewer') + '</span>' +
+          '<button onclick="removeMember(' + m.id + ')" class="text-gray-300 hover:text-red-500 p-1">' +
+          '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22"/></svg>' +
+          '</button>' +
+          '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    function sendInvite() {
+      var email = document.getElementById('invite-email').value.trim();
+      if (!email) return;
+      var members = [];
+      var stored = localStorage.getItem('clincoo_invites');
+      if (stored) { try { members = JSON.parse(stored); } catch(e) {} }
+      members.push({ id: Date.now(), email: email, role: 'Viewer', joined: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) });
+      localStorage.setItem('clincoo_invites', JSON.stringify(members));
+      document.getElementById('invite-email').value = '';
+      renderMembers();
+    }
+
+    function removeMember(id) {
+      var members = [];
+      var stored = localStorage.getItem('clincoo_invites');
+      if (stored) { try { members = JSON.parse(stored); } catch(e) {} }
+      members = members.filter(function(m) { return m.id !== id; });
+      localStorage.setItem('clincoo_invites', JSON.stringify(members));
+      renderMembers();
+    }
+
+    function regenerateLink() {
+      var code = Math.random().toString(36).substr(2, 8) + Math.random().toString(36).substr(2, 4);
+      var link = 'https://devconium.github.io/Clincoo.com/?invite=' + code;
+      localStorage.setItem('clincoo_invite_link', link);
+      document.getElementById('invite-link').textContent = link;
+    }
+
+    function copyInviteLink() {
+      var link = document.getElementById('invite-link').textContent;
+      if (link === 'Belum dibuat') { regenerateLink(); link = localStorage.getItem('clincoo_invite_link'); }
+      navigator.clipboard.writeText(link).then(function() {
+        alert('Link tersalin!');
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
