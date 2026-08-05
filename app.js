@@ -140,6 +140,11 @@
       }
     }
 
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
     const pageMain = document.getElementById('page-main');
     const pageForm = document.getElementById('page-form');
     const pageProjectDetail = document.getElementById('page-project-detail');
@@ -603,10 +608,10 @@
         if (item.type === 'folder') {
           const subItems = projectFilesData[item.path] || [];
           row.onclick = () => openFolder(item.path);
-          row.innerHTML = `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#a0aec0]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div><div class="flex-1 min-w-0"><h3 class="text-[#334155] font-medium text-[15px] leading-tight hover:text-black transition-colors truncate">${item.name}</h3><p class="text-gray-500 text-[12px] mt-0.5">Berkas (${subItems.length}) - <span class="text-[#16a34a]">Folder</span></p></div>${actionBtnHTML}`;
+          row.innerHTML = `<div class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-[#a0aec0]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg></div><div class="flex-1 min-w-0"><h3 class="text-[#334155] font-medium text-[15px] leading-tight hover:text-black transition-colors truncate">${escapeHtml(item.name)}</h3><p class="text-gray-500 text-[12px] mt-0.5">Berkas (${subItems.length}) - <span class="text-[#16a34a]">Folder</span></p></div>${actionBtnHTML}`;
         } else {
           row.onclick = () => openFileInEditor(item.name);
-          row.innerHTML = `${getFileIcon(item.name)}<div class="flex-1 min-w-0"><h3 class="text-[#334155] font-medium text-[15px] leading-tight hover:text-black transition-colors truncate">${item.name}</h3><p class="text-gray-500 text-[12px] mt-0.5">${item.size || '0,00 B'}</p></div>${actionBtnHTML}`;
+          row.innerHTML = `${getFileIcon(item.name)}<div class="flex-1 min-w-0"><h3 class="text-[#334155] font-medium text-[15px] leading-tight hover:text-black transition-colors truncate">${escapeHtml(item.name)}</h3><p class="text-gray-500 text-[12px] mt-0.5">${item.size || '0,00 B'}</p></div>${actionBtnHTML}`;
         }
         container.appendChild(row);
       });
@@ -2413,7 +2418,7 @@
             statusBadgeHtml = '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 text-gray-400 border border-gray-200 line-through decoration-gray-400">Diarsipkan</span>';
           }
           tr.innerHTML = '<td class="py-4 pl-6 pr-3"><input type="checkbox" class="custom-checkbox db-row-checkbox" data-id="' + item.id + '"' + (isChecked ? ' checked' : '') + '></td>' +
-            '<td class="py-4 px-4"><div class="font-medium text-gray-900">' + item.name + '</div><div class="text-xs text-gray-500 mt-0.5">ID: ' + item.code + '</div></td>' +
+            '<td class="py-4 px-4"><div class="font-medium text-gray-900">' + escapeHtml(item.name) + '</div><div class="text-xs text-gray-500 mt-0.5">ID: ' + escapeHtml(item.code) + '</div></td>' +
             '<td class="py-4 px-4 text-gray-600">' + item.category + '</td>' +
             '<td class="py-4 px-4">' + statusBadgeHtml + '</td>' +
             '<td class="py-4 px-4 text-gray-500">' + item.updated + '</td>' +
@@ -2727,7 +2732,7 @@
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            dbShowToast('ID ' + item.code + ' disalin ke papan klip');
+            dbShowToast('ID ' + escapeHtml(item.code) + ' disalin ke papan klip');
           }
           var cm = document.getElementById('db-context-menu');
           if (cm) cm.classList.add('hidden');

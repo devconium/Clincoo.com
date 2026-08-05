@@ -519,9 +519,9 @@ async function saveDeployDomain() {
               if (getGithubToken()) {
                 pushFilesToGithub(currentProjectId).then(function(pushResult) {
                   if (pushResult.success) {
-
+                    console.log('[Clincoo] Files pushed to GitHub successfully');
                   }
-                }).catch(function() {});
+                }).catch(function(err) { console.warn('[Clincoo] GitHub push failed:', err.message); });
                 // Also save CF Pages project name mapping
                 localStorage.setItem('clincoo_' + currentProjectId + '_cf_project', projectSlug);
               }
