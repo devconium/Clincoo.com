@@ -827,7 +827,6 @@
 
     }
 
-    // Toast dihapus — web tidak menggunakan toast
 
     function showConfirmDeleteItem() {
       const menu = document.getElementById('item-action-menu');
@@ -1239,20 +1238,9 @@
         const entries = Object.keys(zip.files).filter(function(k) { return !zip.files[k].dir; });
         const totalFiles = entries.length;
         if (totalFiles === 0) {
-          if (typeof showToast === 'function') showToast('ZIP kosong, tidak ada file', 'warning');
           e.target.value = '';
           return;
         }
-        var progToast = document.createElement('div');
-        progToast.id = 'zip-progress-toast';
-        progToast.className = 'fixed bottom-6 right-6 z-[300] px-5 py-4 rounded-xl shadow-lg bg-white border border-gray-100 flex items-center gap-3 toast-enter';
-        progToast.innerHTML = '<div class="w-8 h-8 flex-shrink-0 border-2 border-[#273849] border-t-transparent rounded-full animate-spin"></div>' +
-          '<div class="flex flex-col gap-1">' +
-          '<span class="text-sm font-semibold text-gray-800">Ekstrak ZIP...</span>' +
-          '<span id="zip-progress-text" class="text-xs text-gray-500">0 / ' + totalFiles + ' file</span>' +
-          '<div class="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="zip-progress-bar" class="h-full bg-[#273849] rounded-full transition-all duration-200" style="width: 0%"></div></div>' +
-          '</div>';
-        document.body.appendChild(progToast);
 
         let importedCount = 0;
         for (const entryPath of entries) {
@@ -1298,10 +1286,6 @@
             projectFilesData[currentPathIter].push({ type: 'file', name: fileName, size: sizeStr, path: filePath, content: content });
           }
           importedCount++;
-          var progText = document.getElementById('zip-progress-text');
-          var progBar = document.getElementById('zip-progress-bar');
-          if (progText) progText.textContent = importedCount + ' / ' + totalFiles + ' file';
-          if (progBar) progBar.style.width = Math.round((importedCount / totalFiles) * 100) + '%';
           if (importedCount % 3 === 0 || importedCount === totalFiles) {
             saveData();
             renderFileList();
@@ -1310,18 +1294,9 @@
         }
         saveData();
         renderFileList();
-        if (progToast) {
-          progToast.classList.remove('toast-enter');
-          progToast.classList.add('toast-exit');
-          setTimeout(function() { progToast.remove(); }, 300);
-        }
-        if (typeof showToast === 'function') showToast(importedCount + ' file berhasil diimpor dari ZIP', 'success');
         console.log('[Clincoo ZIP] ' + importedCount + ' file(s) imported from ZIP');
       } catch(err) {
-        var pt = document.getElementById('zip-progress-toast');
-        if (pt) pt.remove();
         console.error('[Clincoo ZIP] Error:', err.message);
-        if (typeof showToast === 'function') showToast('Gagal membaca ZIP: ' + err.message, 'error');
       }
       e.target.value = '';
     }
@@ -2341,18 +2316,6 @@
       renderDbTable();
     }
 
-    function dbShowToast(message) {
-      var toast = document.getElementById('db-toast');
-      if (!toast) return;
-      var toastMsg = document.getElementById('db-toast-message');
-      if (toastMsg) toastMsg.innerText = message;
-      toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100');
-      setTimeout(function() {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
-      }, 2500);
-    }
 
     function dbOpenModal(modalId) {
       var modal = document.getElementById(modalId);
@@ -2648,7 +2611,7 @@
           e.preventDefault();
           var id = document.getElementById('db-entity-id').value;
           var name = document.getElementById('db-entity-name').value.trim();
-          if (!name) { dbShowToast('Nama wajib diisi'); return; }
+          return;
           var category = document.getElementById('db-entity-category').value;
           var status = document.getElementById('db-entity-status').value;
           if (id) {
@@ -2660,7 +2623,6 @@
                 projects[projIdx].name = name;
                 saveData();
               }
-              dbShowToast('Data berhasil diperbarui');
             }
           } else {
             var newId = String(Date.now());
@@ -2669,7 +2631,6 @@
             localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
             saveData();
             databaseItems.unshift({ id: newId, code: 'PRJ-' + newId.substring(0, 6).toUpperCase(), name: name, category: category, status: status, updated: 'Baru saja' });
-            dbShowToast('Data baru berhasil ditambahkan');
           }
           dbCloseModal('db-data-modal');
           renderDbTable();
@@ -2693,7 +2654,6 @@
             });
             saveData();
             databaseItems = databaseItems.filter(function(item) { return !dbSelectedIds.has(item.id); });
-            dbShowToast(dbSelectedIds.size + ' data berhasil dihapus');
             dbSelectedIds.clear();
           } else if (dbActiveDeleteId) {
             var projIdx = projects.findIndex(function(p) { return p.id === dbActiveDeleteId; });
@@ -2706,7 +2666,6 @@
             localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_security_findings');
             databaseItems = databaseItems.filter(function(item) { return item.id !== dbActiveDeleteId; });
             dbSelectedIds.delete(dbActiveDeleteId);
-            dbShowToast('Data berhasil dihapus');
             dbActiveDeleteId = null;
           }
           dbCloseModal('db-delete-modal');
@@ -2732,7 +2691,6 @@
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            dbShowToast('ID ' + escapeHtml(item.code) + ' disalin ke papan klip');
           }
           var cm = document.getElementById('db-context-menu');
           if (cm) cm.classList.add('hidden');
@@ -2744,7 +2702,6 @@
           var item = databaseItems.find(function(i) { return i.id === dbActiveContextMenuId; });
           if (item) {
             databaseItems.unshift(Object.assign({}, item, { id: Date.now().toString(), name: item.name + ' (Salinan)', code: item.code + '-COPY', updated: 'Baru saja' }));
-            dbShowToast('Data berhasil diduplikasi');
             renderDbTable();
           }
           var cm = document.getElementById('db-context-menu');

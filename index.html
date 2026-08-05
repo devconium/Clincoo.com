@@ -81,16 +81,6 @@
       animation: fadeIn 0.2s ease-out forwards;
     }
 
-    @keyframes toastSlideIn {
-      from { opacity: 0; transform: translateY(1rem) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes toastSlideOut {
-      from { opacity: 1; transform: translateY(0) scale(1); }
-      to { opacity: 0; transform: translateY(1rem) scale(0.95); }
-    }
-    .toast-enter { animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .toast-exit { animation: toastSlideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
     .CodeMirror {
       width: 100% !important;
@@ -874,9 +864,6 @@
     </div>
 
     <!-- Toast -->
-    <div id="db-toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-[300] px-5 py-3 rounded-xl shadow-lg bg-gray-900 text-white text-sm font-medium transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none">
-      <span id="db-toast-message"></span>
-    </div>
   </div>
 
   <!-- ===== PAGE: STORAGE ===== -->
@@ -1917,30 +1904,8 @@
       if (fileSearchInput) fileSearchInput.value = '';
       renderFileList();
       closeInputModal();
-      if (modalAction === 'create_file') showToast('File berhasil dibuat', 'success');
-      else if (modalAction === 'create_folder') showToast('Folder berhasil dibuat', 'success');
-      else if (modalAction === 'rename') showToast('Nama berhasil diubah', 'success');
     }
 
-    function showToast(message, type) {
-      var existing = document.getElementById('clincoo-toast');
-      if (existing) existing.remove();
-      var toast = document.createElement('div');
-      toast.id = 'clincoo-toast';
-      toast.className = 'fixed bottom-6 right-6 z-[300] px-4 py-3 rounded-xl shadow-lg text-sm font-medium text-white flex items-center gap-2 toast-enter';
-      if (type === 'error') toast.style.backgroundColor = '#ef4444';
-      else if (type === 'warning') toast.style.backgroundColor = '#f59e0b';
-      else if (type === 'info') toast.style.backgroundColor = '#3b82f6';
-      else toast.style.backgroundColor = '#10b981';
-      var icon = type === 'error' ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' : type === 'warning' ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M12 3l9 16H3l9-16z"/></svg>' : type === 'info' ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' : '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
-      toast.innerHTML = icon + '<span>' + message + '</span>';
-      document.body.appendChild(toast);
-      setTimeout(function() {
-        toast.classList.remove('toast-enter');
-        toast.classList.add('toast-exit');
-        setTimeout(function() { toast.remove(); }, 300);
-      }, 2800);
-    }
 
     function showConfirmDeleteItem() {
       const menu = document.getElementById('item-action-menu');
@@ -1983,7 +1948,6 @@
       }
       saveData();
       renderFileList();
-      showToast((itemName.split('.').length > 1 ? 'File' : 'Folder') + ' berhasil dihapus', 'success');
     }
 
     function triggerImport(type) {
@@ -2273,21 +2237,10 @@
         const entries = Object.keys(zip.files).filter(function(k) { return !zip.files[k].dir; });
         const totalFiles = entries.length;
         if (totalFiles === 0) {
-          showToast('ZIP kosong, tidak ada file', 'warning');
           e.target.value = '';
           return;
         }
-        var progToast = document.createElement('div');
-        progToast.id = 'zip-progress-toast';
-        progToast.className = 'fixed bottom-6 right-6 z-[300] px-5 py-4 rounded-xl shadow-lg bg-white border border-gray-100 flex items-center gap-3 toast-enter';
-        progToast.innerHTML = '<div class="w-8 h-8 flex-shrink-0 border-2 border-[#273849] border-t-transparent rounded-full animate-spin"></div>' +
-          '<div class="flex flex-col gap-1">' +
-          '<span class="text-sm font-semibold text-gray-800">Ekstrak ZIP...</span>' +
-          '<span id="zip-progress-text" class="text-xs text-gray-500">0 / ' + totalFiles + ' file</span>' +
-          '<div class="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="zip-progress-bar" class="h-full bg-[#273849] rounded-full transition-all duration-200" style="width: 0%"></div></div>' +
-          '</div>';
-        document.body.appendChild(progToast);
-
+        
         let importedCount = 0;
         for (const entryPath of entries) {
           const zipEntry = zip.files[entryPath];
@@ -2332,10 +2285,6 @@
             projectFilesData[currentPathIter].push({ type: 'file', name: fileName, size: sizeStr, path: filePath, content: content });
           }
           importedCount++;
-          var progText = document.getElementById('zip-progress-text');
-          var progBar = document.getElementById('zip-progress-bar');
-          if (progText) progText.textContent = importedCount + ' / ' + totalFiles + ' file';
-          if (progBar) progBar.style.width = Math.round((importedCount / totalFiles) * 100) + '%';
           if (importedCount % 3 === 0 || importedCount === totalFiles) {
             saveData();
             renderFileList();
@@ -2344,18 +2293,9 @@
         }
         saveData();
         renderFileList();
-        if (progToast) {
-          progToast.classList.remove('toast-enter');
-          progToast.classList.add('toast-exit');
-          setTimeout(function() { progToast.remove(); }, 300);
-        }
-        showToast(importedCount + ' file berhasil diimpor dari ZIP', 'success');
         console.log('[Clincoo ZIP] ' + importedCount + ' file(s) imported from ZIP');
       } catch(err) {
-        var pt = document.getElementById('zip-progress-toast');
-        if (pt) pt.remove();
         console.error('[Clincoo ZIP] Error:', err.message);
-        showToast('Gagal membaca ZIP: ' + err.message, 'error');
       }
       e.target.value = '';
     }
@@ -3175,14 +3115,12 @@
         if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
         renderEnvList();
         if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
-        showToast('Variabel berhasil dihapus', 'success');
         }
 
     function saveEnv() {
         const keyInput = document.getElementById('env-key');
         const valInput = document.getElementById('env-value');
         if(!keyInput.value.trim() || !valInput.value) {
-          showToast('Kunci dan nilai tidak boleh kosong', 'error');
           return;
         }
         envVariables.push({ key: keyInput.value.trim(), value: valInput.value });
@@ -3192,7 +3130,6 @@
         valInput.value = '';
         renderEnvList();
         if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
-        showToast('Variabel berhasil disimpan', 'success');
     }
 
     function safeNavigate(url) {
@@ -3263,7 +3200,6 @@ async function saveDeployDomain() {
       if (!domainInput) return;
       const domain = domainInput.value.trim();
       if (!domain) {
-        showToast('Domain tidak boleh kosong', 'error');
         return;
       }
       if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan...'; }
@@ -3294,7 +3230,6 @@ async function saveDeployDomain() {
       }
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan'; }
-      showToast(success ? 'Domain berhasil disimpan' : 'Gagal menyimpan domain', success ? 'success' : 'error');
     }
 
     async function removeDeployDomain() {
@@ -3317,7 +3252,6 @@ async function saveDeployDomain() {
         } catch(err) { console.warn('[Clincoo] Domain delete sync failed:', err.message); }
       }
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
-      showToast('Domain berhasil dihapus', 'success');
     }
 
     document.addEventListener('change', function(e) {
@@ -3836,18 +3770,6 @@ async function saveDeployDomain() {
       renderDbTable();
     }
 
-    function dbShowToast(message) {
-      var toast = document.getElementById('db-toast');
-      if (!toast) return;
-      var toastMsg = document.getElementById('db-toast-message');
-      if (toastMsg) toastMsg.innerText = message;
-      toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100');
-      setTimeout(function() {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
-      }, 2500);
-    }
 
     function dbOpenModal(modalId) {
       var modal = document.getElementById(modalId);
@@ -4089,7 +4011,7 @@ async function saveDeployDomain() {
           e.preventDefault();
           var id = document.getElementById('db-entity-id').value;
           var name = document.getElementById('db-entity-name').value.trim();
-          if (!name) { dbShowToast('Nama wajib diisi'); return; }
+          return;
           var category = document.getElementById('db-entity-category').value;
           var status = document.getElementById('db-entity-status').value;
           if (id) {
@@ -4098,7 +4020,6 @@ async function saveDeployDomain() {
               databaseItems[idx] = Object.assign({}, databaseItems[idx], { name: name, category: category, status: status, updated: 'Baru saja' });
               var projIdx = projects.findIndex(function(p) { return p.id === id; });
               if (projIdx !== -1) { projects[projIdx].name = name; saveData(); }
-              dbShowToast('Data berhasil diperbarui');
             }
           } else {
             var newId = String(Date.now());
@@ -4107,7 +4028,6 @@ async function saveDeployDomain() {
             localStorage.setItem('clincoo_' + newId + '_files', JSON.stringify(projectFilesData));
             saveData();
             syncDatabaseItems();
-            dbShowToast('Data baru berhasil ditambahkan');
           }
           dbCloseModal('db-data-modal');
           renderDbTable();
@@ -4130,7 +4050,6 @@ async function saveDeployDomain() {
             });
             saveData();
             syncDatabaseItems();
-            dbShowToast(dbSelectedIds.size + ' data berhasil dihapus');
             dbSelectedIds.clear();
           } else if (dbActiveDeleteId) {
             var projIdx = projects.findIndex(function(p) { return p.id === dbActiveDeleteId; });
@@ -4141,7 +4060,6 @@ async function saveDeployDomain() {
             localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_env_variables');
             localStorage.removeItem('clincoo_' + dbActiveDeleteId + '_github_repo');
             syncDatabaseItems();
-            dbShowToast('Data berhasil dihapus');
             dbActiveDeleteId = null;
           }
           dbCloseModal('db-delete-modal');
@@ -4160,7 +4078,7 @@ async function saveDeployDomain() {
           var tempInput = document.createElement('input');
           tempInput.value = item.code; document.body.appendChild(tempInput);
           tempInput.select(); document.execCommand('copy'); document.body.removeChild(tempInput);
-          dbShowToast('ID ' + item.code + ' disalin');
+
         }
         var cm = document.getElementById('db-context-menu'); if (cm) cm.classList.add('hidden');
       });
@@ -4172,7 +4090,6 @@ async function saveDeployDomain() {
           projects.push({ id: newId, name: item.name + ' (Salinan)', desc: '', visibility: 'public' });
           saveData();
           syncDatabaseItems();
-          dbShowToast('Data berhasil diduplikasi');
           renderDbTable();
         }
         var cm = document.getElementById('db-context-menu'); if (cm) cm.classList.add('hidden');
