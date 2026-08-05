@@ -102,7 +102,7 @@ async function saveDeployDomain() {
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
         if (success) {
-          dnsStatus.textContent = 'Domain disimpan. Mengecek DNS...!';
+          dnsStatus.textContent = 'Domain disimpan';
           dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
           setTimeout(function() { checkDNS(); }, 600);
           // Deploy 404 page if no real deployment exists yet
@@ -112,7 +112,7 @@ async function saveDeployDomain() {
             deploy404Page(projectSlug);
           }
         } else {
-          dnsStatus.textContent = 'Gagal menyimpan domain. Coba lagi!';
+          dnsStatus.textContent = 'Gagal menyimpan domain';
           dnsStatus.className = 'text-xs font-medium mt-1 text-red-600';
         }
       }
@@ -170,7 +170,7 @@ async function saveDeployDomain() {
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
-        dnsStatus.textContent = 'Domain berhasil dihapus!';
+        dnsStatus.textContent = 'Domain dihapus';
         dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
       }
     }
@@ -240,7 +240,7 @@ async function saveDeployDomain() {
       if (!domainInput || !statusEl) return;
       var domain = domainInput.value.trim();
       if (!domain) {
-        statusEl.textContent = 'Isi domain dulu!';
+        statusEl.textContent = 'Isi domain dulu';
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         return;
       }
@@ -251,7 +251,7 @@ async function saveDeployDomain() {
       if (!projectSlug) projectSlug = 'clincoo-app';
       var expectedTarget = projectSlug + '.pages.dev';
 
-      statusEl.textContent = 'Mengecek DNS...!';
+      statusEl.textContent = 'Mengecek DNS...';
       statusEl.className = 'text-xs font-medium mt-1 text-gray-500';
 
       // Domain yang dicek: domain asli + www. variant
@@ -269,7 +269,7 @@ async function saveDeployDomain() {
               if (data.Answer[i].type === 5) {
                 var cnameTarget = data.Answer[i].data.replace(/\.$/, '');
                 if (cnameTarget === expectedTarget) {
-                  statusEl.textContent = 'Domain terhubung!';
+                  statusEl.textContent = 'Domain terhubung';
                   statusEl.className = 'text-xs font-medium mt-1 text-green-600';
                   localStorage.setItem(getDnsVerifiedKey(), 'true');
                   if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
@@ -286,7 +286,7 @@ async function saveDeployDomain() {
                   found = true;
                   break;
                 } else if (cnameTarget.indexOf('pages.dev') !== -1) {
-                  statusEl.textContent = 'DNS belum terhubung!';
+                  statusEl.textContent = 'Domain belum terhubung';
                   statusEl.className = 'text-xs font-medium mt-1 text-red-600';
                   localStorage.setItem(getDnsVerifiedKey(), 'false');
                   if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
@@ -305,7 +305,7 @@ async function saveDeployDomain() {
           if (aData.Answer && aData.Answer.length > 0) {
             var aTarget = aData.Answer[0].data;
             if (aTarget.indexOf('172.66') !== -1 || aTarget.indexOf('104.') !== -1) {
-              statusEl.textContent = 'Domain terhubung!';
+              statusEl.textContent = 'Domain terhubung';
               statusEl.className = 'text-xs font-medium mt-1 text-green-600';
               localStorage.setItem(getDnsVerifiedKey(), 'true');
               if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
@@ -323,14 +323,14 @@ async function saveDeployDomain() {
           }
         }
         if (!found) {
-          statusEl.textContent = 'DNS belum terhubung!';
+          statusEl.textContent = 'Domain belum terhubung';
           statusEl.className = 'text-xs font-medium mt-1 text-red-600';
           localStorage.setItem(getDnsVerifiedKey(), 'false');
           if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
           renderDeployStatus();
         }
       } catch(err) {
-        statusEl.textContent = 'Gagal mengecek DNS!';
+        statusEl.textContent = 'Gagal cek DNS';
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
       }
     }
@@ -514,7 +514,7 @@ async function saveDeployDomain() {
               if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
               renderDeployStatus();
               if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
-              if (statusEl) { statusEl.textContent = 'Situs aktif!'; statusEl.className = 'text-xs text-green-500'; setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 3000); }
+              if (statusEl) { statusEl.textContent = 'Situs aktif'; statusEl.className = 'text-xs text-green-500'; setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 3000); }
               // Push to GitHub if connected
               if (getGithubToken()) {
                 pushFilesToGithub(currentProjectId).then(function(pushResult) {
