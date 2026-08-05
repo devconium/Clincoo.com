@@ -1614,7 +1614,7 @@
         // Deploy 404 page to overwrite old content before deletion
         if (projName) {
           var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          if (projectSlug) deploy404Page(projectSlug);
+          if (projectSlug) fetch('https://clincoo-deploy.clincoo.workers.dev/domain?projectName=' + encodeURIComponent(projectSlug), { method: 'DELETE' });
         }
         if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(targetId, projName);
       }
@@ -1721,7 +1721,7 @@
       // Deploy 404 page to overwrite old content before deletion
       if (projName) {
         var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-        if (projectSlug) deploy404Page(projectSlug);
+        if (projectSlug) fetch('https://clincoo-deploy.clincoo.workers.dev/domain?projectName=' + encodeURIComponent(projectSlug), { method: 'DELETE' });
       }
       if (typeof _deleteProjectFromD1 === 'function') _deleteProjectFromD1(projectId, projName);
     }

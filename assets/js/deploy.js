@@ -1,11 +1,19 @@
+    // ============================================================
+    // CLINCOO DEPLOY — R2-based (no CF Pages project limits)
+    // Files stored in Cloudflare R2, served by the deploy worker.
+    // Custom subdomains auto-configured via Cloudflare DNS CNAME.
+    // ============================================================
+
     function getDeployDomainKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_domain'; }
     function getDnsVerifiedKey() { return 'clincoo_' + (currentProjectId || 'default') + '_dns_verified'; }
     function getDeployBranchKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_branch'; }
     function getDeploySiteKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_site'; }
     function getDeployHttpsKey() { return 'clincoo_' + (currentProjectId || 'default') + '_deploy_https'; }
 
-    function loadDeployData() {
+    var DEPLOY_WORKER_URL = 'https://clincoo-deploy.clincoo.workers.dev';
+    var DEPLOY_CNAME_TARGET = 'clincoo-deploy.clincoo.workers.dev';
 
+    function loadDeployData() {
       const savedDomain = localStorage.getItem(getDeployDomainKey());
       const domainEl = document.getElementById('deploy-domain');
       if (domainEl) domainEl.value = savedDomain || '';
@@ -20,7 +28,6 @@
 
       renderDeployStatus();
 
-      // Fetch domain from D1 if available (real-time sync)
       if (typeof _syncDomainFromD1 === 'function' && currentProjectId) {
         _syncDomainFromD1(currentProjectId);
       }
@@ -51,7 +58,6 @@
       if (urlEl) { urlEl.textContent = displayUrl; urlEl.href = displayUrl; }
       if (visitEl) visitEl.href = displayUrl;
       if (timeEl) timeEl.textContent = site.time || '';
-      // Load saved domain into input
       const domainInput = document.getElementById('deploy-domain');
       if (domainInput) {
         const savedDomain = localStorage.getItem(getDeployDomainKey());
@@ -59,15 +65,12 @@
       }
     }
 
-async function saveDeployDomain() {
+    async function saveDeployDomain() {
       const domainInput = document.getElementById('deploy-domain');
       const saveBtn = document.getElementById('save-domain-btn');
       if (!domainInput) return;
       const domain = domainInput.value.trim();
-      if (!domain) {
-
-        return;
-      }
+      if (!domain) { return; }
       if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan...'; }
       localStorage.setItem(getDeployDomainKey(), domain);
       if (typeof FB !== 'undefined') FB.set(getDeployDomainKey(), domain);
@@ -82,7 +85,7 @@ async function saveDeployDomain() {
 
       var success = false;
       try {
-        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/domain', {
+        var res = await fetch(DEPLOY_WORKER_URL + '/domain', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ projectName: projectSlug, domain: domain })
@@ -90,29 +93,23 @@ async function saveDeployDomain() {
         var result = await res.json();
         success = result.success;
         if (result.success) {
-          console.log('[Clincoo] Domain berhasil disimpan');
+          console.log('[Clincoo] Domain berhasil dikonfigurasi (auto CNAME)');
         } else {
-          console.warn('[Clincoo] Gagal menyimpan domain');
+          console.warn('[Clincoo] Gagal menyimpan domain:', result.error || 'unknown');
         }
       } catch(err) {
-        console.warn('[Clincoo] Gagal menyimpan domain');
+        console.warn('[Clincoo] Gagal menyimpan domain:', err.message);
       }
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Simpan'; }
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
         if (success) {
-          dnsStatus.textContent = 'Domain disimpan';
-          dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
-          setTimeout(function() { checkDNS(); }, 600);
-          // Deploy 404 page if no real deployment exists yet
-          var existingSite = null;
-          try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site:', e.message); }
-          if (!existingSite || !existingSite.url) {
-            deploy404Page(projectSlug);
-          }
+          dnsStatus.textContent = 'Subdomain dikonfigurasi, menunggu DNS...';
+          dnsStatus.className = 'text-xs font-medium mt-1 text-blue-500';
+          setTimeout(function() { checkDNS(); }, 2000);
         } else {
-          dnsStatus.textContent = 'Gagal menyimpan domain';
+          dnsStatus.textContent = 'Gagal membuat subdomain';
           dnsStatus.className = 'text-xs font-medium mt-1 text-red-600';
         }
       }
@@ -133,44 +130,21 @@ async function saveDeployDomain() {
       var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
       if (!projectSlug) projectSlug = 'clincoo-app';
 
+      // Delete DNS CNAME via worker
       if (domain) {
         try {
-          await fetch('https://clincoo-deploy.clincoo.workers.dev/domain?projectName=' + encodeURIComponent(projectSlug) + '&domain=' + encodeURIComponent(domain), {
+          await fetch(DEPLOY_WORKER_URL + '/domain?projectName=' + encodeURIComponent(projectSlug) + '&domain=' + encodeURIComponent(domain), {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
           });
-        } catch(err) { console.warn('[Clincoo] Domain delete sync failed:', err.message); }
-      }
-
-      // Re-deploy current files WITHOUT redirect script (so pages.dev works again without redirecting to deleted domain)
-      var existingSite = null;
-      try { existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site:', e.message); }
-      if (existingSite && existingSite.url) {
-        // Re-deploy existing files without redirect
-        try {
-          var allFiles = [];
-          var projectData = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
-          if (projectData && projectData.files) {
-            allFiles = projectData.files.map(function(f) { return { path: f.path, content: f.content }; });
-          }
-          if (allFiles.length > 0) {
-            await fetch('https://clincoo-deploy.clincoo.workers.dev', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ projectName: projectSlug, files: allFiles, branch: 'main' })
-            });
-            console.log('[Clincoo] Re-deployed without redirect after domain removal');
-          }
-        } catch(e) { console.warn('[Clincoo] Re-deploy failed:', e.message); }
-      } else {
-        // Deploy 404 page without redirect
-        deploy404Page(projectSlug);
+          console.log('[Clincoo] DNS CNAME removed for', domain);
+        } catch(err) { console.warn('[Clincoo] Domain delete failed:', err.message); }
       }
 
       if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
       var dnsStatus = document.getElementById('dns-status-text');
       if (dnsStatus) {
-        dnsStatus.textContent = 'Domain dihapus';
+        dnsStatus.textContent = 'Subdomain dihapus';
         dnsStatus.className = 'text-xs font-medium mt-1 text-gray-500';
       }
     }
@@ -179,82 +153,26 @@ async function saveDeployDomain() {
       if (e.target && e.target.id === 'deploy-https') {
         localStorage.setItem(getDeployHttpsKey(), String(e.target.checked));
         if (typeof FB !== 'undefined') FB.set(getDeployHttpsKey(), e.target.checked);
-        // Apply HTTPS setting to Cloudflare Pages
-        applyHttpsSetting(e.target.checked);
       }
     });
 
-    async function applyHttpsSetting(enabled) {
-      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
-      var projName = proj ? proj.name : (currentProjectId || 'project');
-      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-      if (!projectSlug) projectSlug = 'clincoo-app';
-      try {
-        await fetch('https://clincoo-deploy.clincoo.workers.dev/ssl?projectName=' + encodeURIComponent(projectSlug), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ enabled: enabled })
-        });
-        console.log('[Clincoo] SSL setting applied:', enabled);
-      } catch(err) {
-        console.warn('[Clincoo] SSL setting failed:', err.message);
-      }
-    }
-
-    // === DEPLOY 404 PAGE ===
-    async function deploy404Page(projectSlug) {
-      if (!projectSlug) return;
-      // Inject redirect script if custom domain is set and DNS is verified
-      var _cd = localStorage.getItem(getDeployDomainKey());
-      var _dnsOk = localStorage.getItem(getDnsVerifiedKey()) === 'true';
-      var _redir = '';
-      if (_cd && _dnsOk) {
-        _redir = '<script>if(location.hostname.endsWith(".pages.dev")){location.replace(location.href.replace(location.hostname,"' + _cd + '"))}<\/script>';
-      }
-      var notFoundHtml = '<!DOCTYPE html>\n<html lang="id">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>404 - Clincoo</title>\n' + _redir + '\n<style>\n*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f1117;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}\n.logo{width:48px;height:48px;margin:0 auto 2rem}\n.logo svg{width:100%;height:100%}\nh1{font-size:5rem;font-weight:700;margin-bottom:0.5rem;letter-spacing:-0.05em}\nh2{font-size:1.25rem;font-weight:500;color:#9ca3af;margin-bottom:1.5rem}\np{color:#6b7280;max-width:400px;line-height:1.6}\n.btn{display:inline-block;margin-top:2rem;padding:0.75rem 1.5rem;background:#fff;color:#0f1117;border-radius:0.5rem;text-decoration:none;font-weight:600;font-size:0.875rem;transition:opacity 0.2s}\n.btn:hover{opacity:0.9}\n</style>\n</head>\n<body>\n<div>\n<div class="logo"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#fff"/><g fill="#000"><path d="M10 16C7 10 9 7 12 7C14 7 15 11 13 16Z"/><path d="M22 16C25 10 23 7 20 7C18 7 17 11 19 16Z"/><path d="M16 27C24 27 28 22.5 28 17C28 12.5 21 11.5 16 11.5C11 11.5 4 12.5 4 17C4 22.5 8 27 16 27Z"/></g></svg></div>\n<h1>404</h1>\n<h2>Halaman tidak ditemukan</h2>\n<p>Domain ini sudah terhubung ke Clincoo, tetapi belum ada proyek yang dipublikasikan.</p>\n<a href="https://devconium.github.io/Clincoo.com/" class="btn">Buat proyek di Clincoo</a>\n</div>\n</body>\n</html>';
-      try {
-        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            projectName: projectSlug,
-            files: [{ path: 'index.html', content: notFoundHtml }],
-            branch: 'main'
-          })
-        });
-        var result = await res.json();
-        if (result.success) {
-          console.log('[Clincoo] 404 page deployed for', projectSlug);
-        } else {
-          console.warn('[Clincoo] 404 page deploy failed:', result.error);
-        }
-      } catch(e) {
-        console.warn('[Clincoo] 404 page deploy error:', e.message);
-      }
-    }
-
-    // === CEK DNS ===
+    // === DNS CHECK ===
+    // With R2 + Worker approach, DNS is auto-created by the worker.
+    // We just verify the CNAME resolves to our worker.
     async function checkDNS() {
       var domainInput = document.getElementById('deploy-domain');
       var statusEl = document.getElementById('dns-status-text');
       if (!domainInput || !statusEl) return;
       var domain = domainInput.value.trim();
       if (!domain) {
-        statusEl.textContent = 'Isi domain dulu';
+        statusEl.textContent = 'Isi subdomain dulu';
         statusEl.className = 'text-xs font-medium mt-1 text-red-600';
         return;
       }
-      // Hitung project slug untuk verifikasi target CNAME
-      var proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
-      var projName = proj ? proj.name : (currentProjectId || 'project');
-      var projectSlug = projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-      if (!projectSlug) projectSlug = 'clincoo-app';
-      var expectedTarget = projectSlug + '.pages.dev';
 
       statusEl.textContent = 'Mengecek DNS...';
       statusEl.className = 'text-xs font-medium mt-1 text-gray-500';
 
-      // Domain yang dicek: domain asli + www. variant
       var domainsToCheck = [domain];
       if (domain.indexOf('www.') !== 0) domainsToCheck.push('www.' + domain);
 
@@ -262,35 +180,26 @@ async function saveDeployDomain() {
         var found = false;
         for (var di = 0; di < domainsToCheck.length && !found; di++) {
           var checkDomain = domainsToCheck[di];
+
+          // Check CNAME
           var res = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(checkDomain) + '&type=CNAME');
           var data = await res.json();
           if (data.Answer) {
             for (var i = 0; i < data.Answer.length; i++) {
               if (data.Answer[i].type === 5) {
                 var cnameTarget = data.Answer[i].data.replace(/\.$/, '');
-                if (cnameTarget === expectedTarget) {
-                  statusEl.textContent = 'Domain terhubung';
+                if (cnameTarget === DEPLOY_CNAME_TARGET || cnameTarget.indexOf('clincoo-deploy') !== -1) {
+                  statusEl.textContent = 'Subdomain aktif';
                   statusEl.className = 'text-xs font-medium mt-1 text-green-600';
                   localStorage.setItem(getDnsVerifiedKey(), 'true');
                   if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
                   renderDeployStatus();
-                  // Deploy/update 404 page with redirect if no real deployment exists
-                  var _existingSite = null;
-                  try { _existingSite = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site:', e.message); }
-                  if (!_existingSite || !_existingSite.url) {
-                    var _proj = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
-                    var _projName = _proj ? _proj.name : (currentProjectId || 'project');
-                    var _projectSlug = _projName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-                    if (_projectSlug) deploy404Page(_projectSlug);
-                  }
                   found = true;
                   break;
                 } else if (cnameTarget.indexOf('pages.dev') !== -1) {
-                  statusEl.textContent = 'Domain belum terhubung';
-                  statusEl.className = 'text-xs font-medium mt-1 text-red-600';
-                  localStorage.setItem(getDnsVerifiedKey(), 'false');
-                  if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
-                  renderDeployStatus();
+                  // Legacy CF Pages CNAME — need to update
+                  statusEl.textContent = 'CNAME lama terdeteksi, update ke CNAME baru';
+                  statusEl.className = 'text-xs font-medium mt-1 text-yellow-600';
                   found = true;
                   break;
                 }
@@ -299,32 +208,22 @@ async function saveDeployDomain() {
           }
         }
         if (!found) {
-          // Cek juga A record di apex (Cloudflare bisa pakai A record untuk apex domain)
+          // Check A record (Cloudflare proxied uses Cloudflare IPs)
           var aRes = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(domain) + '&type=A');
           var aData = await aRes.json();
           if (aData.Answer && aData.Answer.length > 0) {
-            var aTarget = aData.Answer[0].data;
-            if (aTarget.indexOf('172.66') !== -1 || aTarget.indexOf('104.') !== -1) {
-              statusEl.textContent = 'Domain terhubung';
-              statusEl.className = 'text-xs font-medium mt-1 text-green-600';
-              localStorage.setItem(getDnsVerifiedKey(), 'true');
-              if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
-              renderDeployStatus();
-              var _existingSite2 = null;
-              try { _existingSite2 = JSON.parse(localStorage.getItem(getDeploySiteKey()) || 'null'); } catch(e) { console.warn('[Clincoo] Failed to parse deploy site 2:', e.message); }
-              if (!_existingSite2 || !_existingSite2.url) {
-                var _proj2 = (typeof projects !== 'undefined') ? projects.find(function(p) { return p.id == currentProjectId; }) : null;
-                var _projName2 = _proj2 ? _proj2.name : (currentProjectId || 'project');
-                var _projectSlug2 = _projName2.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-                if (_projectSlug2) deploy404Page(_projectSlug2);
-              }
-              found = true;
-            }
+            // Cloudflare proxied records return Cloudflare IPs
+            statusEl.textContent = 'Subdomain aktif (proxied)';
+            statusEl.className = 'text-xs font-medium mt-1 text-green-600';
+            localStorage.setItem(getDnsVerifiedKey(), 'true');
+            if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'true');
+            renderDeployStatus();
+            found = true;
           }
         }
         if (!found) {
-          statusEl.textContent = 'Domain belum terhubung';
-          statusEl.className = 'text-xs font-medium mt-1 text-red-600';
+          statusEl.textContent = 'Menunggu propagasi DNS... (1-2 menit)';
+          statusEl.className = 'text-xs font-medium mt-1 text-yellow-500';
           localStorage.setItem(getDnsVerifiedKey(), 'false');
           if (typeof FB !== 'undefined') FB.set(getDnsVerifiedKey(), 'false');
           renderDeployStatus();
@@ -342,7 +241,6 @@ async function saveDeployDomain() {
       autoDeployTimer = setTimeout(function() {
         if (!currentProjectId) return;
         if (_isDeploying) return;
-        // Check if project actually has files to deploy
         var storageKey = 'clincoo_' + currentProjectId + '_files';
         var files = {};
         try { files = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) { console.warn('[Clincoo] Failed to parse files for deploy:', e.message); }
@@ -395,7 +293,6 @@ async function saveDeployDomain() {
         _isDeploying = false;
         return;
       }
-      // Hide previous error
       var errBox = document.getElementById('deploy-error-box');
       if (errBox) errBox.classList.add('hidden');
 
@@ -405,12 +302,13 @@ async function saveDeployDomain() {
       if (!projectSlug) projectSlug = 'clincoo-app';
       var branch = branchSelect ? branchSelect.value : 'main';
 
+      var originalHTML = btn ? btn.innerHTML : '';
       if (btn) {
-        var originalHTML = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menyimpan...</span>';
       }
-      // Auto-inject env vars into deployed files
+
+      // Auto-inject env vars into HTML files
       var _envVars = [];
       try { _envVars = JSON.parse(localStorage.getItem(getEnvKey()) || '[]'); } catch(e) { console.warn('[Clincoo] Failed to parse env vars:', e.message); }
       var _envScript = '';
@@ -439,18 +337,10 @@ async function saveDeployDomain() {
         '})();\n' +
         '<\/script>';
 
-      // Redirect script: pages.dev -> custom domain (only when DNS is verified)
-      var _customDomain = localStorage.getItem(getDeployDomainKey());
-      var _dnsVerifiedDeploy = localStorage.getItem(getDnsVerifiedKey()) === 'true';
-      var _redirectScript = '';
-      if (_customDomain && _dnsVerifiedDeploy) {
-        _redirectScript = '<script>if(location.hostname.endsWith(".pages.dev")){location.replace(location.href.replace(location.hostname,"' + _customDomain + '"))}<\/script>';
-      }
-
+      // Inject env vars and analytics into HTML files
       for (var fi = 0; fi < allFiles.length; fi++) {
         if (allFiles[fi].path && allFiles[fi].path.match(/\.html?$/i) && allFiles[fi].content) {
           var c = allFiles[fi].content;
-          // Inject env vars first (before any other script)
           if (_envScript && c.indexOf('window.ENV') === -1) {
             if (c.indexOf('</head>') !== -1) {
               c = c.replace('</head>', _envScript + '\n</head>');
@@ -458,17 +348,6 @@ async function saveDeployDomain() {
               c = c.replace('</body>', _envScript + '\n</body>');
             }
           }
-          // Inject redirect to custom domain
-          if (_redirectScript && c.indexOf('.pages.dev') === -1) {
-            if (c.indexOf('<head>') !== -1) {
-              c = c.replace('<head>', '<head>' + _redirectScript);
-            } else if (c.indexOf('</head>') !== -1) {
-              c = c.replace('</head>', _redirectScript + '\n</head>');
-            } else if (c.indexOf('</body>') !== -1) {
-              c = c.replace('</body>', _redirectScript + '\n</body>');
-            }
-          }
-          // Inject analytics tracker
           if (c.indexOf('analyticsTrack') === -1) {
             if (c.indexOf('</head>') !== -1) {
               c = c.replace('</head>', _trackerScript + '\n</head>');
@@ -483,7 +362,7 @@ async function saveDeployDomain() {
       }
 
       try {
-        var res = await fetch('https://clincoo-deploy.clincoo.workers.dev', {
+        var res = await fetch(DEPLOY_WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -497,18 +376,16 @@ async function saveDeployDomain() {
           var siteUrl = result.productionUrl || result.url || '';
           var nowStr = new Date().toLocaleString('id-ID');
 
-          // Show "waiting for live" status
           if (btn) { btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2" stroke-dasharray="30 70"></circle></svg><span>Menunggu live...</span>'; }
           var statusEl = document.getElementById('deploy-prod-status');
           if (statusEl) { statusEl.textContent = 'Menunggu situs aktif...'; statusEl.className = 'text-xs text-blue-500'; }
 
-          // Poll URL until it returns 200 (max 30 seconds)
+          // R2 is immediately available — short poll
           var pollAttempts = 0;
-          var maxPolls = 15;
+          var maxPolls = 8;
           var pollUrl = function() {
             pollAttempts++;
             fetch(siteUrl, { method: 'GET', mode: 'no-cors', cache: 'no-store' }).then(function() {
-              // URL is responding (even in no-cors mode, no rejection means it loaded)
               var siteInfo = { url: siteUrl, time: nowStr };
               localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
               if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
@@ -522,17 +399,15 @@ async function saveDeployDomain() {
                     console.log('[Clincoo] Files pushed to GitHub successfully');
                   }
                 }).catch(function(err) { console.warn('[Clincoo] GitHub push failed:', err.message); });
-                // Also save CF Pages project name mapping
-                localStorage.setItem('clincoo_' + currentProjectId + '_cf_project', projectSlug);
               }
               _isDeploying = false;
               var succErrBox = document.getElementById('deploy-error-box');
               if (succErrBox) succErrBox.classList.add('hidden');
             }).catch(function() {
               if (pollAttempts < maxPolls) {
-                setTimeout(pollUrl, 2000);
+                setTimeout(pollUrl, 1500);
               } else {
-                // Timeout - still save URL, site might be live shortly
+                // Timeout — still save URL, R2 should be live
                 var siteInfo = { url: siteUrl, time: nowStr };
                 localStorage.setItem(getDeploySiteKey(), JSON.stringify(siteInfo));
                 if (typeof FB !== 'undefined') FB.set(getDeploySiteKey(), siteInfo);
@@ -543,7 +418,7 @@ async function saveDeployDomain() {
               }
             });
           };
-          setTimeout(pollUrl, 3000); // Wait 3s before first poll
+          setTimeout(pollUrl, 1500); // R2 is fast, short wait
         } else {
           var deployErr = result.error || 'Publikasi gagal';
           var errBox2 = document.getElementById('deploy-error-box');
@@ -568,3 +443,91 @@ async function saveDeployDomain() {
     var _analyticsRefreshTimer = null;
     var ANALYTICS_STATS_URL = 'https://clincoo-backend.clincoo.workers.dev/api/analytics/stats';
     var ANALYTICS_TRACK_URL = 'https://clincoo-backend.clincoo.workers.dev/api/analytics/track';
+
+    function initAnalytics() {
+      if (_analyticsChartsInited) return;
+      if (typeof Chart === 'undefined') {
+        setTimeout(initAnalytics, 500);
+        return;
+      }
+
+      var ctx1 = document.getElementById('chart-traffic');
+      var ctx2 = document.getElementById('chart-pages');
+      var ctx3 = document.getElementById('chart-devices');
+      var ctx4 = document.getElementById('chart-referrers');
+
+      if (ctx1) {
+        _analyticsCharts.traffic = new Chart(ctx1, {
+          type: 'line',
+          data: { labels: [], datasets: [{ label: 'Page Views', data: [], borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.1)', tension: 0.3, fill: true }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: '#9ca3af' } }, x: { ticks: { color: '#9ca3af' } } } }
+        });
+      }
+      if (ctx2) {
+        _analyticsCharts.pages = new Chart(ctx2, {
+          type: 'bar',
+          data: { labels: [], datasets: [{ label: 'Views', data: [], backgroundColor: '#6366f1', borderRadius: 6 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: '#9ca3af' } }, x: { ticks: { color: '#9ca3af' } } } }
+        });
+      }
+      if (ctx3) {
+        _analyticsCharts.devices = new Chart(ctx3, {
+          type: 'doughnut',
+          data: { labels: [], datasets: [{ data: [], backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ef4444'] }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af' } } } }
+        });
+      }
+      if (ctx4) {
+        _analyticsCharts.referrers = new Chart(ctx4, {
+          type: 'bar',
+          data: { labels: [], datasets: [{ label: 'Visits', data: [], backgroundColor: '#10b981', borderRadius: 6 }] },
+          options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#9ca3af' } }, x: { beginAtZero: true, ticks: { color: '#9ca3af' } } } }
+        });
+      }
+
+      _analyticsChartsInited = true;
+      fetchAnalyticsData();
+    }
+
+    function fetchAnalyticsData() {
+      fetch(ANALYTICS_STATS_URL + '?domain=' + encodeURIComponent(location.hostname))
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (!data.success) return;
+          updateAnalyticsCharts(data.stats || {});
+        })
+        .catch(function(err) { console.warn('[Clincoo] Analytics fetch failed:', err.message); });
+
+      if (_analyticsRefreshTimer) clearInterval(_analyticsRefreshTimer);
+      _analyticsRefreshTimer = setInterval(fetchAnalyticsData, 30000);
+    }
+
+    function updateAnalyticsCharts(stats) {
+      if (_analyticsCharts.traffic && stats.traffic) {
+        _analyticsCharts.traffic.data.labels = stats.traffic.labels || [];
+        _analyticsCharts.traffic.data.datasets[0].data = stats.traffic.data || [];
+        _analyticsCharts.traffic.update();
+      }
+      if (_analyticsCharts.pages && stats.pages) {
+        _analyticsCharts.pages.data.labels = stats.pages.map(function(p) { return p.path; });
+        _analyticsCharts.pages.data.datasets[0].data = stats.pages.map(function(p) { return p.views; });
+        _analyticsCharts.pages.update();
+      }
+      if (_analyticsCharts.devices && stats.devices) {
+        _analyticsCharts.devices.data.labels = stats.devices.map(function(d) { return d.device; });
+        _analyticsCharts.devices.data.datasets[0].data = stats.devices.map(function(d) { return d.count; });
+        _analyticsCharts.devices.update();
+      }
+      if (_analyticsCharts.referrers && stats.referrers) {
+        _analyticsCharts.referrers.data.labels = stats.referrers.map(function(r) { return r.referrer || 'Direct'; });
+        _analyticsCharts.referrers.data.datasets[0].data = stats.referrers.map(function(r) { return r.count; });
+        _analyticsCharts.referrers.update();
+      }
+    }
+
+    function stopAnalyticsRefresh() {
+      if (_analyticsRefreshTimer) {
+        clearInterval(_analyticsRefreshTimer);
+        _analyticsRefreshTimer = null;
+      }
+    }

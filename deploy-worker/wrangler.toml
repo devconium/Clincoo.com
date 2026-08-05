@@ -2,6 +2,13 @@ name = "clincoo-deploy"
 main = "worker.js"
 compatibility_date = "2024-09-23"
 
+[[r2_buckets]]
+binding = "PROJECT_FILES"
+bucket_name = "clincoo-deployed"
+
 # Secrets (set via `wrangler secret put`):
-# CF_API_TOKEN — Cloudflare API token with Pages + Workers permissions
+# CF_API_TOKEN — Cloudflare API token with Pages + Workers + DNS permissions
 # CF_ACCOUNT_ID — Cloudflare account ID
+# GH_CLIENT_ID — GitHub OAuth client ID
+# GH_CLIENT_SECRET — GitHub OAuth client secret
+# CF_ZONE_ID — Cloudflare zone ID for clincoo.com (for auto DNS)
