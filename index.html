@@ -121,39 +121,34 @@
  <div class="text-center mb-6">
  <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="Clincoo" class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-white shadow-sm border border-gray-100 p-2">
  <h2 class="text-xl font-bold text-gray-900" style="font-family: 'Space Grotesk', sans-serif;">Clincoo</h2>
- <p class="text-sm text-gray-500 mt-1">Masuk dengan email untuk melanjutkan</p>
  </div>
 
- <div id="auth-step-email">
- <input type="email" id="auth-email-input" placeholder="email@anda.com" class="w-full bg-gray-100 border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" autocomplete="email">
- <button onclick="sendAuthOtp()" id="auth-send-btn" class="w-full mt-3 px-5 py-3 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors shadow-sm">
- Kirim Kode OTP
+ <div id="auth-step-password">
+ <p class="text-sm text-gray-500 text-center mb-4">Masukkan password untuk masuk</p>
+ <input type="password" id="auth-password-input" placeholder="Password" class="w-full bg-gray-100 border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" autocomplete="current-password">
+ <button onclick="verifyPassword()" id="auth-password-btn" class="w-full mt-3 px-5 py-3 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors shadow-sm">
+ Lanjut
  </button>
- <p id="auth-error" class="text-xs text-red-500 mt-3 hidden text-center"></p>
+ <p id="auth-password-error" class="text-xs text-red-500 mt-3 hidden text-center"></p>
  </div>
 
- <div id="auth-step-otp" class="hidden">
- <p class="text-xs text-gray-500 text-center mb-3">Kode 6 digit telah dikirim ke <span id="auth-email-display" class="font-medium text-gray-700"></span></p>
+ <div id="auth-step-pin" class="hidden">
+ <p class="text-sm text-gray-500 text-center mb-4">Masukkan PIN 6 digit</p>
  <div class="flex gap-2 justify-center mb-3">
- <input type="text" maxlength="1" id="otp-1" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(1, event)">
- <input type="text" maxlength="1" id="otp-2" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(2, event)">
- <input type="text" maxlength="1" id="otp-3" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(3, event)">
- <input type="text" maxlength="1" id="otp-4" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(4, event)">
- <input type="text" maxlength="1" id="otp-5" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(5, event)">
- <input type="text" maxlength="1" id="otp-6" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(6, event)">
+ <input type="text" maxlength="1" id="pin-1" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="movePinFocus(1, event)" inputmode="numeric">
+ <input type="text" maxlength="1" id="pin-2" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="movePinFocus(2, event)" inputmode="numeric">
+ <input type="text" maxlength="1" id="pin-3" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="movePinFocus(3, event)" inputmode="numeric">
+ <input type="text" maxlength="1" id="pin-4" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="movePinFocus(4, event)" inputmode="numeric">
+ <input type="text" maxlength="1" id="pin-5" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="movePinFocus(5, event)" inputmode="numeric">
+ <input type="text" maxlength="1" id="pin-6" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="movePinFocus(6, event)" inputmode="numeric">
  </div>
- <button onclick="verifyAuthOtp()" id="auth-verify-btn" class="w-full mt-1 px-5 py-3 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors shadow-sm">
- Verifikasi
+ <button onclick="verifyPin()" id="auth-pin-btn" class="w-full mt-1 px-5 py-3 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors shadow-sm">
+ Masuk
  </button>
- <button onclick="resendAuthOtp()" id="auth-resend-btn" class="w-full mt-2 px-5 py-2 text-xs text-gray-500 hover:text-gray-700 transition-colors">
- Kirim ulang kode
+ <button onclick="backToPassword()" id="auth-back-btn" class="w-full mt-2 px-5 py-2 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+ Kembali
  </button>
- <p id="auth-otp-error" class="text-xs text-red-500 mt-2 hidden text-center"></p>
- </div>
-
- <div id="auth-loading" class="hidden flex flex-col items-center py-4">
- <svg class="w-8 h-8 animate-spin text-[#273849]" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
- <p class="text-sm text-gray-500 mt-2" id="auth-loading-text">Mengirim kode...</p>
+ <p id="auth-pin-error" class="text-xs text-red-500 mt-2 hidden text-center"></p>
  </div>
  </div>
  </div>
@@ -4520,151 +4515,81 @@ async function saveDeployDomain() {
 
 
 
- const AUTH_API = 'https://veda-0e0504e7.base44.app/functions/clincooAuth';
+ const AUTH_PASSWORD = 'Devconium123';
+ const AUTH_PIN = '300212';
 
  function checkAuth() {
  var authed = localStorage.getItem('clincoo_authed');
- var authEmail = localStorage.getItem('clincoo_auth_email');
  if (!authed) {
  document.getElementById('auth-overlay').classList.remove('hidden');
  return false;
- }
- if (authEmail) {
- var display = document.getElementById('auth-user-email');
- if (display) display.textContent = authEmail;
  }
  return true;
  }
 
  function logoutAuth() {
  localStorage.removeItem('clincoo_authed');
- localStorage.removeItem('clincoo_auth_email');
  location.reload();
  }
 
- async function sendAuthOtp() {
- var email = document.getElementById('auth-email-input').value.trim();
- var errEl = document.getElementById('auth-error');
- if (!email || !email.includes('@')) {
- if (errEl) { errEl.textContent = 'Masukkan email yang valid'; errEl.classList.remove('hidden'); }
+ function verifyPassword() {
+ var password = document.getElementById('auth-password-input').value;
+ var errEl = document.getElementById('auth-password-error');
+ if (!password) {
+ if (errEl) { errEl.textContent = 'Masukkan password'; errEl.classList.remove('hidden'); }
+ return;
+ }
+ if (password !== AUTH_PASSWORD) {
+ if (errEl) { errEl.textContent = 'Password salah'; errEl.classList.remove('hidden'); }
  return;
  }
  if (errEl) errEl.classList.add('hidden');
-
- document.getElementById('auth-step-email').classList.add('hidden');
- document.getElementById('auth-loading').classList.remove('hidden');
- document.getElementById('auth-loading-text').textContent = 'Mengirim kode...';
-
- try {
- var res = await fetch(AUTH_API, {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ action: 'send_otp', email: email })
- });
- var data = await res.json();
-
- document.getElementById('auth-loading').classList.add('hidden');
-
- if (data.success) {
- document.getElementById('auth-step-otp').classList.remove('hidden');
- document.getElementById('auth-email-display').textContent = email;
- document.getElementById('otp-1').focus();
- } else {
- document.getElementById('auth-step-email').classList.remove('hidden');
- if (errEl) { errEl.textContent = data.error || 'Gagal mengirim kode'; errEl.classList.remove('hidden'); }
- }
- } catch(e) {
- document.getElementById('auth-loading').classList.add('hidden');
- document.getElementById('auth-step-email').classList.remove('hidden');
- if (errEl) { errEl.textContent = 'Gagal terhubung ke server'; errEl.classList.remove('hidden'); }
- }
+ document.getElementById('auth-step-password').classList.add('hidden');
+ document.getElementById('auth-step-pin').classList.remove('hidden');
+ document.getElementById('pin-1').focus();
  }
 
- async function resendAuthOtp() {
- var email = document.getElementById('auth-email-input').value.trim();
- document.getElementById('auth-step-otp').classList.add('hidden');
- document.getElementById('auth-loading').classList.remove('hidden');
- document.getElementById('auth-loading-text').textContent = 'Mengirim ulang kode...';
- try {
- var res = await fetch(AUTH_API, {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ action: 'send_otp', email: email })
- });
- var data = await res.json();
- document.getElementById('auth-loading').classList.add('hidden');
- if (data.success) {
- document.getElementById('auth-step-otp').classList.remove('hidden');
- document.getElementById('otp-1').value = '';
- document.getElementById('otp-2').value = '';
- document.getElementById('otp-3').value = '';
- document.getElementById('otp-4').value = '';
- document.getElementById('otp-5').value = '';
- document.getElementById('otp-6').value = '';
- document.getElementById('otp-1').focus();
- } else {
- document.getElementById('auth-step-email').classList.remove('hidden');
- var errEl = document.getElementById('auth-error');
- if (errEl) { errEl.textContent = data.error || 'Gagal mengirim ulang'; errEl.classList.remove('hidden'); }
- }
- } catch(e) {
- document.getElementById('auth-loading').classList.add('hidden');
- document.getElementById('auth-step-email').classList.remove('hidden');
- }
- }
-
- async function verifyAuthOtp() {
- var email = document.getElementById('auth-email-input').value.trim();
- var otp = '';
+ function backToPassword() {
+ document.getElementById('auth-step-pin').classList.add('hidden');
+ document.getElementById('auth-step-password').classList.remove('hidden');
+ // Clear pin fields
  for (var i = 1; i <= 6; i++) {
- otp += document.getElementById('otp-' + i).value || '';
+ var el = document.getElementById('pin-' + i);
+ if (el) el.value = '';
  }
- var errEl = document.getElementById('auth-otp-error');
- if (otp.length !== 6) {
- if (errEl) { errEl.textContent = 'Masukkan 6 digit kode'; errEl.classList.remove('hidden'); }
+ var pinErr = document.getElementById('auth-pin-error');
+ if (pinErr) pinErr.classList.add('hidden');
+ }
+
+ function verifyPin() {
+ var pin = '';
+ for (var i = 1; i <= 6; i++) {
+ pin += document.getElementById('pin-' + i).value || '';
+ }
+ var errEl = document.getElementById('auth-pin-error');
+ if (pin.length !== 6) {
+ if (errEl) { errEl.textContent = 'Masukkan 6 digit PIN'; errEl.classList.remove('hidden'); }
+ return;
+ }
+ if (pin !== AUTH_PIN) {
+ if (errEl) { errEl.textContent = 'PIN salah'; errEl.classList.remove('hidden'); }
  return;
  }
  if (errEl) errEl.classList.add('hidden');
-
- document.getElementById('auth-step-otp').classList.add('hidden');
- document.getElementById('auth-loading').classList.remove('hidden');
- document.getElementById('auth-loading-text').textContent = 'Memverifikasi...';
-
- try {
- var res = await fetch(AUTH_API, {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ action: 'verify_otp', email: email, otp: otp })
- });
- var data = await res.json();
-
- document.getElementById('auth-loading').classList.add('hidden');
-
- if (data.success) {
  localStorage.setItem('clincoo_authed', 'true');
- localStorage.setItem('clincoo_auth_email', email);
  document.getElementById('auth-overlay').classList.add('hidden');
  loadData();
  handleRoute();
- } else {
- document.getElementById('auth-step-otp').classList.remove('hidden');
- if (errEl) { errEl.textContent = data.error || 'Verifikasi gagal'; errEl.classList.remove('hidden'); }
- }
- } catch(e) {
- document.getElementById('auth-loading').classList.add('hidden');
- document.getElementById('auth-step-otp').classList.remove('hidden');
- if (errEl) { errEl.textContent = 'Gagal terhubung ke server'; errEl.classList.remove('hidden'); }
- }
  }
 
- function moveOtpFocus(idx, e) {
+ function movePinFocus(idx, e) {
  var val = e.target.value.replace(/\D/g, '');
  e.target.value = val;
  if (val && idx < 6) {
- document.getElementById('otp-' + (idx + 1)).focus();
+ document.getElementById('pin-' + (idx + 1)).focus();
  }
  if (idx === 6 && val) {
- verifyAuthOtp();
+ verifyPin();
  }
  }
 
