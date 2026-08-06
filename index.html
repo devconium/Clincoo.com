@@ -4644,6 +4644,8 @@ async function saveDeployDomain() {
  localStorage.setItem('clincoo_authed', 'true');
  localStorage.setItem('clincoo_auth_email', email);
  document.getElementById('auth-overlay').classList.add('hidden');
+ loadData();
+ handleRoute();
  } else {
  document.getElementById('auth-step-otp').classList.remove('hidden');
  if (errEl) { errEl.textContent = data.error || 'Verifikasi gagal'; errEl.classList.remove('hidden'); }
