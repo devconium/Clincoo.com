@@ -85,16 +85,6 @@
  .rotate-180 { transform: rotate(180deg); transition: transform 0.2s; }
 .dropdown-modal { transition: all 0.2s ease; }
 
- @keyframes toastSlideIn {
- from { opacity: 0; transform: translateY(1rem) scale(0.95); }
- to { opacity: 1; transform: translateY(0) scale(1); }
- }
- @keyframes toastSlideOut {
- from { opacity: 1; transform: translateY(0) scale(1); }
- to { opacity: 0; transform: translateY(1rem) scale(0.95); }
- }
- .toast-enter { animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
- .toast-exit { animation: toastSlideOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
  .CodeMirror {
  width: 100% !important;
@@ -123,6 +113,51 @@
  </style>
 </head>
 <body class="text-gray-900 antialiased min-h-screen relative bg-[#f7f7f9]">
+
+ 
+ <div id="auth-overlay" class="fixed inset-0 z-[500] flex items-center justify-center bg-[#f7f7f9] hidden">
+ <div class="w-full max-w-sm px-4">
+ <div class="bg-white rounded-2xl shadow-xl p-8">
+ <div class="text-center mb-6">
+ <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="Clincoo" class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-white shadow-sm border border-gray-100 p-2">
+ <h2 class="text-xl font-bold text-gray-900" style="font-family: 'Space Grotesk', sans-serif;">Clincoo</h2>
+ <p class="text-sm text-gray-500 mt-1">Masuk dengan email untuk melanjutkan</p>
+ </div>
+
+ <div id="auth-step-email">
+ <input type="email" id="auth-email-input" placeholder="email@anda.com" class="w-full bg-gray-100 border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" autocomplete="email">
+ <button onclick="sendAuthOtp()" id="auth-send-btn" class="w-full mt-3 px-5 py-3 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors shadow-sm">
+ Kirim Kode OTP
+ </button>
+ <p id="auth-error" class="text-xs text-red-500 mt-3 hidden text-center"></p>
+ </div>
+
+ <div id="auth-step-otp" class="hidden">
+ <p class="text-xs text-gray-500 text-center mb-3">Kode 6 digit telah dikirim ke <span id="auth-email-display" class="font-medium text-gray-700"></span></p>
+ <div class="flex gap-2 justify-center mb-3">
+ <input type="text" maxlength="1" id="otp-1" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(1, event)">
+ <input type="text" maxlength="1" id="otp-2" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(2, event)">
+ <input type="text" maxlength="1" id="otp-3" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(3, event)">
+ <input type="text" maxlength="1" id="otp-4" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(4, event)">
+ <input type="text" maxlength="1" id="otp-5" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(5, event)">
+ <input type="text" maxlength="1" id="otp-6" class="w-10 h-12 text-center text-lg font-bold bg-gray-100 border-gray-300 rounded-xl focus:outline-none focus:ring-0 focus:border-[#273849] transition-all" oninput="moveOtpFocus(6, event)">
+ </div>
+ <button onclick="verifyAuthOtp()" id="auth-verify-btn" class="w-full mt-1 px-5 py-3 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors shadow-sm">
+ Verifikasi
+ </button>
+ <button onclick="resendAuthOtp()" id="auth-resend-btn" class="w-full mt-2 px-5 py-2 text-xs text-gray-500 hover:text-gray-700 transition-colors">
+ Kirim ulang kode
+ </button>
+ <p id="auth-otp-error" class="text-xs text-red-500 mt-2 hidden text-center"></p>
+ </div>
+
+ <div id="auth-loading" class="hidden flex flex-col items-center py-4">
+ <svg class="w-8 h-8 animate-spin text-[#273849]" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+ <p class="text-sm text-gray-500 mt-2" id="auth-loading-text">Mengirim kode...</p>
+ </div>
+ </div>
+ </div>
+ </div>
 
  <div id="page-main" class="page-view hidden w-full min-h-screen flex flex-col items-center pb-16">
  <div class="w-full max-w-5xl px-4 pt-4 sm:px-6 md:px-8">
@@ -892,10 +927,6 @@
  </div>
  </div>
 
- <!-- Toast -->
- <div id="db-toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-[300] px-5 py-3 rounded-xl shadow-lg bg-gray-900 text-white text-sm font-medium transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none">
- <span id="db-toast-message"></span>
- </div>
  </div>
 
  <!-- ===== PAGE: STORAGE ===== -->
@@ -1051,6 +1082,13 @@
  <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
  </svg>
  Analytics
+ </button>
+ <div class="border-t border-gray-100 my-2"></div>
+ <button onclick="logoutAuth()" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-600 text-[14px] hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors w-full">
+ <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+ <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+ </svg>
+ Keluar
  </button>
  <div class="sidebar-dropdown">
  <button onclick="toggleDropdown(this)" class="sidebar-nav-item w-full flex items-center justify-between gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
@@ -2013,29 +2051,32 @@ document.addEventListener('click', (e) => {
  if (fileSearchInput) fileSearchInput.value = '';
  renderFileList();
  closeInputModal();
- if (modalAction === 'create_file') showToast('File berhasil dibuat', 'success');
- else if (modalAction === 'create_folder') showToast('Folder berhasil dibuat', 'success');
- else if (modalAction === 'rename') showToast('Nama berhasil diubah', 'success');
+ if (modalAction === 'create_file') showInfoModal('File berhasil dibuat', 'success');
+ else if (modalAction === 'create_folder') showInfoModal('Folder berhasil dibuat', 'success');
+ else if (modalAction === 'rename') showInfoModal('Nama berhasil diubah', 'success');
  }
 
- function showToast(message, type) {
- var existing = null /* toast removed */;
+ function showInfoModal(message, type) {
+ var existing = document.getElementById('clincoo-info-modal');
  if (existing) existing.remove();
- var toast = document.createElement('div');
- toast.id = 'clincoo-toast';
- toast.className = 'fixed bottom-6 right-6 z-[300] px-4 py-3 rounded-xl shadow-lg text-sm font-medium text-white flex items-center gap-2 toast-enter';
- if (type === 'error') toast.style.backgroundColor = '#ef4444';
- else if (type === 'warning') toast.style.backgroundColor = '#f59e0b';
- else if (type === 'info') toast.style.backgroundColor = '#3b82f6';
- else toast.style.backgroundColor = '#10b981';
- var icon = type === 'error' ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' : type === 'warning' ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M12 3l9 16H3l9-16z"/></svg>' : type === 'info' ? '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' : '<svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
- toast.innerHTML = icon + '<span>' + message + '</span>';
- document.body.appendChild(toast);
- setTimeout(function() {
- toast.classList.remove('toast-enter');
- toast.classList.add('toast-exit');
- setTimeout(function() { toast.remove(); }, 300);
- }, 2800);
+ var iconColor = type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : type === 'info' ? '#3b82f6' : '#10b981';
+ var iconBg = type === 'error' ? 'bg-red-50' : type === 'warning' ? 'bg-amber-50' : type === 'info' ? 'bg-blue-50' : 'bg-green-50';
+ var iconPath = type === 'error' ? '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : type === 'warning' ? '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M12 3l9 16H3l9-16z"/>' : type === 'info' ? '<path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' : '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>';
+ var modal = document.createElement('div');
+ modal.id = 'clincoo-info-modal';
+ modal.className = 'fixed inset-0 z-[300] flex items-center justify-center p-4';
+ modal.innerHTML = '<div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm" onclick="document.getElementById(\'clincoo-info-modal\').remove()"></div>' +
+ '<div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-fade-in">' +
+ '<div class="flex flex-col items-center text-center">' +
+ '<div class="w-12 h-12 ' + iconBg + ' rounded-full flex items-center justify-center mb-4">' +
+ '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" style="color:' + iconColor + '" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">' + iconPath + '</svg>' +
+ '</div>' +
+ '<p class="text-sm text-gray-700 font-medium mb-5">' + message + '</p>' +
+ '<button onclick="document.getElementById(\'clincoo-info-modal\').remove()" class="px-5 py-2 text-sm font-medium text-white bg-[#273849] rounded-xl hover:bg-[#1a2530] transition-colors">Tutup</button>' +
+ '</div>' +
+ '</div>';
+ document.body.appendChild(modal);
+ setTimeout(function() { var m = document.getElementById('clincoo-info-modal'); if (m) m.remove(); }, 3000);
  }
 
  function showConfirmDeleteItem() {
@@ -2155,7 +2196,7 @@ document.addEventListener('click', () => {
  }
  saveData();
  renderFileList();
- showToast((itemName.split('.').length > 1 ? 'File' : 'Folder') + ' berhasil dihapus', 'success');
+ showInfoModal((itemName.split('.').length > 1 ? 'File' : 'Folder') + ' berhasil dihapus', 'success');
  }
 
  function triggerImport(type) {
@@ -2436,7 +2477,7 @@ document.addEventListener('click', () => {
  const file = e.target.files[0];
  if (!file) return;
  if (typeof JSZip === 'undefined') {
- alert('Library JSZip belum dimuat. Refresh halaman dan coba lagi.');
+ showInfoModal('Library JSZip belum dimuat. Refresh halaman dan coba lagi.', 'error');
  e.target.value = '';
  return;
  }
@@ -2445,20 +2486,26 @@ document.addEventListener('click', () => {
  const entries = Object.keys(zip.files).filter(function(k) { return !zip.files[k].dir; });
  const totalFiles = entries.length;
  if (totalFiles === 0) {
- showToast('ZIP kosong, tidak ada file', 'warning');
+ showInfoModal('ZIP kosong, tidak ada file', 'warning');
  e.target.value = '';
  return;
  }
- var progToast = document.createElement('div');
- progToast.id = 'zip-progress-toast';
- progToast.className = 'fixed bottom-6 right-6 z-[300] px-5 py-4 rounded-xl shadow-lg bg-white border border-gray-100 flex items-center gap-3 toast-enter';
- progToast.innerHTML = '<div class="w-8 h-8 flex-shrink-0 border-2 border-[#273849] border-t-transparent rounded-full animate-spin"></div>' +
- '<div class="flex flex-col gap-1">' +
- '<span class="text-sm font-semibold text-gray-800">Ekstrak ZIP...</span>' +
- '<span id="zip-progress-text" class="text-xs text-gray-500">0 / ' + totalFiles + ' file</span>' +
- '<div class="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="zip-progress-bar" class="h-full bg-[#273849] rounded-full transition-all duration-200" style="width: 0%"></div></div>' +
+ var progModal = document.getElementById('zip-progress-modal');
+ if (!progModal) {
+ progModal = document.createElement('div');
+ progModal.id = 'zip-progress-modal';
+ progModal.className = 'fixed inset-0 z-[300] flex items-center justify-center p-4';
+ document.body.appendChild(progModal);
+ }
+ progModal.innerHTML = '<div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm"></div>' +
+ '<div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-fade-in">' +
+ '<div class="flex flex-col items-center">' +
+ '<div class="w-10 h-10 border-2 border-[#273849] border-t-transparent rounded-full animate-spin mb-4"></div>' +
+ '<span class="text-sm font-semibold text-gray-800 mb-2">Ekstrak ZIP...</span>' +
+ '<span id="zip-progress-text" class="text-xs text-gray-500 mb-3">0 / ' + totalFiles + ' file</span>' +
+ '<div class="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="zip-progress-bar" class="h-full bg-[#273849] rounded-full transition-all duration-200" style="width: 0%"></div></div>' +
+ '</div>' +
  '</div>';
- document.body.appendChild(progToast);
 
  let importedCount = 0;
  for (const entryPath of entries) {
@@ -2516,18 +2563,14 @@ document.addEventListener('click', () => {
  }
  saveData();
  renderFileList();
- if (progToast) {
- progToast.classList.remove('toast-enter');
- progToast.classList.add('toast-exit');
- setTimeout(function() { progToast.remove(); }, 300);
- }
- showToast(importedCount + ' file berhasil diimpor dari ZIP', 'success');
+ if (progModal) { progModal.remove(); }
+ showInfoModal(importedCount + ' file berhasil diimpor dari ZIP', 'success');
  console.log('[Clincoo ZIP] ' + importedCount + ' file(s) imported from ZIP');
  } catch(err) {
- var pt = null /* toast removed */;
- if (pt) pt.remove();
+ var pm = document.getElementById('zip-progress-modal');
+ if (pm) pm.remove();
  console.error('[Clincoo ZIP] Error:', err.message);
- showToast('Gagal membaca ZIP: ' + err.message, 'error');
+ showInfoModal('Gagal membaca ZIP: ' + err.message, 'error');
  }
  e.target.value = '';
  }
@@ -2892,6 +2935,9 @@ document.addEventListener('click', () => {
  <span class="text-[15px] font-semibold text-gray-900 truncate">${project.name}</span>
  <span class="text-xs text-gray-500 truncate mt-0.5">${project.desc || 'Tanpa keterangan'}</span>
  </div>
+ <button onclick="togglePin(${project.id}, event)" class="flex-shrink-0 p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors ${project.pinned ? '!text-[#273849]' : 'opacity-0 group-hover:opacity-100'}" aria-label="Pin proyek">
+ <svg class="w-4 h-4" fill="${project.pinned ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v3l-3 3v6l-4 2-4-2v-6L5 8V5z"/></svg>
+ </button>
  <button onclick="toggleProjectActionMenu(event, ${project.id})" class="flex-shrink-0 p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100" aria-label="Aksi proyek">
  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
@@ -2911,7 +2957,21 @@ document.addEventListener('click', () => {
  } else {
  filteredProjects = [...projects];
  }
+ filteredProjects.sort(function(a, b) {
+ if (a.pinned && !b.pinned) return -1;
+ if (!a.pinned && b.pinned) return 1;
+ return 0;
+ });
  renderProjects();
+ }
+
+ function togglePin(projectId, e) {
+ if (e) { e.stopPropagation(); e.preventDefault(); }
+ var p = projects.find(function(p) { return p.id === projectId; });
+ if (!p) return;
+ p.pinned = !p.pinned;
+ saveData();
+ applyFilters();
  }
 
  if (searchInput) {
@@ -3343,14 +3403,14 @@ document.addEventListener('click', () => {
  if (typeof FB !== 'undefined') FB.set(getEnvKey(), envVariables);
  renderEnvList();
  if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
- showToast('Variabel berhasil dihapus', 'success');
+ showInfoModal('Variabel berhasil dihapus', 'success');
  }
 
  function saveEnv() {
  const keyInput = document.getElementById('env-key');
  const valInput = document.getElementById('env-value');
  if(!keyInput.value.trim() || !valInput.value) {
- showToast('Kunci dan nilai tidak boleh kosong', 'error');
+ showInfoModal('Kunci dan nilai tidak boleh kosong', 'error');
  return;
  }
  envVariables.push({ key: keyInput.value.trim(), value: valInput.value });
@@ -3360,7 +3420,7 @@ document.addEventListener('click', () => {
  valInput.value = '';
  renderEnvList();
  if (typeof _syncEnvToD1 === 'function' && currentProjectId) _syncEnvToD1(currentProjectId);
- showToast('Variabel berhasil disimpan', 'success');
+ showInfoModal('Variabel berhasil disimpan', 'success');
  }
 
  function safeNavigate(url) {
@@ -3454,7 +3514,7 @@ async function saveDeployDomain() {
  if (!domainInput) return;
  const domain = domainInput.value.trim();
  if (!domain) {
- showToast('Domain tidak boleh kosong', 'error');
+ showInfoModal('Domain tidak boleh kosong', 'error');
  return;
  }
  if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Menyimpan...'; }
@@ -3488,7 +3548,7 @@ async function saveDeployDomain() {
  // Verify DNS after saving domain
  var dnsOk = await verifyCustomDomainDns(domain);
  renderDeployStatus();
- showToast(success ? (dnsOk ? 'Domain tersimpan, DNS terverifikasi!' : 'Domain tersimpan. DNS belum terverifikasi.') : 'Gagal menyimpan domain', success ? (dnsOk ? 'success' : 'success') : 'error');
+ showInfoModal(success ? (dnsOk ? 'Domain tersimpan, DNS terverifikasi!' : 'Domain tersimpan. DNS belum terverifikasi.') : 'Gagal menyimpan domain', success ? (dnsOk ? 'success' : 'success') : 'error');
  }
 
  async function removeDeployDomain() {
@@ -3513,7 +3573,7 @@ async function saveDeployDomain() {
  localStorage.removeItem(getDeployDnsKey());
  if (typeof _syncDomainToD1 === 'function' && currentProjectId) _syncDomainToD1(currentProjectId);
  renderDeployStatus();
- showToast('Domain berhasil dihapus', 'success');
+ showInfoModal('Domain berhasil dihapus', 'success');
  }
 
  document.addEventListener('change', function(e) {
@@ -4033,16 +4093,7 @@ async function saveDeployDomain() {
  }
 
  function dbShowToast(message) {
- var toast = document.getElementById('db-toast');
- if (!toast) return;
- var toastMsg = document.getElementById('db-toast-message');
- if (toastMsg) toastMsg.innerText = message;
- toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
- toast.classList.add('translate-y-0', 'opacity-100');
- setTimeout(function() {
- toast.classList.remove('translate-y-0', 'opacity-100');
- toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
- }, 2500);
+ showInfoModal(message, 'info');
  }
 
  function dbOpenModal(modalId) {
@@ -4430,7 +4481,7 @@ async function saveDeployDomain() {
  var database = document.getElementById('sql-database').value.trim();
  var username = document.getElementById('sql-username').value.trim();
  var password = document.getElementById('sql-password').value;
- if (!host || !database) { alert('Host dan database wajib diisi'); return; }
+ if (!host || !database) { showInfoModal('Host dan database wajib diisi', 'warning'); return; }
  var conns = [];
  var stored = localStorage.getItem('clincoo_sql_connections');
  if (stored) { try { conns = JSON.parse(stored); } catch(e) { console.warn('[Clincoo] Failed to parse SQL connections:', e.message); } }
@@ -4468,7 +4519,155 @@ async function saveDeployDomain() {
  }
 
 
+
+ const AUTH_API = 'https://veda-0e0504e7.base44.app/functions/clincooAuth';
+
+ function checkAuth() {
+ var authed = localStorage.getItem('clincoo_authed');
+ var authEmail = localStorage.getItem('clincoo_auth_email');
+ if (!authed) {
+ document.getElementById('auth-overlay').classList.remove('hidden');
+ return false;
+ }
+ if (authEmail) {
+ var display = document.getElementById('auth-user-email');
+ if (display) display.textContent = authEmail;
+ }
+ return true;
+ }
+
+ function logoutAuth() {
+ localStorage.removeItem('clincoo_authed');
+ localStorage.removeItem('clincoo_auth_email');
+ location.reload();
+ }
+
+ async function sendAuthOtp() {
+ var email = document.getElementById('auth-email-input').value.trim();
+ var errEl = document.getElementById('auth-error');
+ if (!email || !email.includes('@')) {
+ if (errEl) { errEl.textContent = 'Masukkan email yang valid'; errEl.classList.remove('hidden'); }
+ return;
+ }
+ if (errEl) errEl.classList.add('hidden');
+
+ document.getElementById('auth-step-email').classList.add('hidden');
+ document.getElementById('auth-loading').classList.remove('hidden');
+ document.getElementById('auth-loading-text').textContent = 'Mengirim kode...';
+
+ try {
+ var res = await fetch(AUTH_API, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ action: 'send_otp', email: email })
+ });
+ var data = await res.json();
+
+ document.getElementById('auth-loading').classList.add('hidden');
+
+ if (data.success) {
+ document.getElementById('auth-step-otp').classList.remove('hidden');
+ document.getElementById('auth-email-display').textContent = email;
+ document.getElementById('otp-1').focus();
+ } else {
+ document.getElementById('auth-step-email').classList.remove('hidden');
+ if (errEl) { errEl.textContent = data.error || 'Gagal mengirim kode'; errEl.classList.remove('hidden'); }
+ }
+ } catch(e) {
+ document.getElementById('auth-loading').classList.add('hidden');
+ document.getElementById('auth-step-email').classList.remove('hidden');
+ if (errEl) { errEl.textContent = 'Gagal terhubung ke server'; errEl.classList.remove('hidden'); }
+ }
+ }
+
+ async function resendAuthOtp() {
+ var email = document.getElementById('auth-email-input').value.trim();
+ document.getElementById('auth-step-otp').classList.add('hidden');
+ document.getElementById('auth-loading').classList.remove('hidden');
+ document.getElementById('auth-loading-text').textContent = 'Mengirim ulang kode...';
+ try {
+ var res = await fetch(AUTH_API, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ action: 'send_otp', email: email })
+ });
+ var data = await res.json();
+ document.getElementById('auth-loading').classList.add('hidden');
+ if (data.success) {
+ document.getElementById('auth-step-otp').classList.remove('hidden');
+ document.getElementById('otp-1').value = '';
+ document.getElementById('otp-2').value = '';
+ document.getElementById('otp-3').value = '';
+ document.getElementById('otp-4').value = '';
+ document.getElementById('otp-5').value = '';
+ document.getElementById('otp-6').value = '';
+ document.getElementById('otp-1').focus();
+ } else {
+ document.getElementById('auth-step-email').classList.remove('hidden');
+ var errEl = document.getElementById('auth-error');
+ if (errEl) { errEl.textContent = data.error || 'Gagal mengirim ulang'; errEl.classList.remove('hidden'); }
+ }
+ } catch(e) {
+ document.getElementById('auth-loading').classList.add('hidden');
+ document.getElementById('auth-step-email').classList.remove('hidden');
+ }
+ }
+
+ async function verifyAuthOtp() {
+ var email = document.getElementById('auth-email-input').value.trim();
+ var otp = '';
+ for (var i = 1; i <= 6; i++) {
+ otp += document.getElementById('otp-' + i).value || '';
+ }
+ var errEl = document.getElementById('auth-otp-error');
+ if (otp.length !== 6) {
+ if (errEl) { errEl.textContent = 'Masukkan 6 digit kode'; errEl.classList.remove('hidden'); }
+ return;
+ }
+ if (errEl) errEl.classList.add('hidden');
+
+ document.getElementById('auth-step-otp').classList.add('hidden');
+ document.getElementById('auth-loading').classList.remove('hidden');
+ document.getElementById('auth-loading-text').textContent = 'Memverifikasi...';
+
+ try {
+ var res = await fetch(AUTH_API, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ action: 'verify_otp', email: email, otp: otp })
+ });
+ var data = await res.json();
+
+ document.getElementById('auth-loading').classList.add('hidden');
+
+ if (data.success) {
+ localStorage.setItem('clincoo_authed', 'true');
+ localStorage.setItem('clincoo_auth_email', email);
+ document.getElementById('auth-overlay').classList.add('hidden');
+ } else {
+ document.getElementById('auth-step-otp').classList.remove('hidden');
+ if (errEl) { errEl.textContent = data.error || 'Verifikasi gagal'; errEl.classList.remove('hidden'); }
+ }
+ } catch(e) {
+ document.getElementById('auth-loading').classList.add('hidden');
+ document.getElementById('auth-step-otp').classList.remove('hidden');
+ if (errEl) { errEl.textContent = 'Gagal terhubung ke server'; errEl.classList.remove('hidden'); }
+ }
+ }
+
+ function moveOtpFocus(idx, e) {
+ var val = e.target.value.replace(/\D/g, '');
+ e.target.value = val;
+ if (val && idx < 6) {
+ document.getElementById('otp-' + (idx + 1)).focus();
+ }
+ if (idx === 6 && val) {
+ verifyAuthOtp();
+ }
+ }
+
  window.addEventListener('DOMContentLoaded', () => {
+ if (!checkAuth()) return;
  loadData();
  
  handleRoute();
