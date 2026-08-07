@@ -1229,7 +1229,7 @@
       const file = e.target.files[0];
       if (!file) return;
       if (typeof JSZip === 'undefined') {
-        alert('Library JSZip belum dimuat. Refresh halaman dan coba lagi.');
+        showInfoModal('Library JSZip belum dimuat. Refresh halaman dan coba lagi.', 'error');
         e.target.value = '';
         return;
       }
