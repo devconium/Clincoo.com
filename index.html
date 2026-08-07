@@ -2313,18 +2313,18 @@ document.addEventListener('click', () => {
  if (!token) { showGithubConnectView(); return; }
  if (listEl) listEl.innerHTML = '<div class="flex items-center justify-center py-8 text-xs text-gray-400"><svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Memuat repository...</div>';
  try {
- var res = await fetch('https://api.github.com/user/repos?sort=updated&per_page=100', {
- headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
- });
- if (!res.ok) {
- if (res.status === 401) {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/repos?token=' + encodeURIComponent(token));
+ var payload = await res.json().catch(function() { return null; });
+ if (!res.ok || !payload || payload.success === false) {
+ var status = (payload && payload.status) || res.status;
+ if (status === 401) {
  localStorage.removeItem('clincoo_github_token');
  showGithubConnectView();
  return;
  }
- throw new Error('Gagal memuat repository (' + res.status + ')');
+ throw new Error((payload && payload.error) || ('Gagal memuat repository (' + res.status + ')'));
  }
- var repos = await res.json();
+ var repos = payload.data || [];
  if (repos.length === 0) {
  if (listEl) listEl.innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Tidak ada repository ditemukan</p>';
  return;
@@ -2370,18 +2370,11 @@ document.addEventListener('click', () => {
  if (progressEl) progressEl.textContent = 'Mengambil struktur repository...';
  }
  try {
- var treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1', {
- headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
- });
- if (!treeRes.ok) {
- if (treeRes.status === 404) {
- treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/master?recursive=1', {
- headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
- });
- }
- }
- if (!treeRes.ok) throw new Error('Repository tidak ditemukan');
- var treeData = await treeRes.json();
+ var treeRes = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/tree?token=' + encodeURIComponent(token) + '&owner=' + encodeURIComponent(owner) + '&repo=' + encodeURIComponent(repo) + '&branch=' + encodeURIComponent(branch));
+ var treePayload = await treeRes.json().catch(function() { return null; });
+ if (!treeRes.ok || !treePayload || treePayload.success === false) throw new Error((treePayload && treePayload.error) || 'Repository tidak ditemukan');
+ var treeData = treePayload.data;
+ branch = treePayload.branch || branch;
  var files = (treeData.tree || []).filter(function(item) { return item.type === 'blob'; });
  if (files.length === 0) throw new Error('Tidak ada file di repository');
  if (progressEl) progressEl.textContent = '0/' + files.length + ' file...';
@@ -2402,7 +2395,7 @@ document.addEventListener('click', () => {
  }
  currentPathIter = newPath;
  }
- var rawUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/' + filePath;
+ var rawUrl = 'https://clincoo-deploy.clincoo.workers.dev/github/file?token=' + encodeURIComponent(token) + '&owner=' + encodeURIComponent(owner) + '&repo=' + encodeURIComponent(repo) + '&branch=' + encodeURIComponent(branch) + '&path=' + encodeURIComponent(filePath);
  var fileRes = await fetch(rawUrl);
  if (!fileRes.ok) continue;
  var fileType = getFileType(fileName);
