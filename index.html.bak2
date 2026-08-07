@@ -306,9 +306,9 @@
  <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
  </svg>
  </button>
- <div class="flex items-center justify-center">
- <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm">
- </div>
+ <a href="pages/profile.html" class="flex items-center justify-center">
+ <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
+ </a>
  </div>
  </div>
 
@@ -1079,6 +1079,12 @@
  Analytics
  </button>
  <div class="border-t border-gray-100 my-2"></div>
+ <button onclick="logoutAuth()" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-600 text-[14px] hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors w-full">
+ <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+ <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+ </svg>
+ Keluar
+ </button>
  <div class="sidebar-dropdown">
  <button onclick="toggleDropdown(this)" class="sidebar-nav-item w-full flex items-center justify-between gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
  <div class="flex items-center gap-2.5">
@@ -1139,7 +1145,7 @@
  </div>
  </div>
 
- <div id="input-modal-overlay" onclick="if(event.target===this) closeInputModal()" style="display:none" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+ <div id="input-modal-overlay" onclick="if(event.target===this) closeInputModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
  <div id="input-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
  <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
  <h3 id="input-modal-title" class="text-lg font-bold text-gray-900">Buat File Baru</h3>
@@ -1171,7 +1177,7 @@
  </div>
 
  <!-- GitHub Import Modal -->
- <div id="github-modal-overlay" onclick="if(event.target===this) closeGithubModal()" style="display:none" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+ <div id="github-modal-overlay" onclick="if(event.target===this) closeGithubModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
  <div id="github-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
  <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
  <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
@@ -1896,7 +1902,7 @@ document.addEventListener('click', (e) => {
  function showInputModal() {
  const overlay = document.getElementById('input-modal-overlay');
  const modal = document.getElementById('input-modal');
- overlay.style.display = 'flex';
+ overlay.classList.remove('hidden');
  setTimeout(() => {
  overlay.classList.remove('opacity-0');
  modal.classList.remove('opacity-0', 'scale-95');
@@ -1924,7 +1930,7 @@ document.addEventListener('click', (e) => {
  modal.classList.add('opacity-0', 'scale-95');
  
  setTimeout(() => {
- overlay.style.display = 'none';
+ overlay.classList.add('hidden');
  modalAction = null;
  itemBeingRenamed = null;
  }, 300);
@@ -2274,7 +2280,7 @@ document.addEventListener('click', () => {
  var modal = document.getElementById('github-modal');
  var errEl = document.getElementById('github-modal-error');
  if (!overlay) return;
- overlay.style.display = 'flex';
+ overlay.classList.remove('hidden');
  overlay.classList.add('opacity-100');
  overlay.classList.remove('opacity-0');
  modal.classList.remove('scale-95', 'opacity-0');
@@ -2296,7 +2302,7 @@ document.addEventListener('click', () => {
  overlay.classList.remove('opacity-100');
  modal.classList.add('scale-95', 'opacity-0');
  modal.classList.remove('scale-100', 'opacity-100');
- setTimeout(function() { overlay.style.display = 'none'; }, 300);
+ setTimeout(function() { overlay.classList.add('hidden'); }, 300);
  }
  }
 
