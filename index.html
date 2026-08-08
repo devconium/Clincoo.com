@@ -22,12 +22,6 @@
  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
- <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
- <script src="https://unpkg.com/@phosphor-icons/web"></script>
- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
  
  <style>
  body {
@@ -38,52 +32,6 @@
  font-family: 'Fira Code', monospace;
  .rotate-180 { transform: rotate(180deg); }
  }
-#page-superagent { font-family: 'Inter', sans-serif; background: #ffffff; color: #000000; }
-#page-superagent ::-webkit-scrollbar { width: 6px; }
-#page-superagent ::-webkit-scrollbar-track { background: transparent; }
-#page-superagent ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
-#page-superagent .sa-fade-in { animation: saFadeIn 0.3s ease-in-out forwards; }
-@keyframes saFadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-#page-superagent .sa-typing-cursor::after { content: '|'; animation: saBlink 1s step-start infinite; color: #9ca3af; margin-left: 2px; }
-#page-superagent .sa-typing-cursor > p:last-child { display: inline; }
-@keyframes saBlink { 50% { opacity: 0; } }
-#page-superagent .sa-shiny-text { background: linear-gradient(110deg, #000 35%, #9ca3af 50%, #000 65%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: saShine 3s linear infinite; }
-@keyframes saShine { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
-#page-superagent .sa-font-montserrat { font-family: 'Montserrat', sans-serif; }
-#page-superagent .sa-shimmer { display: inline-flex; align-items: center; gap: 0.375rem; background: linear-gradient(90deg, #6b7280 0%, #d1d5db 50%, #6b7280 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: saShimmerText 2s linear infinite; font-weight: 500; font-size: 0.95rem; }
-@keyframes saShimmerText { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
-#page-superagent .sa-dots { display: inline-flex; align-items: center; gap: 4px; padding: 4px 0; }
-#page-superagent .sa-dot { width: 5px; height: 5px; background-color: #374151; border-radius: 50%; animation: saBounceDot 1.4s infinite ease-in-out both; }
-#page-superagent .sa-dot:nth-child(1) { animation-delay: 0s; }
-#page-superagent .sa-dot:nth-child(2) { animation-delay: 0.2s; }
-#page-superagent .sa-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes saBounceDot { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-4px); opacity: 1; } }
-#page-superagent details > summary { list-style: none; }
-#page-superagent details > summary::-webkit-details-marker { display: none; }
-#page-superagent .hljs { background: transparent !important; padding: 0 !important; }
-#page-superagent .sa-code-container::-webkit-scrollbar { height: 8px; }
-#page-superagent .sa-code-container::-webkit-scrollbar-track { background: #1e1e1e; border-radius: 0 0 20px 20px; }
-#page-superagent .sa-code-container::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-#page-superagent .sa-custom-scroll::-webkit-scrollbar { height: 6px; }
-#page-superagent .sa-custom-scroll::-webkit-scrollbar-track { background: transparent; }
-#page-superagent .sa-custom-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
-#page-superagent .sa-custom-scroll:hover::-webkit-scrollbar-thumb { background: #9ca3af; }
-#page-superagent .sa-md h1 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #000; }
-#page-superagent .sa-md h2 { font-size: 1.25rem; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #000; }
-#page-superagent .sa-md h3 { font-size: 1.125rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; color: #000; }
-#page-superagent .sa-md h4, #page-superagent .sa-md h5, #page-superagent .sa-md h6 { font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: #000; }
-#page-superagent .sa-md p { margin-bottom: 0.75rem; }
-#page-superagent .sa-md p:last-child { margin-bottom: 0; }
-#page-superagent .sa-md ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.75rem; }
-#page-superagent .sa-md ol { list-style-type: decimal; margin-left: 1.25rem; margin-bottom: 0.75rem; }
-#page-superagent .sa-md li { margin-bottom: 0.25rem; }
-#page-superagent .sa-md code:not(.hljs) { background-color: #e5e7eb; color: #db2777; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace; word-break: break-word; }
-#page-superagent .sa-md pre { margin: 0; }
-#page-superagent .sa-md blockquote { border-left: 4px solid #d1d5db; padding-left: 1rem; color: #4b5563; font-style: italic; margin-bottom: 1rem; }
-#page-superagent .sa-md a { color: #2563eb; text-decoration: underline; }
-#page-superagent .sa-md strong { font-weight: 700; }
-#page-superagent .sa-md em { font-style: italic; }
-#page-superagent .sa-md tbody td:first-child { font-weight: 600; background-color: #f9fafb; }
  .page-view {
  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
  }
@@ -358,9 +306,9 @@
  <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
  </svg>
  </button>
- <a href="pages/profile.html" class="flex items-center justify-center">
- <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
- </a>
+ <div class="flex items-center justify-center">
+ <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%3Cpath%20d%3D%22M12%209C10.5%2011%2011%2013%2012%2014.5C13%2013%2013.5%2011%2012%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%3Cpath%20d%3D%22M20%209C21.5%2011%2021%2013%2020%2014.5C19%2013%2018.5%2011%2020%209Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Ccircle%20cx%3D%2219.5%22%20cy%3D%2217%22%20r%3D%221.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.6%22%2F%3E%3Cpolygon%20points%3D%2216%2C20%2015%2C18.5%2017%2C18.5%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.5%22%2F%3E%0A%3C%2Fsvg%3E" alt="App Logo" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-sm">
+ </div>
  </div>
  </div>
 
@@ -1051,49 +999,6 @@
  </div>
  </div>
 
- <!-- ===== PAGE: SUPERAGENT ===== -->
- <div id="page-superagent" class="page-view hidden w-full min-h-screen flex flex-col bg-white">
-  <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-50/60">
-   <div class="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto">
-    <div class="flex items-center justify-between h-14">
-     <div class="flex items-center gap-1.5 sm:gap-3 min-w-0">
-      <button onclick="toggleSidebar()" class="flex-shrink-0 flex items-center text-gray-500 hover:text-black transition-all rounded-full p-1.5 sm:p-2 hover:bg-gray-100 -ml-1.5 sm:-ml-2" aria-label="Buka menu">
-       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
-      <h2 class="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap" style="font-family: 'Space Grotesk', sans-serif;">Superagent</h2>
-     </div>
-     <a href="index.html" class="flex items-center justify-center">
-      <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2F3Csvg%22%20viewBox%3D%220%200%2032%2032%22%3E%0A%20%20%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2216%22%20r%3D%2216%22%20fill%3D%22%23ffffff%22%2F%3E%0A%20%20%3Cg%20fill%3D%22%23000000%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10%2016C7%2010%209%207%2012%207C14%207%2015%2011%2013%2016Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2016C25%2010%2023%207%2020%207C18%207%2017%2011%2019%2016Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16%2027C24%2027%2028%2022.5%2028%2017C28%2012.5%2021%2011.5%2016%2011.5C11%2011.5%204%2012.5%204%2017C4%2022.5%208%2027%2016%2027Z%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 bg-white rounded-full shadow-sm hover:scale-105 transition-transform cursor-pointer">
-     </a>
-    </div>
-   </div>
-  </div>
-  <div id="sa-session-options-popup" class="hidden fixed bg-white border border-gray-200 rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.1)] z-[100] w-36 py-1.5 text-[13px] text-gray-700">
-   <button id="sa-btn-edit-session" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2.5 font-medium"><i class="ph-bold ph-pencil-simple text-gray-500 text-base"></i> Edit</button>
-   <button id="sa-btn-download-session" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2.5 font-medium"><i class="ph-bold ph-download-simple text-gray-500 text-base"></i> Unduh</button>
-   <button id="sa-btn-delete-session" class="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2.5 font-medium"><i class="ph-bold ph-trash text-gray-500 text-base"></i> Hapus</button>
-  </div>
-  <main id="sa-chat-container" class="flex-1 overflow-y-auto px-4 pt-6 pb-32 space-y-8 w-full"></main>
-  <footer class="fixed bottom-0 left-0 right-0 w-full bg-transparent px-4 py-4 z-20 pointer-events-none flex flex-col justify-end">
-   <div id="sa-upload-popup" class="hidden relative bottom-full left-0 mb-1 bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-lg p-1.5 w-36 transition-all origin-bottom-left z-20 pointer-events-auto">
-    <button id="sa-btn-upload-img" class="w-full flex items-center gap-2.5 p-2 hover:bg-gray-50 rounded-lg text-sm text-gray-700 font-medium transition-colors"><i class="ph ph-image text-lg text-gray-500"></i> Gambar</button>
-    <button id="sa-btn-upload-doc" class="w-full flex items-center gap-2.5 p-2 hover:bg-gray-50 rounded-lg text-sm text-gray-700 font-medium transition-colors"><i class="ph ph-file-text text-lg text-gray-500"></i> Dokumen</button>
-   </div>
-   <div id="sa-attachment-preview" class="hidden absolute bottom-full left-4 mb-3 bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl p-2 shadow-lg flex items-center gap-3 max-w-[250px] z-10 transition-all origin-bottom-left pointer-events-auto">
-    <div id="sa-attachment-preview-icon" class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0"></div>
-    <div class="flex-1 overflow-hidden"><p id="sa-attachment-preview-name" class="text-sm font-semibold text-gray-800 truncate"></p><p id="sa-attachment-preview-size" class="text-[11px] text-gray-500"></p></div>
-    <button id="sa-btn-remove-attachment" class="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50"><i class="ph ph-x"></i></button>
-   </div>
-   <input type="file" id="sa-image-upload" accept="image/*" class="hidden">
-   <input type="file" id="sa-doc-upload" accept=".txt,.pdf,.md,.csv,.json,.js,.html,.css" class="hidden">
-   <div id="sa-input-wrapper" class="relative flex items-end bg-white rounded-2xl rounded-br-[24px] p-1.5 transition-all shadow-[0_5px_20px_-5px_rgba(0,0,0,0.15)] focus-within:shadow-[0_8px_30px_-5px_rgba(0,0,0,0.2)] pointer-events-auto duration-200">
-    <button id="sa-btn-plus" class="text-gray-500 hover:text-black transition-transform duration-300 ease-in-out flex-shrink-0 rounded-full h-9 w-9 flex items-center justify-center"><i class="ph ph-plus text-xl"></i></button>
-    <textarea id="sa-chat-input" rows="1" class="flex-1 min-w-0 bg-transparent text-black placeholder-gray-400 outline-none px-2 py-1.5 text-sm sm:text-base resize-none overflow-hidden sa-custom-scroll transition-all duration-150" style="height: 38px; line-height: 24px;" placeholder="Ketik pesan..." autocomplete="off"></textarea>
-    <button id="sa-btn-action" class="w-9 h-9 flex items-center justify-center bg-black text-white rounded-full flex-shrink-0 hover:bg-gray-800 transition-colors shadow-md ml-1"><i id="sa-action-icon" class="ph-bold ph-arrow-up text-lg transition-all"></i></button>
-   </div>
-  </footer>
- </div>
-
 
  <input type="file" id="import-file-input" class="hidden" multiple onchange="handleImportFiles(event)">
  <input type="file" id="import-zip-input" class="hidden" accept=".zip" onchange="handleImportZip(event)">
@@ -1112,6 +1017,13 @@
  <button onclick="showConfirmDeleteItem()" class="flex items-center w-full px-4 py-2.5 text-sm text-red-600 font-medium hover:bg-red-50 transition-colors">
  Hapus
  </button>
+ <div class="h-px bg-gray-100 my-1"></div>
+ <button onclick="pushItemToGithub()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+ Push ke GitHub
+ </button>
+ <button onclick="syncAllToGithub()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+ Sync GitHub
+ </button>
  </div>
 
  <div id="project-action-menu" class="hidden fixed w-44 bg-white rounded-xl shadow-xl overflow-hidden transition-all z-[100] py-1">
@@ -1127,6 +1039,11 @@
  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
  </svg>
  Hapus
+ </button>
+ <div class="h-px bg-gray-100 my-1"></div>
+ <button onclick="linkProjectToGithub()" class="flex items-center w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+ <svg class="h-4 w-4 mr-3 text-gray-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+ Link GitHub
  </button>
  </div>
 
@@ -1159,13 +1076,6 @@
  </svg>
  Beranda
  </button>
- <button onclick="sidebarNavigate('/superagent')" data-sidebar-path="/superagent" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
- <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c.251.017.502.027.751.027h.751m-1.5-.027a48.6 48.6 0 00-1.5.067m1.5 1.423l-.683.683a2.25 2.25 0 01-1.591.659h-.751m1.5-1.423a48.27 48.27 0 013.75.067M5 14.5l-1.5 1.5m1.5-1.5l1.5 1.5m-1.5-1.5l-3 3m4.5 0l1.5-1.5m-1.5 1.5l1.5 1.5m-1.5-1.5l3-3m-3 3l-1.5-1.5m1.5 1.5l-1.5 1.5" />
- <circle cx="12" cy="12" r="3" stroke-width="1.75"/>
- </svg>
- Superagent
- </button>
  <button onclick="sidebarNavigateToLastProject()" data-sidebar-path="/proyek" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
  <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
@@ -1181,12 +1091,6 @@
  Analytics
  </button>
  <div class="border-t border-gray-100 my-2"></div>
- <button onclick="logoutAuth()" class="sidebar-nav-item flex items-center gap-2.5 px-3 py-3 text-gray-600 text-[14px] hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors w-full">
- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
- <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
- </svg>
- Keluar
- </button>
  <div class="sidebar-dropdown">
  <button onclick="toggleDropdown(this)" class="sidebar-nav-item w-full flex items-center justify-between gap-2.5 px-3 py-3 text-gray-800 font-semibold text-[15px] focus:outline-none">
  <div class="flex items-center gap-2.5">
@@ -1247,7 +1151,7 @@
  </div>
  </div>
 
- <div id="input-modal-overlay" onclick="if(event.target===this) closeInputModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
+ <div id="input-modal-overlay" onclick="if(event.target===this) closeInputModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0" style="display:none">
  <div id="input-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
  <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
  <h3 id="input-modal-title" class="text-lg font-bold text-gray-900">Buat File Baru</h3>
@@ -1277,56 +1181,57 @@
  </div>
  </div>
  </div>
+ <!-- GitHub Import Modal (NEW) -->
+ <div id="gh-modal-overlay" onclick="if(event.target===this) closeGithubModal()" style="display:none;position:fixed;inset:0;background:rgba(17,24,39,0.5);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;">
+  <div id="gh-modal-box" style="background:#fff;border-radius:16px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);width:100%;max-width:24rem;margin:0 1rem;overflow:hidden;">
+   <div style="padding:1.25rem 1.5rem;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:between;">
+    <h3 style="font-size:1.125rem;font-weight:700;color:#111827;display:flex;align-items:center;gap:0.5rem;flex:1;">
+     <svg style="width:1.25rem;height:1.25rem;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+     Import dari GitHub
+    </h3>
+    <button onclick="closeGithubModal()" style="color:#9ca3af;padding:0.375rem;border-radius:9999px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">
+     <svg style="width:1.25rem;height:1.25rem;" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+   </div>
+   <div style="padding:1.5rem;max-height:60vh;overflow-y:auto;">
+    <!-- Connect view -->
+    <div id="gh-connect-view">
+     <div style="text-align:center;padding:1rem 0;">
+      <svg style="width:3rem;height:3rem;margin:0 auto 1rem;display:block;color:#1f2937;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      <p style="font-size:0.875rem;color:#6b7280;margin-bottom:1rem;">Hubungkan akun GitHub Anda untuk memilih dan mengimpor repository secara langsung.</p>
+      <button onclick="connectGithub()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;font-size:0.875rem;font-weight:500;color:#fff;background:#111827;border:none;border-radius:0.75rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#1f2937'" onmouseout="this.style.background='#111827'">
+       <svg style="width:1rem;height:1rem;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+       Connect ke GitHub
+      </button>
+     </div>
+    </div>
+    <!-- Repo list view -->
+    <div id="gh-repos-view" style="display:none;">
+     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+      <p style="font-size:0.75rem;font-weight:500;color:#6b7280;">Pilih repository</p>
+      <button onclick="disconnectGithub()" style="font-size:0.75rem;color:#9ca3af;background:none;border:none;cursor:pointer;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#9ca3af'">Putuskan</button>
+     </div>
+     <div id="gh-repo-list" style="display:flex;flex-direction:column;gap:0.375rem;max-height:40vh;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:center;padding:2rem 0;font-size:0.75rem;color:#9ca3af;">
+       <svg style="width:1.25rem;height:1.25rem;animation:spin 1s linear infinite;margin-right:0.5rem;" fill="none" viewBox="0 0 24 24"><circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+       Memuat repository...
+      </div>
+     </div>
+    </div>
+    <!-- Import progress view -->
+    <div id="gh-progress-view" style="display:none;">
+     <div style="display:flex;flex-direction:column;align-items:center;padding:1.5rem 0;">
+      <svg style="width:2rem;height:2rem;animation:spin 1s linear infinite;margin-bottom:1rem;color:#273849;" fill="none" viewBox="0 0 24 24"><circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+      <p id="gh-import-progress" style="font-size:0.875rem;color:#4b5563;text-align:center;">Mengimpor repository...</p>
+     </div>
+    </div>
+    <p id="gh-modal-error" style="font-size:0.75rem;color:#ef4444;margin-top:0.75rem;text-align:center;display:none;"></p>
+   </div>
+  </div>
+ </div>
+ <style>@keyframes spin{100%{transform:rotate(360deg)}}</style>
 
- <!-- GitHub Import Modal -->
- <div id="github-modal-overlay" onclick="if(event.target===this) closeGithubModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm hidden z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0">
- <div id="github-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
- <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
- <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
- <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
- Import dari GitHub
- </h3>
- <button onclick="closeGithubModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors">
- <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
- </button>
- </div>
- <div class="p-6 max-h-[60vh] overflow-y-auto">
- <!-- Connect view (shown when not connected) -->
- <div id="github-connect-view">
- <div class="text-center py-4">
- <svg class="w-12 h-12 mx-auto mb-4 text-gray-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
- <p class="text-sm text-gray-500 mb-4">Hubungkan akun GitHub Anda untuk memilih dan mengimpor repository secara langsung.</p>
- <button onclick="connectGithub()" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition-colors focus:outline-none shadow-sm">
- <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
- Connect ke GitHub
- </button>
- </div>
- </div>
- <!-- Repo list view (shown when connected) -->
- <div id="github-repos-view" class="hidden">
- <div class="flex items-center justify-between mb-3">
- <p class="text-xs font-medium text-gray-500">Pilih repository</p>
- <button onclick="disconnectGithub()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">Putuskan</button>
- </div>
- <div id="github-repo-list" class="space-y-1.5 max-h-[40vh] overflow-y-auto">
- <div class="flex items-center justify-center py-8 text-xs text-gray-400">
- <svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
- Memuat repository...
- </div>
- </div>
- </div>
- <!-- Import progress view -->
- <div id="github-progress-view" class="hidden">
- <div class="flex flex-col items-center py-6">
- <svg class="w-8 h-8 animate-spin mb-4 text-[#273849]" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
- <p id="github-import-progress" class="text-sm text-gray-600 text-center">Mengimpor repository...</p>
- </div>
- </div>
- <p id="github-modal-error" class="text-xs text-red-500 mt-3 hidden text-center"></p>
- </div>
- 
- </div>
- </div>
+
 
  <script>
  let projects = [];
@@ -1462,7 +1367,6 @@ document.addEventListener('click', () => {
  const pageDatabase = document.getElementById('page-database');
  const pageStorage = document.getElementById('page-storage');
  const pageSqlConnection = document.getElementById('page-sql-connection');
- const pageSuperagent = document.getElementById('page-superagent');
  
  const listContainer = document.getElementById('project-list');
  const emptyState = document.getElementById('empty-state');
@@ -1787,7 +1691,6 @@ document.addEventListener('click', (e) => {
  if (_analyticsRefreshTimer) { clearInterval(_analyticsRefreshTimer); _analyticsRefreshTimer = null; }
  }
 
- var _saInitialized = false;
  function handleRoute() {
  const params = new URLSearchParams(window.location.search);
  const path = params.get('p') || '/';
@@ -1796,42 +1699,38 @@ document.addEventListener('click', (e) => {
  if (path.startsWith('/tambah')) {
  stopAnalyticsRefresh();
  setupFormPage(null);
- showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection, pageSuperagent]);
+ showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
  } else if (path.startsWith('/edit/')) {
  stopAnalyticsRefresh();
  const id = parseInt(path.replace('/edit/', ''));
  setupFormPage(id);
- showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection, pageSuperagent]);
+ showPage(pageForm, [pageMain, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
  } else if (path.startsWith('/proyek/')) {
  stopAnalyticsRefresh();
  const id = parseInt(path.replace('/proyek/', ''));
  setupDetailPage(id);
- showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection, pageSuperagent]);
+ showPage(pageProjectDetail, [pageMain, pageForm, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
  } else if (path.startsWith('/analytics')) {
- showPage(pageAnalytics, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageDatabase, pageStorage, pageSqlConnection, pageSuperagent]); updateAnalyticsProjectName();
+ showPage(pageAnalytics, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageDatabase, pageStorage, pageSqlConnection]); updateAnalyticsProjectName();
  initAnalyticsCharts();
  } else if (path.startsWith('/editor')) {
  stopAnalyticsRefresh();
- showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection, pageSuperagent]);
+ showPage(pageFileEditor, [pageMain, pageForm, pageProjectDetail, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
  } else if (path.startsWith('/database')) {
  stopAnalyticsRefresh();
- showPage(pageDatabase, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageStorage, pageSqlConnection, pageSuperagent]);
+ showPage(pageDatabase, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageStorage, pageSqlConnection]);
  if (typeof initDatabasePage === 'function') initDatabasePage();
  } else if (path.startsWith('/storage')) {
  stopAnalyticsRefresh();
- showPage(pageStorage, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageSqlConnection, pageSuperagent]);
+ showPage(pageStorage, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageSqlConnection]);
  if (typeof initStoragePage === 'function') initStoragePage();
  } else if (path.startsWith('/sql-connection')) {
  stopAnalyticsRefresh();
- showPage(pageSqlConnection, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSuperagent]);
+ showPage(pageSqlConnection, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage]);
  if (typeof initSqlConnectionPage === 'function') initSqlConnectionPage();
- } else if (path.startsWith('/superagent')) {
- stopAnalyticsRefresh();
- showPage(pageSuperagent, [pageMain, pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
- if (!_saInitialized) { _saInitialized = true; initSuperagent(); }
  } else {
  stopAnalyticsRefresh();
- showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection, pageSuperagent]);
+ showPage(pageMain, [pageForm, pageProjectDetail, pageFileEditor, pageAnalytics, pageDatabase, pageStorage, pageSqlConnection]);
  applyFilters();
  }
  }
@@ -2026,7 +1925,7 @@ document.addEventListener('click', (e) => {
  function showInputModal() {
  const overlay = document.getElementById('input-modal-overlay');
  const modal = document.getElementById('input-modal');
- overlay.classList.remove('hidden');
+ overlay.style.display = 'flex';
  setTimeout(() => {
  overlay.classList.remove('opacity-0');
  modal.classList.remove('opacity-0', 'scale-95');
@@ -2054,7 +1953,7 @@ document.addEventListener('click', (e) => {
  modal.classList.add('opacity-0', 'scale-95');
  
  setTimeout(() => {
- overlay.classList.add('hidden');
+ overlay.style.display = 'none';
  modalAction = null;
  itemBeingRenamed = null;
  }, 300);
@@ -2316,6 +2215,47 @@ document.addEventListener('click', () => {
  saveData();
  renderFileList();
  showInfoModal((itemName.split('.').length > 1 ? 'File' : 'Folder') + ' berhasil dihapus', 'success');
+ var deletedPath = currentFolderPath === 'root' ? itemName : currentFolderPath + '/' + itemName;
+ githubAutoPushFile(deletedPath, '', 'delete');
+ }
+
+ async function pushItemToGithub() {
+ var menu = document.getElementById('item-action-menu');
+ if (menu) menu.classList.add('hidden');
+ if (!activeItemName) return;
+ var item = (projectFilesData[currentFolderPath] || []).find(function(i) { return i.name === activeItemName; });
+ if (!item || item.type !== 'file') return;
+ var filePath = currentFolderPath === 'root' ? item.name : currentFolderPath + '/' + item.name;
+ var result = await githubUpdateFile(filePath, item.content || '');
+ if (result.success) {
+ showInfoModal('File berhasil dipush ke GitHub', 'success');
+ } else if (result.error && result.error.includes('No repo linked')) {
+ showInfoModal('Proyek belum terhubung ke GitHub', 'error');
+ } else if (result.error && result.error === 'Not connected') {
+ showInfoModal('Hubungkan akun GitHub terlebih dahulu', 'error');
+ } else {
+ showInfoModal('Gagal push: ' + (result.error || 'Unknown error'), 'error');
+ }
+ }
+
+ async function syncAllToGithub() {
+ var menu = document.getElementById('item-action-menu');
+ if (menu) menu.classList.add('hidden');
+ var result = await githubSyncAll();
+ if (result.success) {
+ showInfoModal('Semua file berhasil disinkronisasi ke GitHub', 'success');
+ } else {
+ showInfoModal('Gagal sync: ' + (result.error || 'Unknown error'), 'error');
+ }
+ }
+
+ function linkProjectToGithub() {
+ var menu = document.getElementById('project-action-menu');
+ if (menu) menu.classList.add('hidden');
+ if (!projectActionMenuTargetId) return;
+ currentProjectId = projectActionMenuTargetId;
+ githubImportMode = 'files';
+ openGithubModal();
  }
 
  function triggerImport(type) {
@@ -2360,6 +2300,7 @@ document.addEventListener('click', () => {
  projectFilesData[targetPath].push({ type: 'file', name: file.name, size: sizeStr, path: filePath, content: content });
  }
  saveData();
+ githubAutoPushFile(filePath, content, 'create');
  if (targetPath === currentFolderPath || targetPath.startsWith(currentFolderPath)) renderFileList();
  };
  const type = getFileType(file.name);
@@ -2382,21 +2323,21 @@ document.addEventListener('click', () => {
  }
 
  function showGithubConnectView() {
- document.getElementById('github-connect-view').classList.remove('hidden');
- document.getElementById('github-repos-view').classList.add('hidden');
- document.getElementById('github-progress-view').classList.add('hidden');
+ document.getElementById('gh-connect-view').style.display = 'block';
+ document.getElementById('gh-repos-view').style.display = 'none';
+ document.getElementById('gh-progress-view').style.display = 'none';
  }
 
  function showGithubReposView() {
- document.getElementById('github-connect-view').classList.add('hidden');
- document.getElementById('github-repos-view').classList.remove('hidden');
- document.getElementById('github-progress-view').classList.add('hidden');
+ document.getElementById('gh-connect-view').style.display = 'none';
+ document.getElementById('gh-repos-view').style.display = 'block';
+ document.getElementById('gh-progress-view').style.display = 'none';
  }
 
  function showGithubProgressView() {
- document.getElementById('github-connect-view').classList.add('hidden');
- document.getElementById('github-repos-view').classList.add('hidden');
- document.getElementById('github-progress-view').classList.remove('hidden');
+ document.getElementById('gh-connect-view').style.display = 'none';
+ document.getElementById('gh-repos-view').style.display = 'none';
+ document.getElementById('gh-progress-view').style.display = 'block';
  }
 
 
@@ -2438,19 +2379,150 @@ document.addEventListener('click', () => {
  }
  }
 
+
+ async function githubCreateFile(filePath, content) {
+ var token = getGithubToken();
+ if (!token) return { success: false, error: 'Not connected' };
+ var repoInfoStr = localStorage.getItem('clincoo_' + currentProjectId + '_github_repo');
+ if (!repoInfoStr) return { success: false, error: 'No repo linked' };
+ var repoInfo = JSON.parse(repoInfoStr);
+ var parts = repoInfo.full_name.split('/');
+ var owner = parts[0], repo = parts[1];
+ var branch = repoInfo.branch || 'main';
+ try {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/create-file', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+ body: JSON.stringify({ owner: owner, repo: repo, branch: branch, path: filePath, content: content, message: 'Create ' + filePath })
+ });
+ return await res.json();
+ } catch(e) { return { success: false, error: e.message }; }
+ }
+
+ async function githubUpdateFile(filePath, content) {
+ var token = getGithubToken();
+ if (!token) return { success: false, error: 'Not connected' };
+ var repoInfoStr = localStorage.getItem('clincoo_' + currentProjectId + '_github_repo');
+ if (!repoInfoStr) return { success: false, error: 'No repo linked' };
+ var repoInfo = JSON.parse(repoInfoStr);
+ var parts = repoInfo.full_name.split('/');
+ var owner = parts[0], repo = parts[1];
+ var branch = repoInfo.branch || 'main';
+ try {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/update-file', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+ body: JSON.stringify({ owner: owner, repo: repo, branch: branch, path: filePath, content: content, message: 'Update ' + filePath })
+ });
+ return await res.json();
+ } catch(e) { return { success: false, error: e.message }; }
+ }
+
+ async function githubDeleteFile(filePath) {
+ var token = getGithubToken();
+ if (!token) return { success: false, error: 'Not connected' };
+ var repoInfoStr = localStorage.getItem('clincoo_' + currentProjectId + '_github_repo');
+ if (!repoInfoStr) return { success: false, error: 'No repo linked' };
+ var repoInfo = JSON.parse(repoInfoStr);
+ var parts = repoInfo.full_name.split('/');
+ var owner = parts[0], repo = parts[1];
+ var branch = repoInfo.branch || 'main';
+ try {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/delete-file', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+ body: JSON.stringify({ owner: owner, repo: repo, branch: branch, path: filePath, message: 'Delete ' + filePath })
+ });
+ return await res.json();
+ } catch(e) { return { success: false, error: e.message }; }
+ }
+
+ async function githubDeleteRepo(owner, repo) {
+ var token = getGithubToken();
+ if (!token) return { success: false, error: 'Not connected' };
+ try {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/delete-repo', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+ body: JSON.stringify({ owner: owner, repo: repo })
+ });
+ return await res.json();
+ } catch(e) { return { success: false, error: e.message }; }
+ }
+
+ async function githubCreateRepo(name, isPrivate, description) {
+ var token = getGithubToken();
+ if (!token) return { success: false, error: 'Not connected' };
+ try {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/create-repo', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+ body: JSON.stringify({ name: name, private: isPrivate, description: description || '' })
+ });
+ return await res.json();
+ } catch(e) { return { success: false, error: e.message }; }
+ }
+
+ async function githubSyncAll() {
+ var token = getGithubToken();
+ if (!token) return { success: false, error: 'Not connected' };
+ var repoInfoStr = localStorage.getItem('clincoo_' + currentProjectId + '_github_repo');
+ if (!repoInfoStr) return { success: false, error: 'No repo linked' };
+ var repoInfo = JSON.parse(repoInfoStr);
+ var parts = repoInfo.full_name.split('/');
+ var owner = parts[0], repo = parts[1];
+ var branch = repoInfo.branch || 'main';
+ var storageKey = 'clincoo_' + currentProjectId + '_files';
+ var localFiles = {};
+ try { localFiles = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+ var allFiles = [];
+ for (var folderPath in localFiles) {
+ if (!Array.isArray(localFiles[folderPath])) continue;
+ for (var i = 0; i < localFiles[folderPath].length; i++) {
+ var fItem = localFiles[folderPath][i];
+ if (fItem.type === 'file' && fItem.content) {
+ var fp = folderPath === 'root' ? fItem.name : folderPath + '/' + fItem.name;
+ allFiles.push({ path: fp, content: fItem.content });
+ }
+ }
+ }
+ if (allFiles.length === 0) return { success: false, error: 'No files to sync' };
+ try {
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/sync', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'X-GitHub-Token': token },
+ body: JSON.stringify({ owner: owner, repo: repo, branch: branch, files: allFiles, deletedFiles: [], message: 'Sync from Clincoo' })
+ });
+ return await res.json();
+ } catch(e) { return { success: false, error: e.message }; }
+ }
+
+ async function githubAutoPushFile(filePath, content, action) {
+ var token = getGithubToken();
+ if (!token) return;
+ var repoInfoStr = localStorage.getItem('clincoo_' + currentProjectId + '_github_repo');
+ if (!repoInfoStr) return;
+ try {
+ if (action === 'create') {
+ await githubCreateFile(filePath, content);
+ } else if (action === 'update') {
+ await githubUpdateFile(filePath, content);
+ } else if (action === 'delete') {
+ await githubDeleteFile(filePath);
+ }
+ } catch(e) { console.warn('[Clincoo GitHub] Auto-push error:', e.message); }
+ }
+
  function openGithubModal() {
- var overlay = document.getElementById('github-modal-overlay');
- var modal = document.getElementById('github-modal');
- var errEl = document.getElementById('github-modal-error');
+ var overlay = document.getElementById('gh-modal-overlay');
+ var errEl = document.getElementById('gh-modal-error');
  if (!overlay) return;
- overlay.classList.remove('hidden');
- setTimeout(function() {
- overlay.classList.remove('opacity-0');
- overlay.classList.add('opacity-100');
- modal.classList.remove('scale-95', 'opacity-0');
- modal.classList.add('scale-100', 'opacity-100');
- }, 10);
- if (errEl) errEl.classList.add('hidden');
+ // Move modal to body to escape any parent stacking context (e.g. sidebar)
+ if (overlay.parentNode !== document.body) {
+ document.body.appendChild(overlay);
+ }
+ overlay.style.display = 'flex';
+ if (errEl) errEl.style.display = 'none';
  if (getGithubToken()) {
  showGithubReposView();
  loadGithubRepos();
@@ -2460,26 +2532,19 @@ document.addEventListener('click', () => {
  }
 
  function closeGithubModal() {
- var overlay = document.getElementById('github-modal-overlay');
- var modal = document.getElementById('github-modal');
- if (overlay) {
- overlay.classList.add('opacity-0');
- overlay.classList.remove('opacity-100');
- modal.classList.add('scale-95', 'opacity-0');
- modal.classList.remove('scale-100', 'opacity-100');
- setTimeout(function() { overlay.classList.add('hidden'); }, 300);
- }
+ var overlay = document.getElementById('gh-modal-overlay');
+ if (overlay) overlay.style.display = 'none';
  }
 
  async function loadGithubRepos() {
  var token = getGithubToken();
- var listEl = document.getElementById('github-repo-list');
- var errEl = document.getElementById('github-modal-error');
+ var listEl = document.getElementById('gh-repo-list');
+ var errEl = document.getElementById('gh-modal-error');
  if (!token) { showGithubConnectView(); return; }
- if (listEl) listEl.innerHTML = '<div class="flex items-center justify-center py-8 text-xs text-gray-400"><svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Memuat repository...</div>';
+ if (listEl) listEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:2rem 0;font-size:0.75rem;color:#9ca3af;"><svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Memuat repository...</div>';
  try {
- var res = await fetch('https://api.github.com/user/repos?sort=updated&per_page=100', {
- headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+ var res = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/repos', {
+ headers: { 'X-GitHub-Token': token }
  });
  if (!res.ok) {
  if (res.status === 401) {
@@ -2489,7 +2554,16 @@ document.addEventListener('click', () => {
  }
  throw new Error('Gagal memuat repository (' + res.status + ')');
  }
- var repos = await res.json();
+ var resData = await res.json();
+ if (!resData.success) {
+ if (resData.status === 401) {
+ localStorage.removeItem('clincoo_github_token');
+ showGithubConnectView();
+ return;
+ }
+ throw new Error(resData.error || 'Gagal memuat repository');
+ }
+ var repos = resData.data;
  if (repos.length === 0) {
  if (listEl) listEl.innerHTML = '<p class="text-xs text-gray-400 text-center py-6">Tidak ada repository ditemukan</p>';
  return;
@@ -2507,14 +2581,14 @@ document.addEventListener('click', () => {
  }
  if (listEl) listEl.innerHTML = html;
  } catch(err) {
- if (errEl) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
  if (listEl) listEl.innerHTML = '<p class="text-xs text-red-500 text-center py-4">' + err.message + '</p>';
  }
  }
 
  async function startGithubImport(fullName, branch) {
- var errEl = document.getElementById('github-modal-error');
- var progressEl = document.getElementById('github-import-progress');
+ var errEl = document.getElementById('gh-modal-error');
+ var progressEl = document.getElementById('gh-import-progress');
  var token = getGithubToken();
  if (!token) { showGithubConnectView(); return; }
  var parts = fullName.split('/');
@@ -2535,18 +2609,14 @@ document.addEventListener('click', () => {
  if (progressEl) progressEl.textContent = 'Mengambil struktur repository...';
  }
  try {
- var treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/' + branch + '?recursive=1', {
- headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+ var treeRes = await fetch('https://clincoo-deploy.clincoo.workers.dev/github/tree?owner=' + encodeURIComponent(owner) + '&repo=' + encodeURIComponent(repo) + '&branch=' + encodeURIComponent(branch), {
+ headers: { 'X-GitHub-Token': token }
  });
- if (!treeRes.ok) {
- if (treeRes.status === 404) {
- treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees/master?recursive=1', {
- headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
- });
- }
- }
  if (!treeRes.ok) throw new Error('Repository tidak ditemukan');
- var treeData = await treeRes.json();
+ var treeResData = await treeRes.json();
+ if (!treeResData.success) throw new Error(treeResData.error || 'Repository tidak ditemukan');
+ var treeData = treeResData.data;
+ if (treeResData.branch) branch = treeResData.branch;
  var files = (treeData.tree || []).filter(function(item) { return item.type === 'blob'; });
  if (files.length === 0) throw new Error('Tidak ada file di repository');
  if (progressEl) progressEl.textContent = '0/' + files.length + ' file...';
@@ -2567,8 +2637,8 @@ document.addEventListener('click', () => {
  }
  currentPathIter = newPath;
  }
- var rawUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/' + filePath;
- var fileRes = await fetch(rawUrl);
+ var fileUrl = 'https://clincoo-deploy.clincoo.workers.dev/github/file?owner=' + encodeURIComponent(owner) + '&repo=' + encodeURIComponent(repo) + '&branch=' + encodeURIComponent(branch) + '&path=' + encodeURIComponent(filePath) + '&token=' + encodeURIComponent(token);
+ var fileRes = await fetch(fileUrl);
  if (!fileRes.ok) continue;
  var fileType = getFileType(fileName);
  var content;
@@ -2606,6 +2676,7 @@ document.addEventListener('click', () => {
  saveData();
  renderFileList();
  if (progressEl) progressEl.textContent = 'Selesai! ' + importedCount + ' file diimport.';
+ localStorage.setItem('clincoo_' + currentProjectId + '_github_repo', JSON.stringify({ full_name: fullName, branch: branch }));
  setTimeout(function() {
  closeGithubModal();
  if (isProjectMode) {
@@ -2615,7 +2686,7 @@ document.addEventListener('click', () => {
  }, 1500);
  } catch(err) {
  console.error('[Clincoo GitHub] Error:', err.message);
- if (errEl) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
  showGithubReposView();
  }
  }
@@ -2811,6 +2882,8 @@ document.addEventListener('click', () => {
  projectFilesData[currentFolderPath][itemIndex].content = codeContent;
  projectFilesData[currentFolderPath][itemIndex].size = sizeStr;
  saveData();
+ var savedPath = currentFolderPath === 'root' ? editingFileName : currentFolderPath + '/' + editingFileName;
+ githubAutoPushFile(savedPath, codeContent, 'update');
  }
  }
  const audioPlayer = document.getElementById('audio-player');
@@ -3064,14 +3137,7 @@ document.addEventListener('click', () => {
  var parts = repoInfo.full_name.split('/');
  var owner = parts[0];
  var repo = parts[1];
- try {
- var res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
- method: 'DELETE',
- headers: { 'Authorization': 'token ' + getGithubToken(), 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
- });
- if (res.status === 204) console.log('[Clincoo] GitHub repo deleted:', repoInfo.full_name);
- else console.warn('[Clincoo] GitHub repo delete failed:', res.status);
- } catch(e) { console.warn('[Clincoo] GitHub delete error:', e.message); }
+ await githubDeleteRepo(owner, repo);
  }
  }
 
@@ -4753,14 +4819,14 @@ async function saveDeployDomain() {
  var password = document.getElementById('auth-password-input').value;
  var errEl = document.getElementById('auth-password-error');
  if (!password) {
- if (errEl) { errEl.textContent = 'Masukkan password'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'Masukkan password'; errEl.style.display = 'block'; }
  return;
  }
  if (password !== AUTH_PASSWORD) {
- if (errEl) { errEl.textContent = 'Password salah'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'Password salah'; errEl.style.display = 'block'; }
  return;
  }
- if (errEl) errEl.classList.add('hidden');
+ if (errEl) errEl.style.display = 'none';
  document.getElementById('auth-step-password').classList.add('hidden');
  document.getElementById('auth-step-pin').classList.remove('hidden');
  document.getElementById('pin-1').focus();
@@ -4785,14 +4851,14 @@ async function saveDeployDomain() {
  }
  var errEl = document.getElementById('auth-pin-error');
  if (pin.length !== 6) {
- if (errEl) { errEl.textContent = 'Masukkan 6 digit PIN'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'Masukkan 6 digit PIN'; errEl.style.display = 'block'; }
  return;
  }
  if (pin !== AUTH_PIN) {
- if (errEl) { errEl.textContent = 'PIN salah'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'PIN salah'; errEl.style.display = 'block'; }
  return;
  }
- if (errEl) errEl.classList.add('hidden');
+ if (errEl) errEl.style.display = 'none';
  localStorage.setItem('clincoo_authed', 'true');
  document.getElementById('auth-overlay').classList.add('hidden');
  loadData();
@@ -4817,501 +4883,6 @@ async function saveDeployDomain() {
  handleRoute();
  });
  
-
- function initSuperagent() {
- if (window.pdfjsLib) { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js'; }
- var SA_KEY = 'clincoo_chats_v1';
- var SA_GEMINI_KEY = ["AQ.Ab8RN6Il", "zlTDDm1GFCg34", "ktlS4IUV4Fo0c2", "NAg8wuT9GAdvLJA"].join("");
- var SA_PRIMARY = "gemini-3.6-flash";
- var SA_FALLBACK = "gemini-3-flash-preview";
- var SA_FALLBACK2 = "gemini-2.5-flash";
- var saContainer = document.getElementById('sa-chat-container');
- var saInput = document.getElementById('sa-chat-input');
- var saBtnAction = document.getElementById('sa-btn-action');
- var saActionIcon = document.getElementById('sa-action-icon');
- var saBtnPlus = document.getElementById('sa-btn-plus');
- var saUploadPopup = document.getElementById('sa-upload-popup');
- var saBtnUploadImg = document.getElementById('sa-btn-upload-img');
- var saBtnUploadDoc = document.getElementById('sa-btn-upload-doc');
- var saImgUpload = document.getElementById('sa-image-upload');
- var saDocUpload = document.getElementById('sa-doc-upload');
- var saAttPreview = document.getElementById('sa-attachment-preview');
- var saAttIcon = document.getElementById('sa-attachment-preview-icon');
- var saAttName = document.getElementById('sa-attachment-preview-name');
- var saAttSize = document.getElementById('sa-attachment-preview-size');
- var saBtnRemoveAtt = document.getElementById('sa-btn-remove-attachment');
- var saSessions = JSON.parse(localStorage.getItem(SA_KEY)) || [];
- var saCurrentSessionId = null;
- var saMessages = [];
- var saAttachment = null;
- var saGenerating = false;
- var saTypingInterval = null;
- var saCurrentAiId = null;
- var saStatusInterval = null;
- var saAbortController = null;
- var saAutoScroll = true;
- var saIsInteracting = false;
- var saImageTimeout = null;
- var saGreetings = ["Ada rencana apa hari ini?", "Halo! Ada yang bisa saya bantu hari ini?", "Siap mewujudkan ide hebatmu hari ini?", "Apa proyek seru kita selanjutnya?", "Mari selesaikan berbagai tugas bersamaku!"];
- var saGreeting = saGreetings[Math.floor(Math.random() * saGreetings.length)];
-
- function saGenId() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
-
- function saSave() { localStorage.setItem(SA_KEY, JSON.stringify(saSessions)); }
-
- function saNewSession() {
- saCurrentSessionId = saGenId();
- saMessages = [];
- saGreeting = saGreetings[Math.floor(Math.random() * saGreetings.length)];
- saSessions.unshift({ id: saCurrentSessionId, title: 'Percakapan Baru', updatedAt: Date.now(), messages: saMessages });
- saSave();
- saRenderMessages();
- }
-
- function saUpdateSession() {
- if (!saCurrentSessionId) return;
- var si = saSessions.findIndex(function(s) { return s.id === saCurrentSessionId; });
- if (si !== -1) {
- saSessions[si].messages = saMessages.map(function(m) { var c = Object.assign({}, m); c.isProcessing = false; c.isTyping = false; return c; });
- saSessions[si].updatedAt = Date.now();
- saSessions.sort(function(a, b) { return b.updatedAt - a.updatedAt; });
- saSave();
- }
- }
-
- function saBalanceMd(text) {
- if (!text) return text;
- var r = text;
- var cb = (r.match(/```/g) || []).length;
- if (cb % 2 !== 0) r += '\n```';
- var t4 = r.replace(/```[\s\S]*?```/g, '');
- var bt = (t4.match(/`/g) || []).length;
- if (bt % 2 !== 0) r += '`';
- return r;
- }
-
- if (window.marked) {
- marked.use({
- breaks: true, gfm: true,
- renderer: {
- table: function(header, body) {
- return '<div class="w-full overflow-x-auto sa-custom-scroll my-4 rounded-xl border border-gray-300 shadow-sm bg-white"><table class="w-full min-w-max border-collapse text-sm text-left m-0"><thead class="bg-gray-100">' + header + '</thead><tbody>' + body + '</tbody></table></div>';
- },
- tablerow: function(content) { return '<tr class="hover:bg-gray-50 transition-colors">' + content + '</tr>'; },
- tablecell: function(content, flags) {
- var type = flags.header ? 'th' : 'td';
- var cls = flags.header ? 'p-3 font-bold text-gray-900 border border-gray-300 whitespace-nowrap' : 'p-3 text-gray-800 border border-gray-300 align-top';
- return '<' + type + ' class="' + cls + '">' + content + '</' + type + '>';
- },
- code: function(code_or_token, lang_opt) {
- var code = typeof code_or_token === 'string' ? code_or_token : code_or_token.text;
- var lang = typeof code_or_token === 'string' ? lang_opt : (code_or_token.lang || '');
- lang = (lang || '').trim();
- var fLang = lang;
- var hc = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
- if (window.hljs) {
- try {
- if (lang && hljs.getLanguage(lang)) { hc = hljs.highlight(code, { language: lang }).value; }
- else { var ar = hljs.highlightAuto(code); hc = ar.value; fLang = ar.language || 'text'; }
- } catch(e) {}
- }
- var dl = fLang ? (fLang.charAt(0).toUpperCase() + fLang.slice(1)) : 'Code / File';
- var enc = encodeURIComponent(code);
- var bid = 'sa-code-' + Math.random().toString(36).substr(2, 9);
- var runBtn = '';
- var rbl = ['python', 'javascript', 'js', 'java', 'c', 'cpp', 'php', 'ruby', 'go', 'rust', 'html'];
- if (rbl.includes(fLang.toLowerCase())) {
- if (fLang.toLowerCase() === 'html') {
- runBtn = '<button onclick="saPreviewHTML(this, \'' + bid + '\')" data-code="' + enc + '" class="text-gray-400 hover:text-white transition flex items-center justify-center rounded-lg p-1.5 hover:bg-gray-600" title="Preview"><i class="ph-bold ph-eye text-[18px]"></i></button>';
- } else {
- runBtn = '<button onclick="saRunCode(this, \'' + fLang.toLowerCase() + '\', \'' + bid + '\')" data-code="' + enc + '" class="text-gray-400 hover:text-white transition flex items-center justify-center rounded-lg p-1.5 hover:bg-gray-600" title="Jalankan"><i class="ph-bold ph-play text-[18px]"></i></button>';
- }
- }
- var saveBtn = '';
- if (currentProjectId) {
- saveBtn = '<button onclick="saSaveToProject(this)" data-code="' + enc + '" data-lang="' + (fLang || 'txt') + '" class="text-gray-400 hover:text-white transition flex items-center justify-center rounded-lg p-1.5 hover:bg-gray-600" title="Simpan ke Proyek"><i class="ph-bold ph-folder-simple-plus text-[18px]"></i></button>';
- }
- return '<div class="my-4 bg-[#1e1e1e] rounded-[16px] overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.1)] w-full max-w-full border border-gray-800"><div class="flex items-center justify-between px-4 py-3 bg-[#2d2d2d] border-b border-gray-700"><span class="text-[13px] font-bold text-gray-300 uppercase tracking-wider">' + dl + '</span><div class="flex items-center gap-2">' + runBtn + saveBtn + '<button onclick="saDownloadCode(this, \'' + (fLang || 'txt') + '\')" data-code="' + enc + '" class="text-gray-400 hover:text-white transition flex items-center justify-center rounded-lg p-1.5 hover:bg-gray-600" title="Download"><i class="ph ph-cloud-arrow-down text-[18px]"></i></button><button onclick="saCopyCode(this)" data-code="' + enc + '" class="text-gray-400 hover:text-white transition flex items-center justify-center rounded-lg p-1.5 hover:bg-gray-600" title="Copy"><i class="ph ph-copy text-[18px]"></i></button></div></div><div id="' + bid + '-code-container" class="p-4 overflow-x-auto bg-[#1e1e1e] sa-code-container sa-custom-scroll w-full"><pre style="margin:0;width:100%;"><code class="hljs text-[13.5px] font-mono leading-relaxed bg-transparent p-0 text-gray-300" style="white-space:pre;min-width:100%;display:inline-block;padding-bottom:0.25rem;">' + hc + '</code></pre></div><div id="' + bid + '-output-container" class="hidden bg-[#121212] p-4 transition-all w-full"><div class="text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-wider flex items-center gap-2"><i class="ph ph-terminal-window text-[14px]"></i> Output</div><pre id="' + bid + '-output" class="text-[13px] font-mono whitespace-pre-wrap break-words max-h-80 overflow-y-auto text-gray-200"></pre><iframe id="' + bid + '-iframe" class="hidden w-full h-80 bg-white rounded-md border-0"></iframe></div></div>';
- }
- }
- });
- }
-
- function saFormatMd(text) { if (!text) return ''; try { return marked.parse(text); } catch(e) { return text; } }
-
- function saReadDataUrl(file) { return new Promise(function(res) { var r = new FileReader(); r.onload = function(e) { res(e.target.result); }; r.readAsDataURL(file); }); }
- function saReadText(file) { return new Promise(function(res) { var r = new FileReader(); r.onload = function(e) { res(e.target.result); }; r.readAsText(file); }); }
-
- async function saLoadPDF(file) {
- try {
- var ab = await file.arrayBuffer();
- var pdf = await pdfjsLib.getDocument(ab).promise;
- var t = '';
- for (var i = 1; i <= Math.min(pdf.numPages, 10); i++) { var pg = await pdf.getPage(i); var c = await pg.getTextContent(); t += c.items.map(function(it) { return it.str; }).join(' ') + '\n'; }
- return t;
- } catch(err) { return 'Gagal membaca file PDF.'; }
- }
-
- function saFormatSize(b) { if (b === 0) return '0 Bytes'; var k = 1024, s = ['Bytes','KB','MB','GB'], i = Math.floor(Math.log(b)/Math.log(k)); return parseFloat((b/Math.pow(k,i)).toFixed(1)) + ' ' + s[i]; }
-
- async function saHandleUpload(e, type) {
- var file = e.target.files[0]; if (!file) return;
- var data = null, text = null;
- if (type === 'image') { data = await saReadDataUrl(file); }
- else { if (file.type === 'application/pdf') { text = await saLoadPDF(file); } else { text = await saReadText(file); } }
- saAttachment = { file: file, type: type, name: file.name, size: saFormatSize(file.size), data: data, text: text };
- saShowAttPreview();
- e.target.value = '';
- }
-
- function saShowAttPreview() {
- if (!saAttachment) return;
- saAttName.innerText = saAttachment.name;
- saAttSize.innerText = saAttachment.size;
- if (saAttachment.type === 'image') { saAttIcon.innerHTML = '<img src="' + saAttachment.data + '" class="w-full h-full object-cover">'; }
- else { saAttIcon.innerHTML = '<i class="ph ph-file-text text-xl text-gray-500"></i>'; }
- saAttPreview.classList.remove('hidden');
- saAttPreview.classList.add('sa-fade-in');
- }
-
- saBtnPlus.addEventListener('click', function(e) {
- e.stopPropagation();
- if (saUploadPopup.classList.contains('hidden')) { saUploadPopup.classList.remove('hidden'); saBtnPlus.classList.add('rotate-45'); }
- else { saUploadPopup.classList.add('hidden'); saBtnPlus.classList.remove('rotate-45'); }
- });
-
- saBtnUploadImg.addEventListener('click', function() { saImgUpload.click(); saUploadPopup.classList.add('hidden'); saBtnPlus.classList.remove('rotate-45'); });
- saBtnUploadDoc.addEventListener('click', function() { saDocUpload.click(); saUploadPopup.classList.add('hidden'); saBtnPlus.classList.remove('rotate-45'); });
- saImgUpload.addEventListener('change', function(e) { saHandleUpload(e, 'image'); });
- saDocUpload.addEventListener('change', function(e) { saHandleUpload(e, 'document'); });
- saBtnRemoveAtt.addEventListener('click', function() { saAttachment = null; saAttPreview.classList.add('hidden'); });
-
- function saAdjustInput() {
- saInput.style.height = '38px';
- if (saInput.value.trim() === '') return;
- var sh = saInput.scrollHeight;
- if (sh > 45) { saInput.style.height = Math.min(sh, 140) + 'px'; if (sh > 140) { saInput.classList.replace('overflow-hidden', 'overflow-y-auto'); } else { saInput.classList.replace('overflow-y-auto', 'overflow-hidden'); } }
- else { saInput.style.height = '38px'; saInput.classList.replace('overflow-y-auto', 'overflow-hidden'); }
- }
- saInput.addEventListener('input', saAdjustInput);
-
- function saScrollToBottom(smooth) { if (saContainer) { saContainer.scrollTo({ top: saContainer.scrollHeight, behavior: smooth ? 'smooth' : 'auto' }); } }
-
- saContainer.addEventListener('touchstart', function() { saIsInteracting = true; }, {passive: true});
- saContainer.addEventListener('touchend', function() { saIsInteracting = false; }, {passive: true});
- saContainer.addEventListener('mousedown', function() { saIsInteracting = true; });
- document.addEventListener('mouseup', function() { saIsInteracting = false; });
- saContainer.addEventListener('wheel', function() { saIsInteracting = true; clearTimeout(saContainer.wheelTimeout); saContainer.wheelTimeout = setTimeout(function() { saIsInteracting = false; }, 250); }, {passive: true});
- saContainer.addEventListener('scroll', function() {
- var th = 15, cs = Math.ceil(saContainer.scrollTop), ms = saContainer.scrollHeight - saContainer.clientHeight;
- if (ms - cs > th) { saAutoScroll = false; } else { saAutoScroll = true; }
- });
-
- function saRenderMessages() {
- saContainer.innerHTML = '';
- if (saMessages.length === 0) {
- saContainer.innerHTML = '<div class="flex-1 flex flex-col items-center justify-center text-center px-6" style="min-height: 60vh;"><div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-6"><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="w-10 h-10"><circle cx="16" cy="16" r="16" fill="#000"/><g fill="#fff"><path d="M10 16C7 10 9 7 12 7C14 7 15 11 13 16Z"/><path d="M22 16C25 10 23 7 20 7C18 7 17 11 19 16Z"/><path d="M16 27C24 27 28 22.5 28 17C28 12.5 21 11.5 16 11.5C11 11.5 4 12.5 4 17C4 22.5 8 27 16 27Z"/></g></svg></div><h2 class="sa-font-montserrat text-2xl font-extrabold text-black mb-1">Halo, saya Clincoo</h2><p class="sa-shiny-text sa-font-montserrat text-lg font-semibold">' + saGreeting + '</p></div>';
- return;
- }
- var lastAiIdx = -1, lastUserIdx = -1;
- saMessages.forEach(function(m, i) { if (m.role === 'ai') lastAiIdx = i; if (m.role === 'user') lastUserIdx = i; });
-
- saMessages.forEach(function(msg, index) {
- var el = document.createElement('div');
- el.className = 'flex w-full ' + (msg.role === 'user' ? 'justify-end' : 'justify-start') + ' sa-fade-in';
- if (msg.role === 'ai') {
- var isLastAi = index === lastAiIdx;
- if (msg.isProcessing) {
- var steps = { think: 'Thinking...', search: 'Searching...', read: 'Menganalisis...', file: 'Menganalisis...', image: 'Menganalisis...' };
- var st = steps[msg.processType] || 'Thinking...';
- el.innerHTML = '<div class="flex items-center gap-3 max-w-[80%]"><div class="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"><svg viewBox="0 0 32 32" class="w-5 h-5"><circle cx="16" cy="16" r="16" fill="#000"/><g fill="#fff"><path d="M10 16C7 10 9 7 12 7C14 7 15 11 13 16Z"/><path d="M22 16C25 10 23 7 20 7C18 7 17 11 19 16Z"/><path d="M16 27C24 27 28 22.5 28 17C28 12.5 21 11.5 16 11.5C11 11.5 4 12.5 4 17C4 22.5 8 27 16 27Z"/></g></svg></div><div class="flex flex-col"><p class="text-sm font-medium text-gray-800">Clincoo</p><p id="status-text-' + msg.id + '" class="text-sm text-gray-500 transition-opacity duration-250">' + st + '</p></div></div>';
- } else {
- var content = msg.text || '';
- if (msg.isTyping) content = saBalanceMd(content);
- el.innerHTML = '<div class="flex flex-col max-w-[85%] w-full"><div class="flex items-center gap-2 mb-1.5"><div class="w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0"><svg viewBox="0 0 32 32" class="w-4 h-4"><circle cx="16" cy="16" r="16" fill="#000"/><g fill="#fff"><path d="M10 16C7 10 9 7 12 7C14 7 15 11 13 16Z"/><path d="M22 16C25 10 23 7 20 7C18 7 17 11 19 16Z"/><path d="M16 27C24 27 28 22.5 28 17C28 12.5 21 11.5 16 11.5C11 11.5 4 12.5 4 17C4 22.5 8 27 16 27Z"/></g></svg></div><span class="text-sm font-semibold text-gray-800">Clincoo</span></div><div id="msg-text-' + msg.id + '" class="bg-white text-black px-0 py-1 text-[15px] leading-relaxed sa-md' + (msg.isTyping ? ' sa-typing-cursor' : '') + '">' + saFormatMd(content) + '</div>' + (msg.isImageResponse ? '<div class="flex items-center gap-3 mt-1"><button onclick="saDownloadImg(\'' + msg.imageUrl + '\')" class="text-gray-400 hover:text-black transition p-1" title="Unduh"><i class="ph ph-download-simple text-lg"></i></button></div>' : '<div class="flex items-center gap-3 mt-1" ' + ((msg.isProcessing || msg.isTyping) ? 'style="display:none;"' : '') + '><button onclick="saCopyText(\'' + msg.id + '\', this)" class="text-gray-400 hover:text-black transition p-1" title="Salin"><i class="ph ph-copy text-lg"></i></button><button onclick="saShareText(\'' + msg.id + '\')" class="text-gray-400 hover:text-black transition p-1" title="Bagikan"><i class="ph ph-arrow-bend-up-right text-lg"></i></button>' + (isLastAi ? '<button onclick="saRetry(\'' + msg.id + '\')" class="text-gray-400 hover:text-black transition p-1" title="Ulangi"><i class="ph ph-arrow-clockwise text-lg"></i></button>' : '') + '</div>') + '</div>';
- }
- } else {
- var attHtml = '';
- if (msg.attachment) {
- if (msg.attachment.type === 'image') { attHtml = '<img src="' + msg.attachment.data + '" class="max-w-[200px] sm:max-w-[250px] rounded-lg mb-2 border border-gray-200/50 shadow-sm">'; }
- else { attHtml = '<div class="flex items-center gap-2 bg-black/5 p-2 rounded-lg mb-2 border border-black/5"><i class="ph ph-file-text text-2xl text-gray-700"></i><div class="flex-1 overflow-hidden"><p class="text-sm font-semibold truncate text-gray-800">' + msg.attachment.name + '</p></div></div>'; }
- }
- el.innerHTML = '<div class="flex flex-col items-end max-w-[85%] w-full"><div class="bg-gray-100 text-black px-4 py-2.5 rounded-2xl rounded-br-sm text-[15px] leading-relaxed sa-md" style="word-break:break-word;overflow-wrap:break-word;">' + attHtml + (msg.text ? saFormatMd(msg.text) : '') + '</div></div>';
- }
- saContainer.appendChild(el);
- });
- saScrollToBottom(false);
- }
-
- window.saCopyText = function(id, btn) {
- var msg = saMessages.find(function(m) { return m.id === id; });
- if (msg) {
- var ta = document.createElement('textarea'); ta.value = msg.text; document.body.appendChild(ta); ta.select();
- try { document.execCommand('copy'); } catch(e) {}
- document.body.removeChild(ta);
- if (btn) { var icon = btn.querySelector('i'); if (icon) { icon.className = 'ph-bold ph-check text-lg'; setTimeout(function() { icon.className = 'ph ph-copy text-lg'; }, 1500); } }
- }
- };
-
- window.saShareText = function(id) {
- var msg = saMessages.find(function(m) { return m.id === id; });
- if (msg && navigator.share) { navigator.share({ text: msg.text }).catch(function() {}); }
- };
-
- window.saRetry = function(msgId) {
- var idx = saMessages.findIndex(function(m) { return m.id === msgId; });
- if (idx !== -1) saMessages.splice(idx, 1);
- saRenderMessages(); saUpdateSession(); saFetchAI();
- };
-
- window.saDownloadImg = function(url) {
- var a = document.createElement('a'); a.href = url; a.download = 'clincoo-image.jpg'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
- };
-
- window.saCopyCode = function(btn) {
- var code = decodeURIComponent(btn.getAttribute('data-code'));
- var ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select();
- try { document.execCommand('copy'); } catch(e) {}
- document.body.removeChild(ta);
- };
-
- window.saDownloadCode = function(btn, lang) {
- var code = decodeURIComponent(btn.getAttribute('data-code'));
- var ext = lang || 'txt';
- var blob = new Blob([code], { type: 'text/plain' });
- var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'code.' + ext; document.body.appendChild(a); a.click(); document.body.removeChild(a);
- };
-
- window.saSaveToProject = function(btn) {
- var code = decodeURIComponent(btn.getAttribute('data-code'));
- var lang = btn.getAttribute('data-lang') || 'txt';
- if (!currentProjectId) return;
- var extMap = { 'python': 'py', 'javascript': 'js', 'js': 'js', 'html': 'html', 'css': 'css', 'json': 'json', 'java': 'java', 'c': 'c', 'cpp': 'cpp', 'php': 'php', 'ruby': 'rb', 'go': 'go', 'rust': 'rs', 'markdown': 'md', 'text': 'txt' };
- var ext = extMap[lang.toLowerCase()] || lang || 'txt';
- var name = 'file_' + Date.now() + '.' + ext;
- if (!projectFilesData['root']) projectFilesData['root'] = [];
- projectFilesData['root'].push({ type: 'file', name: name, size: saFormatSize(new Blob([code]).size), path: name, content: code });
- saveData();
- renderFileList();
- var icon = btn.querySelector('i'); if (icon) { icon.className = 'ph-bold ph-check text-[18px]'; setTimeout(function() { icon.className = 'ph-bold ph-folder-simple-plus text-[18px]'; }, 1500); }
- };
-
- window.saRunCode = async function(btn, lang, bid) {
- var code = decodeURIComponent(btn.getAttribute('data-code'));
- var outEl = document.getElementById(bid + '-output');
- var outContainer = document.getElementById(bid + '-output-container');
- if (outContainer) outContainer.classList.remove('hidden');
- if (outEl) outEl.innerHTML = '<span class="text-yellow-400 animate-pulse">Menjalankan...</span>';
- try {
- var resp = await fetch('https://emkc.org/api/v2/piston/execute', {
- method: 'POST', headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ language: lang, version: '*', files: [{ content: code }] })
- });
- var data = await resp.json();
- if (data.compile && data.compile.code !== 0) { outEl.innerHTML = '<span class="text-red-400">' + data.compile.stderr.replace(/</g, '&lt;') + '</span>'; }
- else if (data.run) {
- var out = data.run.output.replace(/</g, '&lt;');
- if (data.run.code !== 0) { outEl.innerHTML = '<span class="text-red-400">' + (out || 'Error') + '</span>'; }
- else { outEl.innerHTML = '<span class="text-green-400">' + (out || 'Berhasil') + '</span>'; }
- }
- } catch(err) { outEl.innerHTML = '<span class="text-red-400">Gagal menjalankan kode.</span>'; }
- };
-
- window.saPreviewHTML = function(btn, bid) {
- var code = decodeURIComponent(btn.getAttribute('data-code'));
- var iframe = document.getElementById(bid + '-iframe');
- var outContainer = document.getElementById(bid + '-output-container');
- if (outContainer) outContainer.classList.remove('hidden');
- if (iframe) { iframe.classList.remove('hidden'); iframe.srcdoc = code; }
- };
-
- function saCheckSearch(text) {
- var t = text.toLowerCase();
- var kw = ['cari di web', 'search google', 'pencarian web', 'berita hari ini', 'berita terbaru', 'harga saham hari ini', 'cuaca hari ini', 'skor pertandingan terkini', 'update terkini hari ini'];
- return kw.some(function(k) { return t.includes(k); }) || (t.includes('cari') && t.includes('terbaru'));
- }
-
- function saCheckImage(text) {
- var t = text.toLowerCase();
- var kw = ['buatkan gambar', 'bikin gambar', 'buat gambar', 'generate image', 'tolong gambar', 'lukiskan'];
- return kw.some(function(k) { return t.includes(k); });
- }
-
- function saCheckTime(text) {
- var t = text.toLowerCase();
- var kw = ['jam berapa', 'waktu sekarang', 'pukul berapa', 'tanggal berapa', 'hari apa', 'bulan apa', 'tahun berapa', 'sekarang jam'];
- return kw.some(function(k) { return t.includes(k); });
- }
-
- function saParseDataUrl(du) { if (!du || !du.includes(',')) return null; var p = du.split(','); var mm = p[0].match(/:(.*?);/); return { mimeType: mm ? mm[1] : 'image/jpeg', base64Data: p[1] }; }
-
- async function saFetchAI() {
- saToggleAction(true); saAutoScroll = true;
- var lastUser = [].concat(saMessages).reverse().find(function(m) { return m.role === 'user'; });
- var lastText = (lastUser && lastUser.text) || '';
- var hasAtt = !!(lastUser && lastUser.attachment);
- var urlRe = /(https?:\/\/[^\s]+)|(\b[a-zA-Z0-9-]+\.(com|id|net|dev|org|ai|io|co|tech|edu|gov)(?:\/[^\s]*)?\b)/gi;
- var urls = lastText.match(urlRe);
- var hasUrl = false;
- if (urls && urls.length > 0) { hasUrl = true; if (!urls[0].startsWith('http')) { urls[0] = 'https://' + urls[0]; } }
- var isTime = !hasUrl && saCheckTime(lastText);
- var needsSearch = !hasUrl && !isTime && saCheckSearch(lastText);
- var needsImage = !hasUrl && !hasAtt && saCheckImage(lastText);
- var pType = 'think';
- if (hasUrl) pType = 'read'; else if (needsImage) pType = 'image'; else if (needsSearch) pType = 'search'; else if (hasAtt) pType = 'file';
- var aiMsg = { id: saGenId(), role: 'ai', text: '', isProcessing: true, isTyping: false, processType: pType };
- saMessages.push(aiMsg); saRenderMessages();
- saCurrentAiId = aiMsg.id; saAbortController = new AbortController();
-
- var steps = { think: ['Thinking...'], search: ['Searching...'], read: ['Menganalisis...'], file: ['Menganalisis...'], image: ['Menganalisis...'] };
- var curSteps = steps[pType] || ['Thinking...'];
- var stepIdx = 0;
- saStatusInterval = setInterval(function() {
- var stEl = document.getElementById('status-text-' + aiMsg.id);
- if (stEl) { if (curSteps.length > 1) { stepIdx = (stepIdx + 1) % curSteps.length; stEl.classList.add('opacity-0'); setTimeout(function() { stEl.innerText = curSteps[stepIdx]; stEl.classList.remove('opacity-0'); }, 250); } }
- else { clearInterval(saStatusInterval); }
- }, 2000);
-
- var buf = '', done = false, charIdx = 0, gotData = false;
- var timeout = setTimeout(function() {
- if (!gotData) {
- if (!aiMsg._retried) { aiMsg._retried = true; saStopGen(); setTimeout(function() { saRetry(aiMsg.id); }, 500); }
- else {
- var mi = saMessages.findIndex(function(m) { return m.id === aiMsg.id; });
- if (mi !== -1) { saMessages[mi].text = 'Sedang memuat... <span onclick="saRetry(\'' + aiMsg.id + '\')" class="cursor-pointer underline font-medium">ketuk untuk melanjutkan</span>'; saMessages[mi].isError = true; }
- saStopGen();
- }
- }
- }, 90000);
-
- if (needsImage) {
- try {
- clearTimeout(timeout);
- var pr = lastText.replace(/buatkan gambar|bikin gambar|buat gambar|generate image|tolong gambar|lukiskan/gi, '').trim();
- var fp = pr || lastText;
- var sp = encodeURIComponent(fp);
- var sd = Math.floor(Math.random() * 1000000);
- var iu = 'https://image.pollinations.ai/prompt/' + sp + '?seed=' + sd + '&nologo=true';
- saImageTimeout = setTimeout(function() {
- var mi = saMessages.findIndex(function(m) { return m.id === aiMsg.id; });
- if (mi !== -1) { saMessages[mi].text = '<div class="flex justify-center w-full my-2"><img src="' + iu + '" class="w-full max-w-sm rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.1)] border border-gray-200" alt="Generated" loading="lazy" onload="document.getElementById(\'sa-chat-container\').scrollTo({top:999999})"></div>'; saMessages[mi].isProcessing = false; saMessages[mi].isTyping = false; saMessages[mi].isImageResponse = true; saMessages[mi].imageUrl = iu; }
- saStopGen();
- }, 3500);
- return;
- } catch(e) { clearTimeout(timeout); buf = 'Terjadi kesalahan.'; done = true; var mi = saMessages.findIndex(function(m) { return m.id === aiMsg.id; }); if (mi !== -1) saMessages[mi].isError = true; }
- }
-
- var timeCtx = '';
- if (isTime) { var now = new Date(); timeCtx = '\n\n[WAKTU SEKARANG]: ' + now.toLocaleString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB.'; }
-
- var extCtx = '';
- if (hasUrl) { try { var r = await fetch('https://r.jina.ai/' + urls[0]); if (r.ok) { extCtx = '[KONTEN WEB]: ' + (await r.text()).substring(0, 5000); } } catch(e) {} }
- else if (needsSearch) { try { var sr = await fetch('https://r.jina.ai/https://www.google.com/search?q=' + encodeURIComponent(lastText)); if (sr.ok) { extCtx = '[HASIL PENCARIAN WEB]: ' + (await sr.text()).substring(0, 5000); } } catch(e) {} }
-
- var sysInst = 'Kamu adalah Clincoo, Superagent AI yang sangat cerdas, ramah, dan membantu. Jawablah menggunakan bahasa Indonesia yang natural dan mudah dipahami, kecuali diminta lain. Gunakan format Markdown untuk menyusun jawaban agar lebih rapi dan terstruktur. PERHATIAN KHUSUS: Saat menyapa pengguna, jawablah secara ramah, hangat, dan alami TANPA menyebutkan tanggal, nama hari, bulan, tahun, atau waktu saat ini kecuali jika pengguna secara khusus menanyakan. Jika diberikan [DATA REAL-TIME DARI WEB] atau [HASIL PENCARIAN WEB], jadikan data tersebut sebagai SUMBER UTAMA.';
-
- try {
- var contents = [];
- var hist = saMessages.filter(function(m) { return !m.isHidden && m.id !== aiMsg.id; });
- hist.forEach(function(m) {
- var role = (m.role === 'ai' || m.role === 'assistant') ? 'model' : 'user';
- var parts = [];
- if (m.attachment && m.attachment.type === 'image' && m.attachment.data) { var pd = saParseDataUrl(m.attachment.data); if (pd) { parts.push({ inlineData: { mimeType: pd.mimeType, data: pd.base64Data } }); } }
- var tc = m.text || '';
- if (m.attachment && m.attachment.type === 'document' && m.attachment.text) { tc += '\n\n[Isi Dokumen (' + m.attachment.name + ')]:\n' + m.attachment.text.substring(0, 10000); }
- if (tc.trim()) { parts.push({ text: tc }); } else if (parts.length === 0) { parts.push({ text: 'Analisis lampiran ini.' }); }
- contents.push({ role: role, parts: parts });
- });
- var sysText = sysInst + timeCtx + (extCtx ? '\n\n' + extCtx : '');
- var payload = { contents: contents, systemInstruction: { parts: [{ text: sysText }] } };
-
- var response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + SA_PRIMARY + ':streamGenerateContent?alt=sse&key=' + SA_GEMINI_KEY, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: saAbortController.signal });
- if (!response.ok) { response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + SA_FALLBACK + ':streamGenerateContent?alt=sse&key=' + SA_GEMINI_KEY, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: saAbortController.signal }); }
- if (!response.ok) { response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + SA_FALLBACK2 + ':streamGenerateContent?alt=sse&key=' + SA_GEMINI_KEY, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: saAbortController.signal }); }
- if (!response.ok) { throw new Error('HTTP ' + response.status); }
-
- gotData = true; clearTimeout(timeout); clearInterval(saStatusInterval);
- var mi = saMessages.findIndex(function(m) { return m.id === aiMsg.id; });
- if (mi !== -1 && saMessages[mi].isProcessing) { saMessages[mi].isProcessing = false; saMessages[mi].isTyping = true; }
-
- var reader = response.body.getReader();
- var decoder = new TextDecoder();
- while (true) {
- var rd = await reader.read();
- if (rd.done) { done = true; break; }
- var chunk = decoder.decode(rd.value, { stream: true });
- var lines = chunk.split('\n');
- for (var li = 0; li < lines.length; li++) {
- if (lines[li].startsWith('data: ')) {
- var ds = lines[li].slice(6).trim();
- if (!ds || ds === '[DONE]') continue;
- try { var d = JSON.parse(ds); if (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts) { d.candidates[0].content.parts.forEach(function(p) { if (p.text) buf += p.text; }); } } catch(e) {}
- }
- }
- }
- } catch(e) {
- if (e.name !== 'AbortError') { buf = 'Maaf, terjadi kesalahan. Coba lagi.'; done = true; var mi = saMessages.findIndex(function(m) { return m.id === aiMsg.id; }); if (mi !== -1) saMessages[mi].isError = true; }
- }
-
- if (!saGenerating || !saCurrentAiId) return;
- if (saTypingInterval) clearInterval(saTypingInterval);
- var lt = '';
- saTypingInterval = setInterval(function() {
- if (charIdx < buf.length) {
- var diff = buf.length - charIdx;
- var n = 1; if (diff > 15) n = Math.ceil(diff / 4);
- lt += buf.substring(charIdx, charIdx + n); charIdx += n;
- var mi = saMessages.findIndex(function(m) { return m.id === aiMsg.id; });
- if (mi !== -1) { saMessages[mi].text = lt; var te = document.getElementById('msg-text-' + aiMsg.id); if (te) { te.innerHTML = saFormatMd(saBalanceMd(lt)); te.classList.add('sa-typing-cursor'); } }
- saScrollToBottom(false);
- } else if (done && charIdx >= buf.length) { saStopGen(); }
- }, 10);
- }
-
- function saStopGen() {
- saGenerating = false; saToggleAction(false);
- if (saTypingInterval) { clearInterval(saTypingInterval); saTypingInterval = null; }
- if (saStatusInterval) { clearInterval(saStatusInterval); saStatusInterval = null; }
- if (saAbortController) { try { saAbortController.abort(); } catch(e) {} saAbortController = null; }
- if (saCurrentAiId) {
- var mi = saMessages.findIndex(function(m) { return m.id === saCurrentAiId; });
- if (mi !== -1) { saMessages[mi].isProcessing = false; saMessages[mi].isTyping = false; var te = document.getElementById('msg-text-' + saCurrentAiId); if (te) te.classList.remove('sa-typing-cursor'); }
- saCurrentAiId = null;
- }
- saRenderMessages(); saUpdateSession();
- }
-
- function saToggleAction(gen) {
- saGenerating = gen;
- if (gen) { saActionIcon.className = 'ph-bold ph-stop text-lg transition-all'; }
- else { saActionIcon.className = 'ph-bold ph-arrow-up text-lg transition-all'; }
- }
-
- saBtnAction.addEventListener('click', function() {
- if (saGenerating) { saStopGen(); }
- else {
- var text = saInput.value.trim();
- if (text || saAttachment) {
- saMessages.push({ id: saGenId(), role: 'user', text: text, attachment: saAttachment });
- saInput.value = ''; saAdjustInput(); saAttachment = null; saAttPreview.classList.add('hidden'); saAutoScroll = true;
- saRenderMessages(); saUpdateSession(); saFetchAI();
- }
- }
- });
-
- saInput.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!saGenerating) saBtnAction.click(); } });
-
- document.addEventListener('click', function(e) {
- if (!e.target.closest('#sa-btn-plus') && !e.target.closest('#sa-upload-popup')) { if (!saUploadPopup.classList.contains('hidden')) { saUploadPopup.classList.add('hidden'); saBtnPlus.classList.remove('rotate-45'); } }
- });
-
- if (saSessions.length > 0) {
- saCurrentSessionId = saSessions[0].id;
- saMessages = JSON.parse(JSON.stringify(saSessions[0].messages));
- saRenderMessages();
- } else { saNewSession(); }
- }
-
  </script>
  <script src="assets/js/backend.js"></script>
 </body>
