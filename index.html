@@ -1182,55 +1182,56 @@
  </div>
  </div>
 
- <!-- GitHub Import Modal -->
- <div id="github-modal-overlay" onclick="if(event.target===this) closeGithubModal()" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[100] flex items-center justify-center transition-opacity duration-300 opacity-0" style="display:none">
- <div id="github-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-all duration-300 opacity-0">
- <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
- <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
- <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
- Import dari GitHub
- </h3>
- <button onclick="closeGithubModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none p-1.5 rounded-full hover:bg-gray-100 transition-colors">
- <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
- </button>
+ <!-- GitHub Import Modal (NEW) -->
+ <div id="gh-modal-overlay" onclick="if(event.target===this) closeGithubModal()" style="display:none;position:fixed;inset:0;background:rgba(17,24,39,0.5);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;">
+  <div id="gh-modal-box" style="background:#fff;border-radius:16px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);width:100%;max-width:24rem;margin:0 1rem;overflow:hidden;">
+   <div style="padding:1.25rem 1.5rem;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:between;">
+    <h3 style="font-size:1.125rem;font-weight:700;color:#111827;display:flex;align-items:center;gap:0.5rem;flex:1;">
+     <svg style="width:1.25rem;height:1.25rem;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+     Import dari GitHub
+    </h3>
+    <button onclick="closeGithubModal()" style="color:#9ca3af;padding:0.375rem;border-radius:9999px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='transparent'">
+     <svg style="width:1.25rem;height:1.25rem;" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+   </div>
+   <div style="padding:1.5rem;max-height:60vh;overflow-y:auto;">
+    <!-- Connect view -->
+    <div id="gh-connect-view">
+     <div style="text-align:center;padding:1rem 0;">
+      <svg style="width:3rem;height:3rem;margin:0 auto 1rem;display:block;color:#1f2937;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      <p style="font-size:0.875rem;color:#6b7280;margin-bottom:1rem;">Hubungkan akun GitHub Anda untuk memilih dan mengimpor repository secara langsung.</p>
+      <button onclick="connectGithub()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1.25rem;font-size:0.875rem;font-weight:500;color:#fff;background:#111827;border:none;border-radius:0.75rem;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#1f2937'" onmouseout="this.style.background='#111827'">
+       <svg style="width:1rem;height:1rem;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+       Connect ke GitHub
+      </button>
+     </div>
+    </div>
+    <!-- Repo list view -->
+    <div id="gh-repos-view" style="display:none;">
+     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+      <p style="font-size:0.75rem;font-weight:500;color:#6b7280;">Pilih repository</p>
+      <button onclick="disconnectGithub()" style="font-size:0.75rem;color:#9ca3af;background:none;border:none;cursor:pointer;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#9ca3af'">Putuskan</button>
+     </div>
+     <div id="gh-repo-list" style="display:flex;flex-direction:column;gap:0.375rem;max-height:40vh;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:center;padding:2rem 0;font-size:0.75rem;color:#9ca3af;">
+       <svg style="width:1.25rem;height:1.25rem;animation:spin 1s linear infinite;margin-right:0.5rem;" fill="none" viewBox="0 0 24 24"><circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+       Memuat repository...
+      </div>
+     </div>
+    </div>
+    <!-- Import progress view -->
+    <div id="gh-progress-view" style="display:none;">
+     <div style="display:flex;flex-direction:column;align-items:center;padding:1.5rem 0;">
+      <svg style="width:2rem;height:2rem;animation:spin 1s linear infinite;margin-bottom:1rem;color:#273849;" fill="none" viewBox="0 0 24 24"><circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+      <p id="gh-import-progress" style="font-size:0.875rem;color:#4b5563;text-align:center;">Mengimpor repository...</p>
+     </div>
+    </div>
+    <p id="gh-modal-error" style="font-size:0.75rem;color:#ef4444;margin-top:0.75rem;text-align:center;display:none;"></p>
+   </div>
+  </div>
  </div>
- <div class="p-6 max-h-[60vh] overflow-y-auto">
- <!-- Connect view (shown when not connected) -->
- <div id="github-connect-view">
- <div class="text-center py-4">
- <svg class="w-12 h-12 mx-auto mb-4 text-gray-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
- <p class="text-sm text-gray-500 mb-4">Hubungkan akun GitHub Anda untuk memilih dan mengimpor repository secara langsung.</p>
- <button onclick="connectGithub()" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition-colors focus:outline-none shadow-sm">
- <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
- Connect ke GitHub
- </button>
- </div>
- </div>
- <!-- Repo list view (shown when connected) -->
- <div id="github-repos-view" class="hidden">
- <div class="flex items-center justify-between mb-3">
- <p class="text-xs font-medium text-gray-500">Pilih repository</p>
- <button onclick="disconnectGithub()" class="text-xs text-gray-400 hover:text-red-500 transition-colors">Putuskan</button>
- </div>
- <div id="github-repo-list" class="space-y-1.5 max-h-[40vh] overflow-y-auto">
- <div class="flex items-center justify-center py-8 text-xs text-gray-400">
- <svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
- Memuat repository...
- </div>
- </div>
- </div>
- <!-- Import progress view -->
- <div id="github-progress-view" class="hidden">
- <div class="flex flex-col items-center py-6">
- <svg class="w-8 h-8 animate-spin mb-4 text-[#273849]" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
- <p id="github-import-progress" class="text-sm text-gray-600 text-center">Mengimpor repository...</p>
- </div>
- </div>
- <p id="github-modal-error" class="text-xs text-red-500 mt-3 hidden text-center"></p>
- </div>
- 
- </div>
- </div>
+ <style>@keyframes spin{100%{transform:rotate(360deg)}}</style>
+
 
  <script>
  let projects = [];
@@ -2322,21 +2323,21 @@ document.addEventListener('click', () => {
  }
 
  function showGithubConnectView() {
- document.getElementById('github-connect-view').classList.remove('hidden');
- document.getElementById('github-repos-view').classList.add('hidden');
- document.getElementById('github-progress-view').classList.add('hidden');
+ document.getElementById('gh-connect-view').style.display = 'block';
+ document.getElementById('gh-repos-view').style.display = 'none';
+ document.getElementById('gh-progress-view').style.display = 'none';
  }
 
  function showGithubReposView() {
- document.getElementById('github-connect-view').classList.add('hidden');
- document.getElementById('github-repos-view').classList.remove('hidden');
- document.getElementById('github-progress-view').classList.add('hidden');
+ document.getElementById('gh-connect-view').style.display = 'none';
+ document.getElementById('gh-repos-view').style.display = 'block';
+ document.getElementById('gh-progress-view').style.display = 'none';
  }
 
  function showGithubProgressView() {
- document.getElementById('github-connect-view').classList.add('hidden');
- document.getElementById('github-repos-view').classList.add('hidden');
- document.getElementById('github-progress-view').classList.remove('hidden');
+ document.getElementById('gh-connect-view').style.display = 'none';
+ document.getElementById('gh-repos-view').style.display = 'none';
+ document.getElementById('gh-progress-view').style.display = 'block';
  }
 
 
@@ -2513,18 +2514,11 @@ document.addEventListener('click', () => {
  }
 
  function openGithubModal() {
- var overlay = document.getElementById('github-modal-overlay');
- var modal = document.getElementById('github-modal');
- var errEl = document.getElementById('github-modal-error');
+ var overlay = document.getElementById('gh-modal-overlay');
+ var errEl = document.getElementById('gh-modal-error');
  if (!overlay) return;
  overlay.style.display = 'flex';
- setTimeout(function() {
- overlay.classList.remove('opacity-0');
- overlay.classList.add('opacity-100');
- modal.classList.remove('scale-95', 'opacity-0');
- modal.classList.add('scale-100', 'opacity-100');
- }, 10);
- if (errEl) errEl.classList.add('hidden');
+ if (errEl) errEl.style.display = 'none';
  if (getGithubToken()) {
  showGithubReposView();
  loadGithubRepos();
@@ -2534,23 +2528,16 @@ document.addEventListener('click', () => {
  }
 
  function closeGithubModal() {
- var overlay = document.getElementById('github-modal-overlay');
- var modal = document.getElementById('github-modal');
- if (overlay) {
- overlay.classList.add('opacity-0');
- overlay.classList.remove('opacity-100');
- modal.classList.add('scale-95', 'opacity-0');
- modal.classList.remove('scale-100', 'opacity-100');
- setTimeout(function() { overlay.style.display = 'none'; }, 300);
- }
+ var overlay = document.getElementById('gh-modal-overlay');
+ if (overlay) overlay.style.display = 'none';
  }
 
  async function loadGithubRepos() {
  var token = getGithubToken();
- var listEl = document.getElementById('github-repo-list');
- var errEl = document.getElementById('github-modal-error');
+ var listEl = document.getElementById('gh-repo-list');
+ var errEl = document.getElementById('gh-modal-error');
  if (!token) { showGithubConnectView(); return; }
- if (listEl) listEl.innerHTML = '<div class="flex items-center justify-center py-8 text-xs text-gray-400"><svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Memuat repository...</div>';
+ if (listEl) listEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:2rem 0;font-size:0.75rem;color:#9ca3af;"><svg class="w-5 h-5 animate-spin mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>Memuat repository...</div>';
  try {
  var res = await fetch('https://api.github.com/user/repos?sort=updated&per_page=100', {
  headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
@@ -2581,14 +2568,14 @@ document.addEventListener('click', () => {
  }
  if (listEl) listEl.innerHTML = html;
  } catch(err) {
- if (errEl) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
  if (listEl) listEl.innerHTML = '<p class="text-xs text-red-500 text-center py-4">' + err.message + '</p>';
  }
  }
 
  async function startGithubImport(fullName, branch) {
- var errEl = document.getElementById('github-modal-error');
- var progressEl = document.getElementById('github-import-progress');
+ var errEl = document.getElementById('gh-modal-error');
+ var progressEl = document.getElementById('gh-import-progress');
  var token = getGithubToken();
  if (!token) { showGithubConnectView(); return; }
  var parts = fullName.split('/');
@@ -2690,7 +2677,7 @@ document.addEventListener('click', () => {
  }, 1500);
  } catch(err) {
  console.error('[Clincoo GitHub] Error:', err.message);
- if (errEl) { errEl.textContent = err.message; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = err.message; errEl.style.display = 'block'; }
  showGithubReposView();
  }
  }
@@ -4823,14 +4810,14 @@ async function saveDeployDomain() {
  var password = document.getElementById('auth-password-input').value;
  var errEl = document.getElementById('auth-password-error');
  if (!password) {
- if (errEl) { errEl.textContent = 'Masukkan password'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'Masukkan password'; errEl.style.display = 'block'; }
  return;
  }
  if (password !== AUTH_PASSWORD) {
- if (errEl) { errEl.textContent = 'Password salah'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'Password salah'; errEl.style.display = 'block'; }
  return;
  }
- if (errEl) errEl.classList.add('hidden');
+ if (errEl) errEl.style.display = 'none';
  document.getElementById('auth-step-password').classList.add('hidden');
  document.getElementById('auth-step-pin').classList.remove('hidden');
  document.getElementById('pin-1').focus();
@@ -4855,14 +4842,14 @@ async function saveDeployDomain() {
  }
  var errEl = document.getElementById('auth-pin-error');
  if (pin.length !== 6) {
- if (errEl) { errEl.textContent = 'Masukkan 6 digit PIN'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'Masukkan 6 digit PIN'; errEl.style.display = 'block'; }
  return;
  }
  if (pin !== AUTH_PIN) {
- if (errEl) { errEl.textContent = 'PIN salah'; errEl.classList.remove('hidden'); }
+ if (errEl) { errEl.textContent = 'PIN salah'; errEl.style.display = 'block'; }
  return;
  }
- if (errEl) errEl.classList.add('hidden');
+ if (errEl) errEl.style.display = 'none';
  localStorage.setItem('clincoo_authed', 'true');
  document.getElementById('auth-overlay').classList.add('hidden');
  loadData();
