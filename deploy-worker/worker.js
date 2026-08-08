@@ -460,6 +460,206 @@ async function handleRequest(request, env) {
       return jsonRes({ success: false, error: 'Push error: ' + e.message }, 500);
     }
   }
+  if (path === '/github/create-file') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) { return jsonRes({ success: false, error: 'Invalid JSON' }, 400); }
+    const owner = body.owner || '';
+    const repo = body.repo || '';
+    const branch = body.branch || 'main';
+    const filePath = (body.path || '').replace(/^\//, '');
+    const content = body.content || '';
+    const message = body.message || 'Create ' + filePath;
+    if (!owner || !repo || !filePath) return jsonRes({ success: false, error: 'owner, repo, path required' }, 400);
+    try {
+      const isBinary = content.startsWith('data:');
+      let encodedContent, encoding;
+      if (isBinary) {
+        encodedContent = content.split(',')[1] || '';
+        encoding = 'base64';
+      } else {
+        encodedContent = btoa(unescape(encodeURIComponent(content)));
+        encoding = 'base64';
+      }
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodeURIComponent(filePath), {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ message: message, content: encodedContent, branch: branch })
+      });
+      const data = await res.json();
+      if (!res.ok) return jsonRes({ success: false, error: (data && data.message) || ('GitHub error ' + res.status), status: res.status }, res.status === 401 ? 401 : 500);
+      return jsonRes({ success: true, message: 'File created: ' + filePath, sha: data.content && data.content.sha });
+    } catch(e) { return jsonRes({ success: false, error: 'Create file error: ' + e.message }, 500); }
+  }
+  if (path === '/github/update-file') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) { return jsonRes({ success: false, error: 'Invalid JSON' }, 400); }
+    const owner = body.owner || '';
+    const repo = body.repo || '';
+    const branch = body.branch || 'main';
+    const filePath = (body.path || '').replace(/^\//, '');
+    const content = body.content || '';
+    const message = body.message || 'Update ' + filePath;
+    if (!owner || !repo || !filePath) return jsonRes({ success: false, error: 'owner, repo, path required' }, 400);
+    try {
+      const checkRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodeURIComponent(filePath) + '?ref=' + branch, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      let sha = '';
+      if (checkRes.ok) { const checkData = await checkRes.json(); sha = checkData.sha; }
+      const isBinary = content.startsWith('data:');
+      let encodedContent;
+      if (isBinary) { encodedContent = content.split(',')[1] || ''; }
+      else { encodedContent = btoa(unescape(encodeURIComponent(content))); }
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodeURIComponent(filePath), {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ message: message, content: encodedContent, branch: branch, sha: sha })
+      });
+      const data = await res.json();
+      if (!res.ok) return jsonRes({ success: false, error: (data && data.message) || ('GitHub error ' + res.status), status: res.status }, res.status === 401 ? 401 : 500);
+      return jsonRes({ success: true, message: 'File updated: ' + filePath, sha: data.content && data.content.sha });
+    } catch(e) { return jsonRes({ success: false, error: 'Update file error: ' + e.message }, 500); }
+  }
+  if (path === '/github/delete-file') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) { return jsonRes({ success: false, error: 'Invalid JSON' }, 400); }
+    const owner = body.owner || '';
+    const repo = body.repo || '';
+    const branch = body.branch || 'main';
+    const filePath = (body.path || '').replace(/^\//, '');
+    const message = body.message || 'Delete ' + filePath;
+    if (!owner || !repo || !filePath) return jsonRes({ success: false, error: 'owner, repo, path required' }, 400);
+    try {
+      const checkRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodeURIComponent(filePath) + '?ref=' + branch, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      if (!checkRes.ok) return jsonRes({ success: false, error: 'File not found' }, 404);
+      const checkData = await checkRes.json();
+      const sha = checkData.sha;
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodeURIComponent(filePath), {
+        method: 'DELETE',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ message: message, sha: sha, branch: branch })
+      });
+      if (!res.ok) { const data = await res.json(); return jsonRes({ success: false, error: (data && data.message) || ('GitHub error ' + res.status) }, res.status === 401 ? 401 : 500); }
+      return jsonRes({ success: true, message: 'File deleted: ' + filePath });
+    } catch(e) { return jsonRes({ success: false, error: 'Delete file error: ' + e.message }, 500); }
+  }
+  if (path === '/github/delete-repo') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) { return jsonRes({ success: false, error: 'Invalid JSON' }, 400); }
+    const owner = body.owner || '';
+    const repo = body.repo || '';
+    if (!owner || !repo) return jsonRes({ success: false, error: 'owner, repo required' }, 400);
+    try {
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      if (res.status === 204) return jsonRes({ success: true, message: 'Repo deleted: ' + owner + '/' + repo });
+      const data = await res.json().catch(() => ({}));
+      return jsonRes({ success: false, error: (data && data.message) || ('GitHub error ' + res.status) }, res.status === 401 ? 401 : 500);
+    } catch(e) { return jsonRes({ success: false, error: 'Delete repo error: ' + e.message }, 500); }
+  }
+  if (path === '/github/create-repo') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) { return jsonRes({ success: false, error: 'Invalid JSON' }, 400); }
+    const name = body.name || '';
+    const isPrivate = body.private !== false;
+    const description = body.description || '';
+    if (!name) return jsonRes({ success: false, error: 'name required' }, 400);
+    try {
+      const res = await fetch('https://api.github.com/user/repos', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ name: name, private: isPrivate, description: description, auto_init: true })
+      });
+      const data = await res.json();
+      if (!res.ok) return jsonRes({ success: false, error: (data && data.message) || ('GitHub error ' + res.status) }, res.status === 401 ? 401 : 500);
+      return jsonRes({ success: true, message: 'Repo created: ' + name, repo: { full_name: data.full_name, default_branch: data.default_branch } });
+    } catch(e) { return jsonRes({ success: false, error: 'Create repo error: ' + e.message }, 500); }
+  }
+  if (path === '/github/sync') {
+    const token = request.headers.get('X-GitHub-Token') || '';
+    if (!token) return jsonRes({ success: false, error: 'Token required' }, 400);
+    let body;
+    try { body = await request.json(); } catch(e) { return jsonRes({ success: false, error: 'Invalid JSON' }, 400); }
+    const owner = body.owner || '';
+    const repo = body.repo || '';
+    const branch = body.branch || 'main';
+    const files = Array.isArray(body.files) ? body.files : [];
+    const deletedFiles = Array.isArray(body.deletedFiles) ? body.deletedFiles : [];
+    const message = body.message || 'Sync from Clincoo';
+    if (!owner || !repo) return jsonRes({ success: false, error: 'owner, repo required' }, 400);
+    try {
+      const refRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/refs/heads/' + branch, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      let latestSha = '';
+      if (refRes.ok) { const refData = await refRes.json(); latestSha = refData.object.sha; }
+      if (!latestSha) return jsonRes({ success: false, error: 'Branch not found: ' + branch }, 400);
+      const commitRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/commits/' + latestSha, {
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Clincoo-App' }
+      });
+      const commitData = await commitRes.json();
+      const baseTreeSha = commitData.tree ? commitData.tree.sha : '';
+      const treeItems = [];
+      for (const file of files) {
+        const cleanPath = file.path.replace(/^\//, '');
+        const isBinary = file.content && file.content.startsWith('data:');
+        let blobSha = '';
+        if (isBinary) {
+          const blobRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/blobs', {
+            method: 'POST',
+            headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+            body: JSON.stringify({ content: file.content.split(',')[1] || file.content, encoding: 'base64' })
+          });
+          const blobData = await blobRes.json();
+          blobSha = blobData.sha;
+        } else {
+          const blobRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/blobs', {
+            method: 'POST',
+            headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+            body: JSON.stringify({ content: file.content || '', encoding: 'utf-8' })
+          });
+          const blobData = await blobRes.json();
+          blobSha = blobData.sha;
+        }
+        treeItems.push({ path: cleanPath, mode: '100644', type: 'blob', sha: blobSha });
+      }
+      for (const dPath of deletedFiles) {
+        treeItems.push({ path: dPath.replace(/^\//, ''), mode: '100644', type: 'blob', sha: null });
+      }
+      const treeRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ base_tree: baseTreeSha, tree: treeItems })
+      });
+      const treeData = await treeRes.json();
+      const newCommitRes = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/commits', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ message: message, tree: treeData.sha, parents: [latestSha] })
+      });
+      const newCommitData = await newCommitRes.json();
+      await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/refs/heads/' + branch, {
+        method: 'PATCH',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json', 'User-Agent': 'Clincoo-App' },
+        body: JSON.stringify({ sha: newCommitData.sha })
+      });
+      return jsonRes({ success: true, message: 'Synced ' + files.length + ' files, deleted ' + deletedFiles.length, commit: newCommitData.sha });
+    } catch(e) { return jsonRes({ success: false, error: 'Sync error: ' + e.message }, 500); }
+  }
   // === END GITHUB API PROXY ===
 
   const cfAccountId = env.CF_ACCOUNT_ID;
